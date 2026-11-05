@@ -109,7 +109,8 @@ input::placeholder{color:rgba(205,187,149,.55)}
       <p class="note" style="margin-top:10px">Presenta este QR en la entrada para recibir tu manilla. También te lo enviamos a tu correo.</p>
       <div class="btns">
         <a class="btn wax" id="t-ver" href="../entrada/">Ver y descargar mi entrada</a>
-        <a class="btn" id="t-wa" href="#" target="_blank" rel="noopener">Enviármela por WhatsApp</a>
+        <a class="btn" id="t-wa" href="#" target="_blank" rel="noopener">Guardar o compartir por WhatsApp</a>
+        <p class="note" style="margin:-2px 0 4px;font-size:14.5px">Elige tu propio chat («Tú» o «Mensaje a ti mismo») para guardarla, y toca enviar.</p>
         <button class="btn" type="button" id="t-otra">Inscribir a otra persona</button>
         <a class="btn" href="../juego/">Mientras tanto, juega «La Campaña»</a>
       </div>
@@ -134,7 +135,7 @@ input::placeholder{color:rgba(205,187,149,.55)}
     var link=new URL('../entrada/?c='+encodeURIComponent(t.codigo)+'&t='+encodeURIComponent(t.token||''),location.href).href;
     document.getElementById('t-ver').href=link;
     var txt='Mi entrada al estreno de «Baraya: El Prócer Independentista» ('+t.codigo+'): '+link;
-    document.getElementById('t-wa').href='https://wa.me/'+(t.cel?'57'+t.cel:'')+'?text='+encodeURIComponent(txt); }
+    document.getElementById('t-wa').href='https://wa.me/?text='+encodeURIComponent(txt); }
   try{ var saved=JSON.parse(localStorage.getItem('baraya-inscripcion')||'null'); if(saved&&saved.codigo&&saved.token) showTicket(saved); }catch(e){}
   document.getElementById('t-otra').addEventListener('click',function(){ document.getElementById('ticket').hidden=true; form.hidden=false; form.reset(); document.getElementById('r-muni').value='Neiva'; document.getElementById('r-btn').disabled=false; msg.textContent=''; document.getElementById('r-nombre').focus(); });
   form.addEventListener('submit',function(e){
