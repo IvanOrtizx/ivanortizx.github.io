@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="es">
+<head>
+<title>iaHuila Estudio</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Videos con inteligencia artificial para personas, marcas y empresas, con el sabor del Huila.">
+<meta property="og:title" content="iaHuila · Videos con IA para tu marca">
+<meta property="og:description" content="El Huila como nunca lo habías visto. Lleva tu marca al universo de iaHuila.">
+<meta property="og:image" content="https://camott.com/ia_huila/img/t_neiva.jpg">
+<meta property="og:url" content="https://camott.com/ia_huila/">
+<link rel="icon" href="img/logo.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: relato en capítulos que se leen de arriba abajo, como una cinta VHS nocturna: IA → impacto → iaHuila → números → tu marca → WhatsApp */
+:root {
+  --bg: #120b24;
+  --bg-2: #1c1236;
+  --line: #3a2d5c;
+  --fg: #f6efe4;
+  --muted: #b9acd3;
+  --sun: #ff6a1a;
+  --magenta: #ff2e88;
+  --gold: #ffcf3f;
+  --teal: #2fd4c9;
+  --ink: #120b24;
+  --wa: #1fa855;
+  --display: "Bricolage Grotesque", "Arial Black", system-ui, sans-serif;
+  --body: "Instrument Sans", "Helvetica Neue", Arial, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { animation: none !important; transition: none !important; } }
+body { background: var(--bg); color: var(--fg); font-family: var(--body); font-size: 17px; line-height: 1.6; overflow-x: hidden; }
+.wrap { max-width: 1080px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.narrow { max-width: 720px; }
+h1, h2, h3 { font-family: var(--display); font-weight: 800; letter-spacing: -0.02em; line-height: 1.02; margin: 0; text-wrap: balance; }
+p { margin: 0; }
+a { color: inherit; }
+.chapter { font-family: var(--mono); font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: var(--gold); display: inline-flex; align-items: center; gap: 10px; }
+.chapter::before { content: ""; width: 9px; height: 9px; border-radius: 50%; background: #ff3b3b; }
+.scan { position: relative; }
+.scan::after { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(0deg, rgba(255,255,255,.035) 0 1px, transparent 1px 3px); pointer-events: none; }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; font-weight: 700; font-size: 17px; border-radius: 999px; padding: 16px 26px; text-decoration: none; font-family: var(--body); }
+.btn:focus-visible, a:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
+.btn-wa { background: var(--wa); color: #fff; }
+.btn-ghost { border: 1.5px solid var(--line); }
+
+/* 0 · Apertura */
+.open { overflow: hidden; padding-block: 24px 80px; }
+.open::before { content: ""; position: absolute; width: 760px; height: 760px; right: -260px; top: -280px; border-radius: 50%; background: radial-gradient(circle, rgba(255,106,26,.55), rgba(255,46,136,.18) 45%, transparent 70%); pointer-events: none; }
+.open .wrap { position: relative; z-index: 1; }
+.nav { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.brand { display: flex; align-items: center; gap: 10px; font-family: var(--display); font-weight: 800; font-size: 20px; text-decoration: none; }
+.brand img { width: 44px; height: 44px; border-radius: 50%; border: 2px solid var(--gold); }
+.nav .mini { font-weight: 700; font-size: 14px; text-decoration: none; border: 1.5px solid var(--line); border-radius: 999px; padding: 8px 14px; }
+.open-grid { display: grid; grid-template-columns: 1.2fr .8fr; gap: 44px; align-items: center; margin-top: 56px; }
+.open h1 { font-size: clamp(44px, 7.4vw, 92px); margin-top: 18px; }
+.open h1 em { font-style: normal; color: var(--sun); }
+.open .lead { font-size: 20px; color: var(--muted); max-width: 32ch; margin-top: 22px; }
+.down { display: inline-block; margin-top: 30px; font-family: var(--mono); font-size: 13px; color: var(--muted); text-decoration: none; }
+.tape { justify-self: center; width: 100%; max-width: 340px; border-radius: 18px; overflow: hidden; border: 1.5px solid var(--line); transform: rotate(2.5deg); box-shadow: 0 30px 60px rgba(0,0,0,.5); position: relative; }
+.tape img { display: block; width: 100%; }
+.tape .rec { position: absolute; top: 12px; right: 14px; font-family: var(--mono); font-size: 12px; display: flex; align-items: center; gap: 6px; z-index: 2; }
+.tape .rec::before { content: ""; width: 9px; height: 9px; border-radius: 50%; background: #ff3b3b; }
+
+/* Capítulos */
+section.ch { padding-block: 88px; border-top: 1.5px solid var(--line); }
+section.ch h2 { font-size: clamp(34px, 5vw, 58px); margin-top: 16px; }
+.say { font-size: clamp(19px, 2.2vw, 22px); color: var(--muted); margin-top: 22px; max-width: 46ch; }
+.say strong { color: var(--fg); font-weight: 600; }
+
+/* 1 · La IA */
+.before-after { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 40px; }
+.ba { border-radius: 18px; padding: 24px; border: 1.5px solid var(--line); }
+.ba h3 { font-size: 22px; margin-bottom: 14px; }
+.ba ul { margin: 0; padding-left: 20px; color: var(--muted); display: grid; gap: 6px; }
+.ba.now { background: linear-gradient(140deg, rgba(255,106,26,.16), rgba(255,46,136,.12)); border-color: rgba(255,106,26,.5); }
+.ba.now ul { color: var(--fg); }
+.ba .k { font-family: var(--mono); font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); display: block; margin-bottom: 6px; }
+
+/* 2 · ¿Impacta? */
+.impact { background: var(--bg-2); }
+.quote-big { font-family: var(--display); font-weight: 800; font-size: clamp(28px, 4vw, 44px); line-height: 1.1; margin-top: 40px; max-width: 22ch; }
+.quote-big span { color: var(--magenta); }
+.signals { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 40px; }
+.signal { border-top: 3px solid var(--sun); padding-top: 16px; }
+.signal:nth-child(2) { border-color: var(--magenta); } .signal:nth-child(3) { border-color: var(--teal); }
+.signal h3 { font-size: 22px; margin-bottom: 8px; }
+.signal p { color: var(--muted); font-size: 16px; }
+
+/* 3 · iaHuila */
+.reel { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; margin-top: 44px; }
+.reel figure { margin: 0; }
+.reel img { width: 100%; border-radius: 12px; display: block; }
+.reel figcaption { font-size: 14px; color: var(--muted); margin-top: 8px; }
+.reel figcaption b { display: block; color: var(--fg); font-family: var(--display); font-size: 17px; }
+
+/* 4 · Números */
+.stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; margin-top: 44px; border-top: 1.5px solid var(--line); }
+.stat { padding: 22px 16px 0 0; }
+.stat b { font-family: var(--display); font-weight: 800; font-size: clamp(34px, 4.6vw, 54px); display: block; line-height: 1; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+.stat:nth-child(1) b { color: var(--gold); } .stat:nth-child(2) b { color: var(--sun); } .stat:nth-child(3) b { color: var(--magenta); } .stat:nth-child(4) b { color: var(--teal); }
+.stat span { font-size: 15px; color: var(--muted); display: block; margin-top: 10px; }
+.voices { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 40px; }
+.voices span { background: var(--bg-2); border: 1.5px solid var(--line); border-radius: 999px; padding: 9px 16px; font-size: 15px; }
+
+/* 5 · Tu marca */
+.offer { background: var(--fg); color: var(--ink); border-top: 0; }
+.offer .chapter { color: #8a3b0f; }
+.offer .say { color: #4d4462; }
+.offer .say strong { color: var(--ink); }
+.gets { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 40px; }
+.get { border: 2px solid var(--ink); border-radius: 16px; padding: 20px; }
+.get h3 { font-size: 20px; margin-bottom: 6px; }
+.get p { font-size: 15px; color: #4d4462; }
+.get.hl { background: var(--ink); color: var(--fg); }
+.get.hl p { color: var(--muted); }
+.for { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px; }
+.for span { font-family: var(--mono); font-size: 13px; background: #efe3d0; border-radius: 999px; padding: 7px 14px; }
+
+/* Cierre */
+.close { text-align: center; padding-block: 96px 72px; overflow: hidden; }
+.close::before { content: ""; position: absolute; width: 700px; height: 700px; left: 50%; top: 40%; transform: translate(-50%, -50%); border-radius: 50%; background: radial-gradient(circle, rgba(255,46,136,.35), transparent 65%); pointer-events: none; }
+.close .wrap { position: relative; z-index: 1; display: grid; justify-items: center; gap: 22px; }
+.close h2 { font-size: clamp(38px, 6vw, 72px); max-width: 16ch; }
+.close h2 em { font-style: normal; color: var(--gold); }
+.close .say { margin-top: 0; }
+.phone { color: var(--muted); font-size: 15px; }
+.phone b { color: var(--fg); font-family: var(--mono); user-select: all; }
+
+footer { border-top: 1.5px solid var(--line); padding-block: 26px 40px; color: var(--muted); font-size: 14px; }
+footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; }
+
+@media (max-width: 900px) {
+  .open-grid { grid-template-columns: 1fr; }
+  .reel { grid-template-columns: repeat(3, 1fr); }
+  .reel figure:nth-child(n+4) { display: none; }
+  .gets { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  section.ch { padding-block: 64px; }
+  .before-after, .signals { grid-template-columns: 1fr; }
+  .stats { grid-template-columns: 1fr 1fr; }
+  .reel { grid-template-columns: 1fr 1fr; }
+  .reel figure:nth-child(3) { display: none; }
+}
+/* Todo centrado */
+.open .wrap, section.ch .wrap, .close .wrap { text-align: center; }
+.open-grid { grid-template-columns: 1fr; justify-items: center; gap: 40px; }
+.open h1, section.ch h2, .quote-big { margin-left: auto; margin-right: auto; }
+.open h1 { max-width: 16ch; }
+section.ch h2 { max-width: 20ch; }
+.open .lead, .say { margin-left: auto; margin-right: auto; }
+.tape { transform: rotate(-1.5deg); }
+.ba ul { list-style: none; padding-left: 0; }
+.signal, .stat, .get { text-align: center; }
+.stat { padding: 22px 8px 0; }
+.voices, .for { justify-content: center; }
+.chapter { justify-content: center; }
+footer .wrap { justify-content: center; text-align: center; flex-direction: column; align-items: center; gap: 6px; }
+</style>
+<style>html,body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+
+
+<header class="open scan">
+  <div class="wrap">
+    <nav class="nav">
+      <a class="brand" href="#inicio" id="inicio"><img src="img/logo.jpg" alt="Logo de iaHuila">iaHuila</a>
+      <a class="mini wa-link" href="https://wa.me/573213973458" target="_blank" rel="noopener">Hablemos</a>
+    </nav>
+    <div class="open-grid">
+      <div>
+        <span class="chapter">Rebobinemos</span>
+        <h1>¿Y si tu marca pudiera estar <em>en cualquier lugar</em> del Huila… y del tiempo?</h1>
+        <p class="lead">Esta es la historia de cómo la inteligencia artificial empezó a contar el Huila, y de cómo puede contar la tuya.</p>
+        <a class="down" href="#ia">▼ Dale play</a>
+      </div>
+      <div class="tape scan">
+        <span class="rec">REC</span>
+        <img src="img/t_neiva.jpg" alt="Fotograma del video Neiva 2099">
+      </div>
+    </div>
+  </div>
+</header>
+
+<section class="ch" id="ia">
+  <div class="wrap">
+    <span class="chapter">Capítulo 1 · La IA</span>
+    <h2>Lo que antes costaba un rodaje, hoy cabe en una idea.</h2>
+    <p class="say">La inteligencia artificial ya permite crear escenas que nunca se podrían grabar: <strong>una ciudad en el año 2099, estatuas que cobran vida, nieve en Neiva.</strong> Sin cámaras, sin locaciones y sin esperar semanas.</p>
+    <div class="before-after">
+      <div class="ba">
+        <span class="k">Antes</span>
+        <h3>Un video tradicional</h3>
+        <ul>
+          <li>Equipo, locaciones y permisos</li>
+          <li>Días de grabación</li>
+          <li>Limitado a lo que existe frente a la cámara</li>
+        </ul>
+      </div>
+      <div class="ba now">
+        <span class="k">Ahora</span>
+        <h3>Un video con IA</h3>
+        <ul>
+          <li>Cualquier escenario, real o imposible</li>
+          <li>Listo en días</li>
+          <li>Tu marca dentro de una historia que se recuerda</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="ch impact">
+  <div class="wrap">
+    <span class="chapter">Capítulo 2 · ¿Impacta?</span>
+    <h2>La gente no comparte anuncios. Comparte lo que la sorprende.</h2>
+    <p class="quote-big">Cuando un video muestra algo que <span>nadie había visto</span>, la gente se detiene, lo comenta y se lo manda a alguien.</p>
+    <div class="signals">
+      <div class="signal"><h3>Detiene el scroll</h3><p>Lo absurdo y lo imposible se ven en el primer segundo. Ahí se decide si alguien sigue mirando.</p></div>
+      <div class="signal"><h3>Se comparte</h3><p>El humor y el orgullo regional hacen que la gente lo envíe a su familia y a sus grupos.</p></div>
+      <div class="signal"><h3>Se recuerda</h3><p>Una marca dentro de una historia se queda en la memoria más que una marca en un anuncio.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="ch">
+  <div class="wrap">
+    <span class="chapter">Capítulo 3 · iaHuila</span>
+    <h2>Así nació iaHuila: el Huila como nunca lo habías visto.</h2>
+    <p class="say">En octubre de 2026 empezamos a publicar videos hechos con IA sobre lo nuestro: <strong>Neiva en el año 2099, los indígenas de San Agustín con herramientas modernas, las brujas de La Jagua, la nieve en Neiva.</strong> Exagerados, surrealistas y con el humor y el orgullo del opita.</p>
+    <div class="reel">
+      <figure><img src="img/t_neiva.jpg" alt="Video Neiva 2099"><figcaption><b>121,7 mil</b>Neiva 2099</figcaption></figure>
+      <figure><img src="img/t_sanagustin.jpg" alt="Video San Agustín"><figcaption><b>76,5 mil</b>San Agustín</figcaption></figure>
+      <figure><img src="img/t_barrio.jpg" alt="Video El Barrio"><figcaption><b>82 mil</b>El Barrio</figcaption></figure>
+      <figure><img src="img/t_olave.jpg" alt="Video Olave"><figcaption><b>73 mil</b>Olave</figcaption></figure>
+      <figure><img src="img/t_jagua.jpg" alt="Video La Jagua"><figcaption><b>40,7 mil</b>La Jagua</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section class="ch">
+  <div class="wrap">
+    <span class="chapter">Capítulo 4 · Los números</span>
+    <h2>En un mes, el Huila respondió.</h2>
+    <p class="say">Una cuenta nueva, sin trayectoria, que en sus primeras semanas sumó cientos de miles de vistas.</p>
+    <div class="stats">
+      <div class="stat"><b>790 mil+</b><span>vistas en el primer mes, entre TikTok e Instagram</span></div>
+      <div class="stat"><b>28 mil</b><span>vistas promedio por video en TikTok</span></div>
+      <div class="stat"><b>121,7 mil</b><span>vistas en el video más visto</span></div>
+      <div class="stat"><b>3.700+</b><span>seguidores en sus primeras semanas</span></div>
+    </div>
+    <p class="say" style="margin-top:40px">Y lo más valioso no son las vistas, es lo que la gente dice:</p>
+    <div class="voices">
+      <span>«La mejor cuenta ❤️»</span>
+      <span>«Día 9 pidiendo a Garzón»</span>
+      <span>«Del Huila para el mundo»</span>
+      <span>«Huila siempre»</span>
+      <span>«¿Y Yaguará?»</span>
+    </div>
+  </div>
+</section>
+
+<section class="ch offer">
+  <div class="wrap">
+    <span class="chapter">Capítulo 5 · Tu marca</span>
+    <h2>Ahora, la historia puede ser la tuya.</h2>
+    <p class="say">Llevamos tu marca, tu producto o tu negocio al universo de iaHuila: <strong>un video pensado para que la gente lo vea, lo recuerde y lo comparta.</strong></p>
+    <div class="gets">
+      <div class="get"><h3>La idea</h3><p>Creamos el concepto y la historia a partir de tu marca y de lo que funciona en la región.</p></div>
+      <div class="get"><h3>La producción</h3><p>Escenas generadas con IA, música, tu logo real y el formato que necesites.</p></div>
+      <div class="get hl"><h3>La comunidad</h3><p>Si quieres, lo publicamos en colaboración con iaHuila para llegar a nuestra audiencia.</p></div>
+    </div>
+    <div class="for"><span>Personas</span><span>Emprendimientos</span><span>Marcas</span><span>Empresas</span><span>Campañas y lanzamientos</span></div>
+  </div>
+</section>
+
+<section class="close scan">
+  <div class="wrap narrow">
+    <span class="chapter">Fin de la cinta</span>
+    <h2>¿Grabamos el <em>siguiente capítulo</em> juntos?</h2>
+    <p class="say">Cuéntanos tu idea por WhatsApp y te enviamos una propuesta a la medida de tu marca.</p>
+    <a class="btn btn-wa wa-link" id="wa" href="https://wa.me/573213973458" target="_blank" rel="noopener">Escríbenos por WhatsApp</a>
+    <p class="phone">o al <b>321 397 3458</b></p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>iaHuila · Camilo Ortiz Motta · @ia_huila en TikTok e Instagram</span>
+    <span>Contenido generado con inteligencia artificial.</span>
+  </div>
+</footer>
+
+<script>
+(function () {
+  // El enlace de cada bio termina en #tiktok, #instagram o #facebook para saber de dónde llega la persona
+  const map = { tiktok: "TikTok", instagram: "Instagram", ig: "Instagram", facebook: "Facebook", fb: "Facebook" };
+  const src = map[(location.hash || "").replace("#", "").toLowerCase()];
+  const msg = "Hola Camilo 🗿 Vengo de la página de iaHuila" + (src ? " (enlace de " + src + ")" : "") + ". Me interesa un video para mi marca.";
+  const href = "https://wa.me/573213973458?text=" + encodeURIComponent(msg);
+  document.querySelectorAll(".wa-link").forEach((a) => { a.href = href; });
+})();
+</script>
+
+</body>
+</html>
