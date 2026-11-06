@@ -23,14 +23,16 @@
   --paper:#f3f4ef; --paper-2:#e9ece4; --ink:#1c2a25; --muted:#5a6a63;
   --emerald:#1f5c4a; --emerald-deep:#123c31; --sand:#d8c7a6; --sand-deep:#b69c6c; --sky:#7096b8;
   --line:rgba(31,92,74,.22);
+  --grain:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .12 0 0 0 0 .3 0 0 0 0 .24 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   --f-script:"Pinyon Script","Snell Roundhand",cursive;
   --f-serif:"Cormorant Infant","Cormorant Garamond",Georgia,serif;
   --f-sans:"Jost","Helvetica Neue",Arial,sans-serif;
   color-scheme:light;
 }
 *{box-sizing:border-box}
+[hidden]{display:none!important}
 html{scroll-behavior:smooth}
-body{background:var(--paper);color:var(--ink);font-family:var(--f-serif);font-size:19px;line-height:1.55;overflow-x:hidden}
+body{background-color:var(--paper);background-image:var(--grain);color:var(--ink);font-family:var(--f-serif);font-size:19px;line-height:1.55;overflow-x:hidden}
 body.locked{overflow:hidden;height:100vh}
 body.modo-panel{overflow:auto;height:auto}
 a{color:inherit}
@@ -239,11 +241,61 @@ details.p-card summary{cursor:pointer;font-weight:500;color:var(--emerald-deep)}
   .inv{grid-template-columns:1fr}
   .inv .acc{justify-content:flex-start}
 }
+
+/* ---------- Textura, hojas y extras ---------- */
+.band{background-image:var(--grain)}
+section{position:relative;overflow:hidden}
+section > .wrap{position:relative;z-index:1}
+.frond{position:absolute;width:210px;height:155px;color:var(--emerald);opacity:.1;pointer-events:none;z-index:0;transform-origin:8px 112px;animation:sway 7s ease-in-out infinite alternate}
+.frond.tl{top:-18px;left:-40px;transform:rotate(14deg)}
+.frond.br{bottom:-24px;right:-46px;transform:scale(-1,-1) rotate(10deg);animation-delay:-3s}
+.frond.tr{top:-14px;right:-44px;transform:scaleX(-1) rotate(12deg);animation-delay:-1.5s}
+.rsvp .frond{color:var(--sand);opacity:.13}
+@keyframes sway{from{rotate:-3deg}to{rotate:3deg}}
+.hojas{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.hoja{position:absolute;top:-30px;border-radius:0 100% 0 100%;opacity:.7;animation:caer linear infinite}
+@keyframes caer{0%{transform:translate(0,-30px) rotate(0)}50%{transform:translate(30px,50vh) rotate(160deg)}100%{transform:translate(-10px,105vh) rotate(320deg)}}
+.hero{overflow:hidden}
+.hero img{will-change:transform}
+
+/* raspa y descubre */
+.scratch{position:relative;display:inline-block;margin:6px auto 4px;border-radius:6px;touch-action:none}
+.scratch .bigdate{margin:0;padding:6px 10px}
+.scratch canvas{position:absolute;inset:0;width:100%;height:100%;border-radius:6px;cursor:grab;transition:opacity .8s ease}
+.scratch canvas.done{opacity:0;pointer-events:none}
+.scratch-hint{font-family:var(--f-sans);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--sand-deep);margin-top:6px;min-height:1.4em}
+
+/* galería tipo polaroid + visor */
+.gal img{cursor:zoom-in;transition:transform .35s ease,box-shadow .35s ease;border:6px solid #fff;box-shadow:0 8px 18px -10px rgba(18,60,49,.45);border-radius:2px}
+.gal img:nth-child(odd){transform:rotate(-1.2deg)}
+.gal img:nth-child(even){transform:rotate(1.2deg)}
+.gal img:hover{transform:rotate(0) scale(1.02)}
+.gal-hint{font-family:var(--f-sans);font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-top:14px}
+#visor{position:fixed;inset:0;z-index:60;background:rgba(10,30,24,.94);display:flex;align-items:center;justify-content:center;padding:calc(20px + env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) calc(20px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+#visor img{max-width:100%;max-height:100%;border:6px solid #fff;border-radius:2px;box-shadow:0 20px 50px rgba(0,0,0,.5)}
+#visor button{position:absolute;border:0;background:rgba(255,255,255,.12);color:#fff;width:46px;height:46px;border-radius:50%;font-size:26px;line-height:1;cursor:pointer}
+#visor button:focus-visible{outline:2px solid var(--sand)}
+#visor .x{top:calc(14px + env(safe-area-inset-top,0px));right:calc(14px + env(safe-area-inset-right,0px))}
+#visor .ant{left:calc(10px + env(safe-area-inset-left,0px));top:50%;transform:translateY(-50%)}
+#visor .sig{right:calc(10px + env(safe-area-inset-right,0px));top:50%;transform:translateY(-50%)}
+#confeti{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:70}
+.clima{display:inline-flex;align-items:center;gap:8px;margin-top:16px;font-family:var(--f-sans);font-size:13px;color:var(--emerald-deep);background:rgba(216,199,166,.3);border-radius:999px;padding:8px 14px}
+.clima svg{width:18px;height:18px}
+.place.cere-ok .pend{display:none}
+.place .cere-info[hidden]{display:none}
+.p-ceremonia{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1.6fr) 130px;gap:10px;align-items:end;margin-top:12px}
+.p-ceremonia label{display:grid;gap:4px;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);min-width:0}
+.p-ceremonia .full{grid-column:1/-1}
+.p-ceremonia .bt{grid-column:1/-1;display:flex;gap:8px;flex-wrap:wrap}
+@media (max-width:760px){.p-ceremonia{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){.frond,.hoja{animation:none}}
 </style>
 </head>
 <body>
 <div id="invitacion">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><symbol id="palma" viewBox="0 0 170 125"><path d="M8 112Q60 70 152 8" stroke="currentColor" stroke-width="1.4" fill="none"/><g fill="currentColor"><ellipse cx="16.5" cy="0" rx="16.5" ry="2.5" transform="translate(14.7 106.7) rotate(-89.3)"/><ellipse cx="16.5" cy="0" rx="16.5" ry="2.5" transform="translate(14.7 106.7) rotate(12.4)"/><ellipse cx="16.0" cy="0" rx="16.0" ry="2.5" transform="translate(21.6 101.2) rotate(-87.7)"/><ellipse cx="16.0" cy="0" rx="16.0" ry="2.5" transform="translate(21.6 101.2) rotate(11.8)"/><ellipse cx="15.6" cy="0" rx="15.6" ry="2.4" transform="translate(28.9 95.5) rotate(-86.2)"/><ellipse cx="15.6" cy="0" rx="15.6" ry="2.4" transform="translate(28.9 95.5) rotate(11.1)"/><ellipse cx="15.1" cy="0" rx="15.1" ry="2.4" transform="translate(36.5 89.8) rotate(-84.7)"/><ellipse cx="15.1" cy="0" rx="15.1" ry="2.4" transform="translate(36.5 89.8) rotate(10.3)"/><ellipse cx="14.6" cy="0" rx="14.6" ry="2.3" transform="translate(44.4 83.8) rotate(-83.2)"/><ellipse cx="14.6" cy="0" rx="14.6" ry="2.3" transform="translate(44.4 83.8) rotate(9.6)"/><ellipse cx="14.1" cy="0" rx="14.1" ry="2.2" transform="translate(52.6 77.7) rotate(-81.7)"/><ellipse cx="14.1" cy="0" rx="14.1" ry="2.2" transform="translate(52.6 77.7) rotate(8.8)"/><ellipse cx="13.6" cy="0" rx="13.6" ry="2.2" transform="translate(61.2 71.4) rotate(-80.3)"/><ellipse cx="13.6" cy="0" rx="13.6" ry="2.2" transform="translate(61.2 71.4) rotate(8.0)"/><ellipse cx="13.2" cy="0" rx="13.2" ry="2.1" transform="translate(70.0 65.0) rotate(-78.8)"/><ellipse cx="13.2" cy="0" rx="13.2" ry="2.1" transform="translate(70.0 65.0) rotate(7.2)"/><ellipse cx="12.7" cy="0" rx="12.7" ry="2.0" transform="translate(79.2 58.4) rotate(-77.4)"/><ellipse cx="12.7" cy="0" rx="12.7" ry="2.0" transform="translate(79.2 58.4) rotate(6.3)"/><ellipse cx="12.2" cy="0" rx="12.2" ry="2.0" transform="translate(88.6 51.7) rotate(-76.0)"/><ellipse cx="12.2" cy="0" rx="12.2" ry="2.0" transform="translate(88.6 51.7) rotate(5.5)"/><ellipse cx="11.7" cy="0" rx="11.7" ry="1.9" transform="translate(98.4 44.8) rotate(-74.7)"/><ellipse cx="11.7" cy="0" rx="11.7" ry="1.9" transform="translate(98.4 44.8) rotate(4.6)"/><ellipse cx="11.2" cy="0" rx="11.2" ry="1.9" transform="translate(108.5 37.8) rotate(-73.3)"/><ellipse cx="11.2" cy="0" rx="11.2" ry="1.9" transform="translate(108.5 37.8) rotate(3.7)"/><ellipse cx="10.7" cy="0" rx="10.7" ry="1.8" transform="translate(118.9 30.5) rotate(-72.0)"/><ellipse cx="10.7" cy="0" rx="10.7" ry="1.8" transform="translate(118.9 30.5) rotate(2.8)"/><ellipse cx="10.3" cy="0" rx="10.3" ry="1.7" transform="translate(129.6 23.2) rotate(-70.6)"/><ellipse cx="10.3" cy="0" rx="10.3" ry="1.7" transform="translate(129.6 23.2) rotate(1.9)"/><ellipse cx="9.8" cy="0" rx="9.8" ry="1.7" transform="translate(140.7 15.7) rotate(-69.3)"/><ellipse cx="9.8" cy="0" rx="9.8" ry="1.7" transform="translate(140.7 15.7) rotate(1.0)"/></g></symbol></defs></svg>
 <div id="intro" aria-live="polite">
+  <div class="hojas" id="hojas" aria-hidden="true"></div>
   <div class="intro-top">
     <div class="label">Nos casamos</div>
     <div class="for" id="introFor"></div>
@@ -281,6 +333,7 @@ details.p-card summary{cursor:pointer;font-weight:500;color:var(--emerald-deep)}
 </div>
 
 <section class="welcome reveal">
+  <svg class="frond tl" aria-hidden="true"><use href="#palma"/></svg><svg class="frond br" aria-hidden="true"><use href="#palma"/></svg>
   <div class="wrap">
     <svg class="orn" viewBox="0 0 120 20" fill="none" stroke="currentColor" stroke-width="1"><path d="M2 10h44M74 10h44"/><path d="M60 3c-5 4-5 10 0 14 5-4 5-10 0-14Z"/><path d="M52 10c-3-3-6-3-8 0 2 3 5 3 8 0ZM68 10c3-3 6-3 8 0-2 3-5 3-8 0Z"/></svg>
     <h2>Bienvenidos</h2>
@@ -301,7 +354,11 @@ details.p-card summary{cursor:pointer;font-weight:500;color:var(--emerald-deep)}
 <section class="band reveal">
   <div class="wrap">
     <div class="label">Sábado</div>
-    <div class="bigdate"><span class="side">Marzo</span><span class="day">20</span><span class="side">2027</span></div>
+    <div class="scratch" id="scratch">
+      <div class="bigdate"><span class="side">Marzo</span><span class="day">20</span><span class="side">2027</span></div>
+      <canvas id="scratchCv" aria-label="Raspa para descubrir la fecha"></canvas>
+    </div>
+    <div class="scratch-hint" id="scratchHint">Raspa con tu dedo para descubrir la fecha</div>
     <div style="font-family:var(--f-sans);letter-spacing:.2em;font-size:14px;color:var(--muted)">4:00 P.M.</div>
     <div class="count" aria-label="Cuenta regresiva">
       <div><b id="cd-d">0</b><small>Días</small></div>
@@ -320,8 +377,13 @@ details.p-card summary{cursor:pointer;font-weight:500;color:var(--emerald-deep)}
     <div class="places">
       <div class="place">
         <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M20 4v8M16 8h8"/><path d="M8 36V20l12-8 12 8v16"/><path d="M16 36v-8a4 4 0 0 1 8 0v8"/></svg>
-        <h3>Ceremonia</h3>
+        <h3 id="cereTit">Ceremonia</h3>
         <p class="pend">Lugar por confirmar. Te avisaremos muy pronto.</p>
+        <div class="cere-info" id="cereInfo" hidden>
+          <p class="nm" id="cereNom"></p>
+          <p class="ad" id="cereDir"></p>
+          <a class="btn solid" id="cereMapa" target="_blank" rel="noopener" hidden>Cómo llegar</a>
+        </div>
       </div>
       <div class="place">
         <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M13 6l4 12a3 3 0 0 1-6 0l2-12ZM27 6l-2 12a3 3 0 0 0 6 0l-4-12Z"/><path d="M14 21v12M28 21v12M10 33h8M24 33h8"/></svg>
@@ -344,6 +406,7 @@ details.p-card summary{cursor:pointer;font-weight:500;color:var(--emerald-deep)}
       <img src="img/foto4.jpg" alt="Selfie en el campo" loading="lazy">
       <img class="wide" src="img/foto3.jpg" alt="Selfie en el carro" loading="lazy">
     </div>
+    <div class="gal-hint">Toca una foto para verla en grande</div>
   </div>
 </section>
 
@@ -371,10 +434,12 @@ details.p-card summary{cursor:pointer;font-weight:500;color:var(--emerald-deep)}
       <span class="sw"><i style="background:#2f5f9e"></i>Azules</span>
     </div>
     <p class="note">Te pedimos no usar blanco, beige, verde esmeralda ni tonos azules. Son los colores de los novios.</p>
+    <div class="clima"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>Villavicencio es de clima cálido: elige telas frescas</div>
   </div>
 </section>
 
 <section class="band gift reveal">
+  <svg class="frond tr" aria-hidden="true"><use href="#palma"/></svg>
   <div class="wrap">
     <svg viewBox="0 0 58 58" fill="none" stroke="currentColor" stroke-width="1.3"><rect x="8" y="18" width="42" height="28" rx="2"/><path d="M8 20l21 15 21-15"/><path d="M22 10l2 5M29 7v6M36 10l-2 5"/></svg>
     <div class="label" style="margin-top:6px">Regalo</div>
@@ -384,6 +449,7 @@ details.p-card summary{cursor:pointer;font-weight:500;color:var(--emerald-deep)}
 </section>
 
 <section class="rsvp" id="confirmar">
+  <svg class="frond tl" aria-hidden="true"><use href="#palma"/></svg><svg class="frond br" aria-hidden="true"><use href="#palma"/></svg>
   <div class="wrap">
     <div class="label">Confirma tu asistencia</div>
     <h2>¿Nos acompañas?</h2>
@@ -440,6 +506,14 @@ details.p-card summary{cursor:pointer;font-weight:500;color:var(--emerald-deep)}
 </footer>
 </div>
 
+<div id="visor" hidden role="dialog" aria-modal="true" aria-label="Foto ampliada">
+  <img alt="">
+  <button type="button" class="ant" aria-label="Foto anterior">‹</button>
+  <button type="button" class="sig" aria-label="Foto siguiente">›</button>
+  <button type="button" class="x" aria-label="Cerrar">×</button>
+</div>
+<canvas id="confeti" aria-hidden="true"></canvas>
+
 <!-- ======================= PANEL DE LOS NOVIOS (?panel) ======================= -->
 <div id="panel" class="wrap" hidden>
   <div id="pinVista" class="pin">
@@ -472,6 +546,18 @@ details.p-card summary{cursor:pointer;font-weight:500;color:var(--emerald-deep)}
         <label>Celular (opcional)<input class="p-in" id="aCel" inputmode="tel" placeholder="312 000 0000"></label>
         <label class="full">Nombres de cada persona (opcional, separados por coma)<input class="p-in" id="aPers" placeholder="Ej.: Victor, Derly"></label>
         <button class="p-btn" type="submit">+ Agregar invitado</button>
+      </form>
+    </div>
+
+    <div class="p-card" style="margin-top:16px">
+      <div style="font-weight:500;color:var(--emerald-deep)">Lugar de la ceremonia</div>
+      <p class="sub" style="margin-top:4px">Cuando lo tengan definido, escríbanlo aquí y aparecerá en todas las invitaciones al instante. Mientras esté vacío, la invitación dice “Lugar por confirmar”.</p>
+      <form class="p-ceremonia" id="cereForm">
+        <label>Nombre del lugar<input class="p-in" id="cNom" placeholder="Ej.: Parroquia Nuestra Señora del Carmen"></label>
+        <label>Dirección<input class="p-in" id="cDir" placeholder="Ej.: Cra. 30 #15-20, Villavicencio"></label>
+        <label>Hora<input class="p-in" id="cHora" placeholder="Ej.: 3:00 p.m."></label>
+        <label class="full">Enlace de Google Maps (opcional)<input class="p-in" id="cMapa" inputmode="url" placeholder="Pega aquí el enlace de “Compartir” en Google Maps"></label>
+        <div class="bt"><button class="p-btn" type="submit" id="cGuardar">Guardar lugar</button><button class="p-btn peligro" type="button" id="cQuitar">Volver a “por confirmar”</button><span class="sub" id="cEstado" style="align-self:center"></span></div>
       </form>
     </div>
 
@@ -568,6 +654,8 @@ async function local(p){
       if("respuesta" in c){ if(c.respuesta==="si"||c.respuesta==="no"){ g.respuesta=c.respuesta; g.asistentes=c.respuesta==="si"?(+g.asistentes||+g.cupos||1):0; if(!g.respondido) g.respondido=now; } else { g.respuesta=""; g.asistentes=0; g.quienes=""; g.respondido=""; } }
       save(); return {ok:true,guest:g}; }
     case "delete": { pin(); all=all.filter(g=>g.id!==p.id); save(); return {ok:true}; }
+    case "config": return {ok:true, ceremonia:store.get(LK+"-cere",null)};
+    case "setConfig": { pin(); store.set(LK+"-cere", p.ceremonia||null); return {ok:true, ceremonia:p.ceremonia||null}; }
   }
   throw new Error("accion_desconocida");
 }
@@ -660,6 +748,91 @@ function iniciarInvitacion(){
   const io='IntersectionObserver' in window ? new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.remove('pre'); io.unobserve(e.target);} }),{threshold:.12}) : null;
   document.querySelectorAll('.reveal').forEach(el=>{ if(io && el.getBoundingClientRect().top>innerHeight){ el.classList.add('pre'); io.observe(el);} });
 
+  // Lugar de la ceremonia (lo editan los novios desde el panel)
+  API.call({action:"config"}).then(r=>{
+    const c=r.ceremonia; if(!c||!c.nombre) return;
+    $("#cereTit").textContent = "Ceremonia" + (c.hora ? " · " + c.hora : "");
+    $("#cereNom").textContent = c.nombre; $("#cereDir").textContent = c.direccion || "";
+    if(c.mapa && /^https:\/\//i.test(c.mapa)){ $("#cereMapa").href=c.mapa; $("#cereMapa").hidden=false; }
+    $("#cereInfo").hidden=false; $("#cereInfo").closest(".place").classList.add("cere-ok");
+  }).catch(()=>{});
+
+  const quieto = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // Hojas cayendo en el sobre
+  if(!quieto){
+    const cols=["#1f5c4a","#2f7a5f","#4f9a76","#b69c6c","#7096b8"];
+    for(let i=0;i<16;i++){
+      const e=document.createElement("i"); e.className="hoja"; const s=10+Math.random()*14;
+      e.style.cssText="left:"+(Math.random()*100)+"%;width:"+s+"px;height:"+(s*.55)+"px;background:"+cols[i%cols.length]+";animation-duration:"+(9+Math.random()*8)+"s;animation-delay:-"+(Math.random()*14)+"s";
+      $("#hojas").append(e);
+    }
+  }
+
+  // Leve paralaje en la foto de portada
+  const heroImg=document.querySelector(".hero img");
+  if(!quieto && heroImg) addEventListener("scroll",()=>{ const y=scrollY; if(y<innerHeight*1.2) heroImg.style.transform="translateY("+(y*.22)+"px) scale(1.04)"; },{passive:true});
+
+  // Confeti
+  function confeti(){
+    if(quieto) return;
+    const cv=$("#confeti"), cx=cv.getContext("2d"), W=cv.width=innerWidth*devicePixelRatio, H=cv.height=innerHeight*devicePixelRatio;
+    const cols=["#1f5c4a","#d8c7a6","#7096b8","#b69c6c","#f3f4ef","#2f7a5f"];
+    const ps=Array.from({length:140},()=>({x:W/2+(Math.random()-.5)*W*.3,y:H*.55,vx:(Math.random()-.5)*16*devicePixelRatio,vy:-(8+Math.random()*12)*devicePixelRatio,s:(5+Math.random()*6)*devicePixelRatio,r:Math.random()*6,vr:(Math.random()-.5)*.3,c:cols[Math.floor(Math.random()*cols.length)]}));
+    const t0=performance.now();
+    (function f(t){
+      cx.clearRect(0,0,W,H);
+      ps.forEach(p=>{ p.vy+=.35*devicePixelRatio; p.vx*=.99; p.x+=p.vx; p.y+=p.vy; p.r+=p.vr; cx.save(); cx.translate(p.x,p.y); cx.rotate(p.r); cx.fillStyle=p.c; cx.fillRect(-p.s/2,-p.s/4,p.s,p.s/2); cx.restore(); });
+      if(t-t0<3200) requestAnimationFrame(f); else cx.clearRect(0,0,W,H);
+    })(t0);
+  }
+
+  // Raspa y descubre la fecha
+  (function(){
+    const wrap=$("#scratch"), cv=$("#scratchCv"), cx=cv.getContext("2d",{willReadFrequently:true});
+    let listo=false, dib=false, n=0;
+    function pintar(){
+      const r=wrap.getBoundingClientRect(), dpr=devicePixelRatio||1;
+      cv.width=r.width*dpr; cv.height=r.height*dpr; cx.setTransform(dpr,0,0,dpr,0,0);
+      const g=cx.createLinearGradient(0,0,r.width,r.height);
+      g.addColorStop(0,"#c9b28a"); g.addColorStop(.45,"#efe3c8"); g.addColorStop(.55,"#e2d0ac"); g.addColorStop(1,"#b69c6c");
+      cx.fillStyle=g; cx.fillRect(0,0,r.width,r.height);
+      for(let i=0;i<260;i++){ cx.fillStyle="rgba(255,255,255,"+(Math.random()*.35)+")"; cx.fillRect(Math.random()*r.width,Math.random()*r.height,1.2,1.2); }
+      cx.fillStyle="#5b4826"; cx.font="500 13px Jost, Arial, sans-serif"; cx.textAlign="center"; cx.textBaseline="middle";
+      cx.fillText("R A S P A   A Q U Í", r.width/2, r.height/2);
+      cx.globalCompositeOperation="destination-out";
+    }
+    function revelar(){ if(listo) return; listo=true; cv.classList.add("done"); $("#scratchHint").textContent="¡Sábado 20 de marzo de 2027! Guarda la fecha"; confeti(); }
+    function pos(e){ const r=cv.getBoundingClientRect(); return [e.clientX-r.left, e.clientY-r.top]; }
+    function raspar(e){
+      if(!dib||listo) return; const [x,y]=pos(e);
+      cx.beginPath(); cx.arc(x,y,20,0,Math.PI*2); cx.fill();
+      if(++n%8===0){ const d=cx.getImageData(0,0,cv.width,cv.height).data; let c=0,t=0; for(let i=3;i<d.length;i+=64){ t++; if(d[i]===0) c++; } if(c/t>.42) revelar(); }
+    }
+    cv.addEventListener("pointerdown",e=>{ dib=true; cv.setPointerCapture(e.pointerId); raspar(e); });
+    cv.addEventListener("pointermove",raspar);
+    ["pointerup","pointercancel"].forEach(t=>cv.addEventListener(t,()=>dib=false));
+    cv.addEventListener("keydown",e=>{ if(e.key==="Enter"||e.key===" ") revelar(); });
+    cv.tabIndex=0;
+    if(quieto){ cv.classList.add("done"); $("#scratchHint").textContent=""; listo=true; }
+    else { pintar(); (document.fonts?document.fonts.ready:Promise.resolve()).then(()=>{ if(!listo){ cx.globalCompositeOperation="source-over"; pintar(); } }); }
+  })();
+
+  // Visor de fotos
+  (function(){
+    const imgs=[...document.querySelectorAll(".gal img")], v=$("#visor"), vi=v.querySelector("img");
+    let i=0, x0=null;
+    const ver=k=>{ i=(k+imgs.length)%imgs.length; vi.src=imgs[i].src; vi.alt=imgs[i].alt; };
+    imgs.forEach((im,k)=>im.addEventListener("click",()=>{ ver(k); v.hidden=false; v.querySelector(".x").focus(); }));
+    v.querySelector(".ant").onclick=e=>{ e.stopPropagation(); ver(i-1); };
+    v.querySelector(".sig").onclick=e=>{ e.stopPropagation(); ver(i+1); };
+    v.querySelector(".x").onclick=()=>v.hidden=true;
+    v.addEventListener("click",e=>{ if(e.target===v) v.hidden=true; });
+    v.addEventListener("touchstart",e=>{ x0=e.touches[0].clientX; },{passive:true});
+    v.addEventListener("touchend",e=>{ if(x0===null) return; const dx=e.changedTouches[0].clientX-x0; if(Math.abs(dx)>40) ver(i+(dx<0?1:-1)); x0=null; });
+    document.addEventListener("keydown",e=>{ if(v.hidden) return; if(e.key==="Escape") v.hidden=true; if(e.key==="ArrowLeft") ver(i-1); if(e.key==="ArrowRight") ver(i+1); });
+  })();
+
   // Confirmación
   $("#attYes").addEventListener("change",actualizarAsis); $("#attNo").addEventListener("change",actualizarAsis);
   const conQuien = () => $("#toNovio").checked ? {nombre:"Brayan", tel:CONFIG.telNovio, k:"novio"} : {nombre:"Josseline", tel:CONFIG.telNovia, k:"novia"};
@@ -695,6 +868,7 @@ function iniciarInvitacion(){
     wa.hidden=false;
     if(guardado){
       ok.textContent = si ? "¡Gracias! Tu asistencia quedó confirmada. Te esperamos el 20 de marzo." : "Gracias por avisarnos. Tu respuesta quedó registrada.";
+      if(si) confeti();
       wa.dataset.pre="Avisar también a "; wa.textContent="Avisar también a "+c.nombre+" por WhatsApp";
     } else {
       ok.textContent = "No pudimos registrar tu respuesta en este momento. Envíala por WhatsApp con el botón de abajo.";
@@ -726,7 +900,7 @@ function iniciarPanel(){
   const enlace = g => ajustes.base.split("?")[0].split("#")[0] + "?para=" + encodeURIComponent(g.nombre) + (+g.cupos ? "&cupos=" + g.cupos : "") + "&id=" + g.id;
   const cuposTxt = g => +g.cupos===1 ? "1 cupo" : (+g.cupos||0)+" cupos";
   const mensaje = g => ajustes.plantilla.replaceAll("{nombre}", g.nombre).replaceAll("{cupos}", cuposTxt(g)).replaceAll("{enlace}", enlace(g));
-  const errTxt = e => ({pin_incorrecto:"Código incorrecto."}[e.message] || "No hay conexión con la hoja. Revisa tu internet e intenta de nuevo.");
+  const errTxt = e => ({pin_incorrecto:"Código incorrecto.", accion_desconocida:"Falta actualizar el código de la hoja (Code.gs) y crear una nueva versión."}[e.message] || "No hay conexión con la hoja. Revisa tu internet e intenta de nuevo.");
 
   async function op(p){ return API.call(Object.assign({pin}, p)); }
   async function cargar(silencioso){
@@ -740,7 +914,7 @@ function iniciarPanel(){
       const r=await op({action:"login"});
       try{ localStorage.setItem(KP, cod); }catch(e){}
       if(r.hoja){ $("#btnHoja").href=r.hoja; $("#btnHoja").hidden=false; }
-      $("#pinVista").hidden=true; $("#panelVista").hidden=false; cargar();
+      $("#pinVista").hidden=true; $("#panelVista").hidden=false; cargar(); cargarCere();
     }catch(e){ if(!auto) $("#pinErr").textContent=errTxt(e); try{ if(e.message==="pin_incorrecto") localStorage.removeItem(KP); }catch(_){} }
     b.disabled=false;
   }
@@ -748,6 +922,26 @@ function iniciarPanel(){
   if(guardado) entrar(guardado, true);
   $("#pinForm").addEventListener("submit", e=>{ e.preventDefault(); entrar($("#pinIn").value.trim()); });
   $("#btnRecargar").addEventListener("click", ()=>cargar());
+  async function cargarCere(){
+    try{ const r=await API.call({action:"config"}); const c=r.ceremonia||{};
+      $("#cNom").value=c.nombre||""; $("#cDir").value=c.direccion||""; $("#cHora").value=c.hora||""; $("#cMapa").value=c.mapa||"";
+      $("#cEstado").textContent = c.nombre ? "Publicado en la invitación." : "Aún dice “Lugar por confirmar”.";
+    }catch(e){ $("#cEstado").textContent = errTxt(e); }
+  }
+  async function guardarCere(cere, btn){
+    btn.disabled=true;
+    try{ await op({action:"setConfig", ceremonia:cere}); $("#cEstado").textContent = cere ? "Publicado en la invitación." : "Aún dice “Lugar por confirmar”."; toast(cere?"Lugar de la ceremonia guardado":"La ceremonia quedó por confirmar"); }
+    catch(e){ toast(errTxt(e)); $("#cEstado").textContent=errTxt(e); }
+    btn.disabled=false;
+  }
+  $("#cereForm").addEventListener("submit", e=>{
+    e.preventDefault();
+    const c={ nombre:$("#cNom").value.trim(), direccion:$("#cDir").value.trim(), hora:$("#cHora").value.trim(), mapa:$("#cMapa").value.trim() };
+    if(!c.nombre){ $("#cNom").focus(); toast("Escribe el nombre del lugar"); return; }
+    if(c.mapa && !/^https:\/\//i.test(c.mapa)){ $("#cMapa").focus(); toast("El enlace de Maps debe empezar por https://"); return; }
+    guardarCere(c, $("#cGuardar"));
+  });
+  $("#cQuitar").addEventListener("click", ()=>{ ["cNom","cDir","cHora","cMapa"].forEach(id=>$(id).value=""); guardarCere(null, $("#cQuitar")); });
   document.addEventListener("visibilitychange", ()=>{ if(!document.hidden && pin && !$("#panelVista").hidden) cargar(true); });
   $("#filtros").addEventListener("click", e=>{ const b=e.target.closest("button"); if(!b) return; filtro=b.dataset.f; document.querySelectorAll("#filtros button").forEach(x=>x.setAttribute("aria-pressed", x===b?"true":"false")); render(); });
 
