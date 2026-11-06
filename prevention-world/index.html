@@ -1,0 +1,716 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Formatos Digitales PW</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap">
+<style>
+/* Layout: barra superior con roles; cada vista es una columna de trabajo, el estudiante en formato móvil paso a paso. */
+:root{
+  --bg:#eef1f4; --surface:#ffffff; --sunk:#f6f8fa; --ink:#16212c; --muted:#5b6774; --line:#d5dce3;
+  --band:#4b545d; --band-ink:#ffffff; --accent:#1a5ea6; --accent-soft:#e3edf8; --accent-ink:#ffffff;
+  --ok:#1d7548; --ok-soft:#e1f2e8; --warn:#a85a12; --warn-soft:#fbeedd; --bad:#b0281f; --bad-soft:#fbe4e2;
+  --paper:#ffffff; --pen:#0d1d55;
+  --f-display:"Barlow Condensed","Arial Narrow",Arial,sans-serif;
+  --f-body:"Barlow",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --r:6px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0f151b; --surface:#172029; --sunk:#121a22; --ink:#e6ecf1; --muted:#98a5b2; --line:#2b3743;
+  --band:#33404c; --band-ink:#eef3f7; --accent:#6aa7ea; --accent-soft:#1b2d42; --accent-ink:#0c1520;
+  --ok:#5cc48d; --ok-soft:#13291e; --warn:#e9a75c; --warn-soft:#2e2112; --bad:#f07f76; --bad-soft:#331816;
+  --paper:#ffffff; --pen:#0d1d55; color-scheme:dark }}
+:root[data-theme="dark"]{
+  --bg:#0f151b; --surface:#172029; --sunk:#121a22; --ink:#e6ecf1; --muted:#98a5b2; --line:#2b3743;
+  --band:#33404c; --band-ink:#eef3f7; --accent:#6aa7ea; --accent-soft:#1b2d42; --accent-ink:#0c1520;
+  --ok:#5cc48d; --ok-soft:#13291e; --warn:#e9a75c; --warn-soft:#2e2112; --bad:#f07f76; --bad-soft:#331816;
+  --paper:#ffffff; --pen:#0d1d55; color-scheme:dark }
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.45}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
+h1,h2,h3{font-family:var(--f-display);font-weight:700;margin:0;text-wrap:balance;letter-spacing:.01em}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1080px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+/* barra superior */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:var(--surface);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding-block:10px}
+.brand{display:flex;align-items:baseline;gap:10px;margin-right:auto;min-width:0}
+.brand b{font-family:var(--f-display);font-size:21px;font-weight:700;letter-spacing:.02em}
+.brand span{color:var(--muted);font-size:13px}
+.chip{font-family:var(--f-display);font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:2px 8px;border-radius:99px;background:var(--warn-soft);color:var(--warn)}
+.roles{display:flex;gap:4px;background:var(--sunk);border:1px solid var(--line);border-radius:8px;padding:3px}
+.roles a{font-family:var(--f-display);font-size:16px;font-weight:600;letter-spacing:.03em;text-decoration:none;color:var(--muted);padding:5px 14px;border-radius:6px}
+.roles a[aria-current="page"]{background:var(--accent);color:var(--accent-ink)}
+
+/* flujo */
+.flow{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:2px;margin:18px 0 6px}
+.flow div{background:var(--surface);border:1px solid var(--line);padding:8px 12px;font-size:13px;color:var(--muted)}
+.flow div:first-child{border-radius:var(--r) 0 0 var(--r)}.flow div:last-child{border-radius:0 var(--r) var(--r) 0}
+.flow b{display:block;font-family:var(--f-display);font-size:15px;color:var(--ink);letter-spacing:.02em}
+.flow div.on{border-color:var(--accent);background:var(--accent-soft)}
+@media (max-width:640px){.flow{grid-template-columns:1fr 1fr}.flow div{border-radius:var(--r)!important}}
+
+main{padding-block:12px 64px}
+.view{display:grid;gap:18px}
+
+/* banda tipo formato PW */
+.band{background:var(--band);color:var(--band-ink);font-family:var(--f-display);font-weight:600;font-size:15px;letter-spacing:.06em;text-transform:uppercase;padding:6px 26px 6px 12px;display:inline-block;clip-path:polygon(0 0,calc(100% - 16px) 0,100% 100%,0 100%)}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px;min-width:0}
+.panel > .band{margin:-18px 0 14px -18px;border-top-left-radius:var(--r)}
+.row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 16px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px 16px}
+@media (max-width:720px){.grid3{grid-template-columns:1fr 1fr}}
+@media (max-width:520px){.grid2,.grid3{grid-template-columns:1fr}}
+.split{display:grid;grid-template-columns:320px minmax(0,1fr);gap:18px;align-items:start}
+@media (max-width:860px){.split{grid-template-columns:1fr}}
+
+label.f{display:grid;gap:4px;font-size:12px;font-family:var(--f-display);font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);min-width:0}
+.f input,.f select,.f textarea{font-family:var(--f-body);font-size:15px;text-transform:none;letter-spacing:0;font-weight:400;color:var(--ink);background:var(--sunk);border:1px solid var(--line);border-radius:5px;padding:9px 10px;width:100%}
+.f textarea{min-height:70px;resize:vertical}
+.f .err{color:var(--bad)}
+.span2{grid-column:1/-1}
+
+.btn{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:6px;padding:9px 14px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.btn:hover{border-color:var(--accent)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.ghost{background:transparent;border-color:transparent;color:var(--accent);padding-inline:6px}
+.btn.sm{padding:5px 10px;font-size:13px}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+
+.muted{color:var(--muted)}
+.small{font-size:13px}
+.pill{display:inline-block;font-size:12px;font-weight:600;padding:2px 9px;border-radius:99px;white-space:nowrap}
+.pill.ok{background:var(--ok-soft);color:var(--ok)}
+.pill.warn{background:var(--warn-soft);color:var(--warn)}
+.pill.ex{background:var(--sunk);color:var(--muted);border:1px solid var(--line)}
+
+/* lista de grupos */
+.groups{display:grid;gap:8px}
+.gcard{text-align:left;border:1px solid var(--line);background:var(--sunk);border-radius:var(--r);padding:10px 12px;cursor:pointer;display:grid;gap:2px}
+.gcard[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft)}
+.gcard b{font-family:var(--f-display);font-size:17px;letter-spacing:.02em}
+.code{font-family:var(--f-display);font-weight:600;letter-spacing:.06em;color:var(--muted);font-size:13px}
+
+.kv{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 14px;font-size:14px}
+.kv dt{color:var(--muted);font-family:var(--f-display);font-weight:600;letter-spacing:.05em;text-transform:uppercase;font-size:12px;padding-top:2px}
+.kv dd{margin:0;min-width:0;overflow-wrap:anywhere}
+
+.linkbox{display:flex;gap:8px;align-items:center;background:var(--sunk);border:1px dashed var(--line);border-radius:var(--r);padding:8px 10px;flex-wrap:wrap}
+.linkbox code{font-size:13px;overflow-wrap:anywhere;flex:1 1 200px;min-width:0}
+
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r)}
+table{border-collapse:collapse;width:100%;font-size:14px;min-width:640px}
+th{font-family:var(--f-display);font-weight:600;letter-spacing:.06em;text-transform:uppercase;font-size:12px;color:var(--band-ink);background:var(--band);text-align:left;padding:8px 10px}
+td{padding:9px 10px;border-top:1px solid var(--line);vertical-align:middle}
+td.num{font-variant-numeric:tabular-nums}
+.score{font-variant-numeric:tabular-nums;font-weight:600}
+.empty{padding:22px;text-align:center;color:var(--muted)}
+
+/* estudiante */
+.phone{max-width:560px;margin:0 auto;width:100%}
+.steps{display:flex;gap:4px;margin:4px 0 14px}
+.steps i{flex:1;height:5px;border-radius:3px;background:var(--line)}
+.steps i.on{background:var(--accent)}
+.q{border:1px solid var(--line);border-radius:var(--r);padding:12px;display:grid;gap:8px;background:var(--sunk)}
+.q p{margin:0;font-weight:500}
+.opts{display:grid;gap:6px}
+.opt{display:flex;gap:10px;align-items:flex-start;padding:8px 10px;border:1px solid var(--line);border-radius:5px;background:var(--surface);cursor:pointer}
+.opt input{margin-top:3px}
+.opt b{font-family:var(--f-display);width:14px;flex:none}
+.opt:has(input:checked){border-color:var(--accent);background:var(--accent-soft)}
+.yn{display:flex;gap:6px;flex:none}
+.yn label{border:1px solid var(--line);border-radius:5px;padding:5px 12px;cursor:pointer;background:var(--surface);font-weight:600}
+.yn label:has(input:checked){border-color:var(--accent);background:var(--accent-soft);color:var(--accent)}
+.yn input{position:absolute;opacity:0;pointer-events:none}
+.hrow{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;padding:10px 0;border-top:1px solid var(--line)}
+.hrow:first-child{border-top:0}
+.hrow > span{flex:1 1 220px;min-width:0}
+.rate{display:flex;gap:4px}
+.rate label{width:38px;text-align:center;border:1px solid var(--line);border-radius:5px;padding:5px 0;cursor:pointer;background:var(--surface);font-weight:600;font-variant-numeric:tabular-nums}
+.rate label:has(input:checked){background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.rate input{position:absolute;opacity:0;pointer-events:none}
+.topic{display:grid;gap:10px}
+.topic h3{font-size:18px;color:var(--accent)}
+.legal{font-size:13px;color:var(--muted);background:var(--sunk);border-radius:var(--r);padding:10px 12px;display:grid;gap:6px}
+.legal p{margin:0}
+.notice{border-radius:var(--r);padding:10px 12px;font-size:14px}
+.notice.bad{background:var(--bad-soft);color:var(--bad)}
+.notice.info{background:var(--accent-soft);color:var(--ink)}
+.notice.ok{background:var(--ok-soft);color:var(--ink)}
+.nav{display:flex;justify-content:space-between;gap:10px;margin-top:16px}
+
+/* firma */
+.sig{display:grid;gap:6px}
+.sigpad{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);position:relative;touch-action:none;aspect-ratio:3/1;max-width:100%}
+.sigpad canvas{width:100%;height:100%;display:block;border-radius:var(--r);cursor:crosshair}
+.sigpad::after{content:"";position:absolute;left:8%;right:8%;bottom:24%;border-bottom:1px solid #b9c2cb;pointer-events:none}
+.sigpad .hint{position:absolute;left:0;right:0;bottom:6%;text-align:center;font-size:12px;color:#7a8692;pointer-events:none}
+
+/* instructor */
+.scores{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
+.scores div{background:var(--sunk);border:1px solid var(--line);border-radius:5px;padding:6px 8px;font-size:12px;color:var(--muted)}
+.scores b{display:block;font-size:20px;color:var(--ink);font-variant-numeric:tabular-nums;font-family:var(--f-display)}
+@media (max-width:560px){.scores{grid-template-columns:repeat(3,minmax(0,1fr))}}
+
+/* visor */
+.modal{position:fixed;inset:0;z-index:20;background:rgba(10,15,20,.6);display:flex;align-items:flex-start;justify-content:center;padding:calc(env(safe-area-inset-top,0px) + 20px) max(16px,env(safe-area-inset-right,0px)) 20px max(16px,env(safe-area-inset-left,0px));overflow:auto}
+.sheet{background:var(--surface);border-radius:8px;max-width:980px;width:100%;padding:14px;display:grid;gap:10px}
+.sheet canvas{width:100%;height:auto;border:1px solid var(--line);background:#fff;display:block}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(env(safe-area-inset-bottom,0px) + 20px);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:8px;z-index:30;font-size:14px;max-width:calc(100% - 32px)}
+@media (prefers-reduced-motion:no-preference){.btn,.opt,.gcard{transition:border-color .15s,background .15s}}
+</style>
+
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <div class="brand"><b>Formatos Digitales PW</b><span>Instituto Prevention World QHSE S.A.S.</span><span class="chip">Demo</span></div>
+    <nav class="roles" aria-label="Rol">
+      <a href="#gestora" data-r="gestora">Gestora</a>
+      <a href="#estudiante" data-r="estudiante">Estudiante</a>
+      <a href="#instructor" data-r="instructor">Instructor</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="flow" id="flow">
+    <div data-s="gestora"><b>1 · Gestora</b>Crea el grupo y comparte el enlace</div>
+    <div data-s="estudiante"><b>2 · Estudiante</b>Diligencia la ficha, la evaluación y firma</div>
+    <div data-s="instructor"><b>3 · Instructor</b>Revisa la calificación y firma cada formulario</div>
+    <div data-s="pdf"><b>4 · PDF DF47</b>Sale en el formato oficial, listo para subir</div>
+  </div>
+  <main id="app"></main>
+</div>
+<div id="modal" class="modal" hidden></div>
+<div id="toast" class="toast" hidden></div>
+
+<script src="lib/pdf-lib.min.js"></script>
+<script src="lib/pdf.min.js"></script>
+<script src="lib/jszip.min.js"></script>
+<script>
+// Rellena el formato DF47 (Brigadas integrales) de Prevention World sobre el PDF original.
+// Coordenadas medidas del PDF original (origen arriba-izquierda, puntos). pdf-lib usa origen abajo-izquierda.
+(function (root) {
+  var H = 612;
+
+  var P0 = {
+    texto: {
+      lugar: [437, 83.6, 220], metodologia: [455, 96.1, 200],
+      razon: [457, 121, 200], nit: [678, 121, 95], direccion: [447, 133.3, 210], telefono: [694, 133.3, 80],
+      nombre: [479, 161.5, 172], rh: [710, 164.6, 62], cedula: [475, 177.3, 175], cargo: [678, 177.3, 95],
+      email: [439, 189.7, 210], celular: [689, 189.7, 85], edad: [434, 202.1, 30], eps: [485, 202.1, 165], arl: [673, 202.1, 100],
+      contacto: [491, 226.8, 160], contactoCel: [683, 226.8, 90]
+    },
+    salud: [250.4, 263.0, 275.6, 288.2, 300.8],
+    siX: 600.3, noX: 630.7,
+    emb: [326.3, 342.8], embSi: 733.0, embNo: 762.2,
+    fecha: { d: 515.2, m: 545.8, a: 576.5, top: 590 },
+    firma: { x: 590, top: 560, w: 98, h: 32 }
+  };
+
+  var GRIDS = {
+    pa: { cols: [173.05, 206.3, 239.65, 272.95], rows: [346.3, 360.5, 374.6, 388.8, 403.3], ok: [79.5, 428.8], ko: [271.2, 428.8] },
+    er: { cols: [174.45, 207.7, 241.05, 274.35], rows: [485.3, 499.5, 513.7, 527.9, 542.3], ok: [79.5, 564.6], ko: [271.2, 564.6] },
+    ci: { cols: [554.0, 587.25, 620.55, 653.85], rows: [81.7, 95.8, 110.0, 124.2, 138.7], ok: [476.2, 159.8], ko: [667.8, 159.8] },
+    dr: { cols: [552.85, 586.05, 619.35, 652.75], rows: [220.3, 234.5, 248.6, 262.8, 277.3], ok: [477.2, 308.2], ko: [657.6, 308.5] },
+    am: { cols: [553.25, 586.5, 619.85, 653.15], rows: [373.5, 387.7, 401.9, 416.1, 430.5], ok: [477.7, 454.4], ko: [660.0, 454.1] }
+  };
+
+  var SAT = { cols: [286.2, 307.45, 328.7, 349.95, 371.25], top0: 125.0, step: 14.17 };
+
+  function fit(font, text, size, maxW) {
+    text = String(text || '');
+    var s = size;
+    while (s > 4.5 && font.widthOfTextAtSize(text, s) > maxW) s -= 0.25;
+    while (text.length > 1 && font.widthOfTextAtSize(text, s) > maxW) text = text.slice(0, -1);
+    return { text: text, size: s };
+  }
+
+  async function fillDF47(PDFLib, templateBytes, d) {
+    var doc = await PDFLib.PDFDocument.load(templateBytes);
+    var font = await doc.embedFont(PDFLib.StandardFonts.Helvetica);
+    var bold = await doc.embedFont(PDFLib.StandardFonts.HelveticaBold);
+    var ink = PDFLib.rgb(0.07, 0.17, 0.5);
+    var pages = doc.getPages();
+    var p0 = pages[0], p1 = pages[1];
+
+    function txt(page, s, x, top, opt) {
+      opt = opt || {};
+      var f = opt.bold ? bold : font;
+      var r = fit(f, s, opt.size || 6.6, opt.maxW || 300);
+      if (!r.text) return;
+      var w = f.widthOfTextAtSize(r.text, r.size);
+      var xx = opt.center ? x - w / 2 : x;
+      page.drawText(r.text, { x: xx, y: H - top - (opt.base != null ? opt.base : 5.5), size: r.size, font: f, color: ink });
+    }
+    function mark(page, cx, cyTop, size) {
+      var s = (size || 7) / 2, cy = H - cyTop;
+      page.drawLine({ start: { x: cx - s, y: cy - s }, end: { x: cx + s, y: cy + s }, thickness: 1.3, color: ink });
+      page.drawLine({ start: { x: cx - s, y: cy + s }, end: { x: cx + s, y: cy - s }, thickness: 1.3, color: ink });
+    }
+    async function sig(page, dataUrl, box) {
+      if (!dataUrl) return;
+      var b64 = dataUrl.split(',')[1];
+      var bytes = typeof atob === 'function' ? Uint8Array.from(atob(b64), function (c) { return c.charCodeAt(0); }) : Buffer.from(b64, 'base64');
+      var img = await doc.embedPng(bytes);
+      var sc = Math.min(box.w / img.width, box.h / img.height);
+      var w = img.width * sc, h = img.height * sc;
+      page.drawImage(img, { x: box.x + (box.w - w) / 2, y: H - box.top - box.h + (box.h - h) / 2, width: w, height: h });
+    }
+
+    // ---- Página 1 del formato (hoja 0, mitad derecha)
+    var g = d.grupo || {}, e = d.estudiante || {};
+    var vals = {
+      lugar: g.lugar, metodologia: g.metodologia, razon: g.razon, nit: g.nit, direccion: g.direccion, telefono: g.telefono,
+      nombre: e.nombre, rh: e.rh, cedula: e.cedula, cargo: e.cargo, email: e.email, celular: e.celular,
+      edad: e.edad, eps: e.eps, arl: e.arl, contacto: e.contacto, contactoCel: e.contactoCel
+    };
+    Object.keys(P0.texto).forEach(function (k) {
+      var c = P0.texto[k];
+      txt(p0, vals[k], c[0], c[1], { maxW: c[2] });
+    });
+    (d.salud || []).forEach(function (s, i) {
+      var top = P0.salud[i];
+      mark(p0, (s.r === 'si' ? P0.siX : P0.noX) + 3, top + 3, 5.5);
+      if (s.r === 'si' && s.cual) txt(p0, s.cual, 643, top + 0.6, { size: 6, maxW: 130 });
+    });
+    if (d.embarazo) {
+      mark(p0, (d.embarazo[0] === 'si' ? P0.embSi : P0.embNo) + 3, P0.emb[0] + 3, 5.5);
+      mark(p0, (d.embarazo[1] === 'si' ? P0.embSi : P0.embNo) + 3, P0.emb[1] + 3, 5.5);
+    }
+    var f = (g.fecha || '').split('-'); // yyyy-mm-dd
+    if (f.length === 3) {
+      txt(p0, f[2], P0.fecha.d, P0.fecha.top, { center: true, bold: true, size: 8, base: 0 });
+      txt(p0, f[1], P0.fecha.m, P0.fecha.top, { center: true, bold: true, size: 8, base: 0 });
+      txt(p0, f[0], P0.fecha.a, P0.fecha.top, { center: true, bold: true, size: 8, base: 0 });
+    }
+    await sig(p0, e.firma, P0.firma);
+
+    // ---- Páginas 2 y 3 (hoja 1)
+    txt(p1, d.numero, 736.5, 50.5, { center: true, bold: true, size: 9, base: 0 });
+    (d.satisfaccion || []).forEach(function (v, i) {
+      if (!v) return;
+      var cx = SAT.cols[5 - v];
+      mark(p1, cx, SAT.top0 + SAT.step * i + 7.1, 6.5);
+    });
+    if (d.comentarios) {
+      var words = String(d.comentarios).split(/\s+/), lines = [''], li = 0;
+      var widths = [220, 360, 360];
+      words.forEach(function (w) {
+        var t = lines[li] ? lines[li] + ' ' + w : w;
+        if (font.widthOfTextAtSize(t, 6.6) > widths[li] && li < 2) { li++; lines[li] = w; }
+        else lines[li] = t;
+      });
+      var pos = [[157, 260.6], [19, 276.5], [19, 291.8]];
+      lines.forEach(function (l, i) { if (l) txt(p1, l, pos[i][0], pos[i][1], { maxW: widths[i] }); });
+    }
+    Object.keys(GRIDS).forEach(function (k) {
+      var G = GRIDS[k], ans = (d.respuestas || {})[k];
+      if (!ans) return;
+      var ok = 0;
+      ans.forEach(function (a, i) {
+        if (a == null) return;
+        mark(p1, G.cols[a], G.rows[i] + 3, 8);
+        if (d.clave && d.clave[k] && d.clave[k][i] === a) ok++;
+      });
+      txt(p1, String(ok), G.ok[0] + 23, G.ok[1] + 6.6, { center: true, bold: true, size: 9, base: 0 });
+      txt(p1, String(5 - ok), G.ko[0] + 23, G.ko[1] + 6.6, { center: true, bold: true, size: 9, base: 0 });
+    });
+    await sig(p1, d.firmaInstructor, { x: 552, top: 518, w: 82, h: 34 });
+    if (g.instructor) txt(p1, g.instructor, 592.9, 564.5, { center: true, size: 6, maxW: 120 });
+
+    return await doc.save();
+  }
+
+  root.fillDF47 = fillDF47;
+  if (typeof module !== 'undefined') module.exports = { fillDF47: fillDF47 };
+})(typeof window !== 'undefined' ? window : globalThis);
+
+</script>
+<script>
+(function(){
+"use strict";
+// ================== Contenido del formato DF47 ==================
+var FORMACION = { codigo:"DF47", nombre:"Brigadas integrales: Salud y Medio ambiente", horas:8 };
+var OTRAS = ["Primeros auxilios básicos","Control de incendios","RICPAS","Trabajo seguro en alturas"];
+var SALUD = ["¿Me encuentro en óptimas condiciones de salud?","¿Sufre alguna enfermedad actualmente?","¿Ha consumido algún medicamento recientemente?","¿Ha sufrido lesiones recientemente?","¿Padece algún tipo de alergia?"];
+var SAT = ["La organización, preparación, comodidad y seguridad del ambiente de formación fue","El logro de los objetivos planteados al inicio de la capacitación fue","La metodología aplicada para el desarrollo de la actividad fue","Los materiales utilizados para presentar los temas fueron","Los contenidos de la capacitación respondieron a la oferta","El lenguaje utilizado por el instructor fue","El manejo de los participantes en general por parte del instructor fue","Sus dudas fueron resueltas de manera","La utilización de ayudas para la comprensión del tema fue"];
+var SAT_ESC = {5:"Excelente",4:"Bueno",3:"Aceptable",2:"Regular",1:"Deficiente"};
+// Preguntas de demostración (inventadas). k = índice de la respuesta correcta.
+var EVAL = [
+ {id:"pa",t:"Primeros auxilios",q:[
+  ["¿Qué es lo primero que debe hacer al llegar a una emergencia?",["Mover de inmediato al lesionado","Verificar que la escena sea segura","Darle agua al lesionado","Llamar a un familiar"],1],
+  ["En RCP a un adulto, ¿cuál es la relación entre compresiones y ventilaciones?",["15:2","5:1","30:2","10:2"],2],
+  ["Ante una hemorragia externa, lo primero es:",["Hacer presión directa sobre la herida","Aplicar alcohol en la herida","Poner siempre un torniquete","Dejar que sangre para limpiar"],0],
+  ["Para una quemadura leve se recomienda:",["Aplicar crema dental","Reventar las ampollas","Poner hielo directo","Enfriar con agua a temperatura ambiente"],3],
+  ["¿Cuál es la línea única de emergencias en Colombia?",["911","123","112","132"],1]]},
+ {id:"er",t:"Evacuación y rescate",q:[
+  ["Al escuchar la alarma de evacuación usted debe:",["Terminar lo que está haciendo","Seguir la ruta de evacuación hasta el punto de encuentro","Esperar instrucciones por celular","Buscar sus objetos personales"],1],
+  ["Si hay humo durante la evacuación, debe desplazarse:",["Agachado y cerca al piso","De pie y corriendo","Hacia los pisos superiores","Por el ascensor"],0],
+  ["Durante una evacuación NO se debe usar:",["Las escaleras","Las rutas señalizadas","Los ascensores","Las salidas de emergencia"],2],
+  ["El punto de encuentro es:",["El lugar donde se guarda el botiquín","La oficina del jefe","La salida más cercana a la casa","Un sitio seguro y señalizado donde se reúne y se cuenta al personal"],3],
+  ["Antes de mover a un lesionado se debe:",["Verificar que la escena sea segura y que sea necesario moverlo","Levantarlo por los brazos","Darle de beber","Quitarle siempre el casco"],0]]},
+ {id:"ci",t:"Control de incendios",q:[
+  ["Los elementos del triángulo del fuego son:",["Calor, humo y agua","Combustible, oxígeno y calor","Oxígeno, gas y luz","Madera, papel y chispa"],1],
+  ["Un fuego clase A es el que involucra:",["Líquidos inflamables","Equipos eléctricos energizados","Sólidos comunes como madera, papel o tela","Metales combustibles"],2],
+  ["¿Qué agente NO debe usarse en un fuego eléctrico energizado?",["Agua","CO2","Polvo químico seco","Agente limpio"],0],
+  ["En la técnica PASS, el primer paso es:",["Apuntar a las llamas","Apretar la manija","Halar el pasador de seguridad","Barrer de lado a lado"],2],
+  ["El chorro del extintor se dirige a:",["La parte alta de las llamas","El humo","Las paredes cercanas","La base del fuego"],3]]},
+ {id:"dr",t:"Disposición de residuos",q:[
+  ["En Colombia, la caneca blanca es para residuos:",["Orgánicos","Aprovechables como plástico, vidrio, papel y metal","No aprovechables","Peligrosos"],1],
+  ["La caneca verde es para:",["Residuos orgánicos aprovechables","Vidrio","Pilas","Papel higiénico"],0],
+  ["Las servilletas y el papel higiénico usados van en la caneca:",["Blanca","Verde","Negra","Roja"],2],
+  ["Las pilas y baterías usadas se deben:",["Botar en la caneca blanca","Quemar","Enterrar","Entregar en puntos de recolección autorizados"],3],
+  ["Las 3R significan:",["Recoger, revisar y reparar","Romper, rellenar y reciclar","Reducir, reutilizar y reciclar","Reunir, reportar y retirar"],2]]},
+ {id:"am",t:"Automedicación",q:[
+  ["La automedicación es:",["Tomar medicamentos formulados por el médico","Tomar medicamentos sin prescripción ni supervisión médica","Ir a control médico","Leer el prospecto del medicamento"],1],
+  ["Un riesgo de tomar antibióticos sin fórmula es:",["Mejor digestión","Más energía","Que las bacterias se vuelvan resistentes","Ninguno"],2],
+  ["Si un medicamento le causa una reacción, debe:",["Suspenderlo y consultar al médico","Duplicar la dosis","Cambiarlo por otro sin consultar","Tomarlo con café"],0],
+  ["Mezclar medicamentos con alcohol:",["Mejora su efecto","Siempre es seguro en pequeñas cantidades","No tiene ningún efecto","Puede causar efectos peligrosos"],3],
+  ["Un medicamento vencido se debe:",["Tomar a mitad de dosis","Regalar","Llevar a un punto de recolección y no consumirlo","Guardar para otra ocasión"],2]]}
+];
+var CLAVE = {}; EVAL.forEach(function(e){ CLAVE[e.id] = e.q.map(function(q){return q[2];}); });
+var L = ["A","B","C","D"];
+
+// ================== Estado ==================
+var KEY = "pw-df47-demo-v1";
+var S = null;
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
+function load(){ try{ var s = localStorage.getItem(KEY); if(s) return JSON.parse(s); }catch(e){} return null; }
+function uid(){ return Math.random().toString(36).slice(2,8); }
+function pad(n){ return String(n).padStart(4,"0"); }
+function esc(s){ return String(s==null?"":s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];}); }
+function today(){ var d=new Date(); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); }
+function fmtFecha(f){ var p=(f||"").split("-"); return p.length===3? p[2]+"/"+p[1]+"/"+p[0] : f; }
+
+// firma de ejemplo dibujada en canvas
+function fakeSig(seed){
+  var c=document.createElement("canvas"); c.width=600; c.height=200; var x=c.getContext("2d");
+  var r=seed; function rnd(){ r=(r*9301+49297)%233280; return r/233280; }
+  x.strokeStyle="#0d1d55"; x.lineWidth=5; x.lineCap="round"; x.lineJoin="round"; x.beginPath();
+  var px=40, py=120; x.moveTo(px,py);
+  for(var i=0;i<9;i++){ var nx=px+50+rnd()*20, ny=50+rnd()*100; x.quadraticCurveTo(px+25, ny<py?ny-30:ny+30, nx, ny); px=nx; py=ny; }
+  x.stroke(); x.beginPath(); x.moveTo(60,150); x.lineTo(px-20,140+rnd()*10); x.lineWidth=3; x.stroke();
+  return c.toDataURL("image/png");
+}
+function score(resp){ var t=0, by={}; EVAL.forEach(function(e){ var ok=0; (resp[e.id]||[]).forEach(function(a,i){ if(a===CLAVE[e.id][i]) ok++; }); by[e.id]=ok; t+=ok; }); return {total:t, by:by}; }
+function randomAns(bias){ var o={}; EVAL.forEach(function(e,ei){ o[e.id]=e.q.map(function(q,qi){ return ((qi+ei)%bias===0)? (q[2]+1)%4 : q[2]; }); }); return o; }
+
+function seed(){
+  var g = { id:"g"+uid(), formacion:"DF47", lugar:"Centro de Formación Prevention World, Neiva", metodologia:"Teórico-práctica presencial",
+    razon:"Constructora Ejemplo S.A.S.", nit:"900.000.000-0", direccion:"Calle 0 # 00-00 (ejemplo)", telefono:"000 000 0000",
+    fecha: today(), instructor:"Instructor de ejemplo", ejemplo:true };
+  function est(n, nombre, cargo, firmado, bias){
+    return { id:"f"+uid(), grupo:g.id, numero:pad(n), creado:Date.now()-n*60000, ejemplo:true,
+      estudiante:{ nombre:nombre, sexo:"Hombre", rh:"O+", cedula:"0000000"+n, cargo:cargo, email:"estudiante"+n+"@ejemplo.com", celular:"300 000 000"+n, edad:String(24+n*3), eps:"EPS de ejemplo", arl:"ARL de ejemplo", contacto:"Contacto de ejemplo", contactoCel:"300 000 00"+n+n, firma:fakeSig(n*7+3) },
+      salud:[{r:"si"},{r:"no"},{r:"no"},{r:"no"},{r:n===2?"si":"no",cual:n===2?"Penicilina":""}], embarazo:null,
+      satisfaccion:[5,5,4,5,4,5,5,4,5], comentarios:n===1?"Muy clara la parte práctica de extintores.":"",
+      respuestas: randomAns(bias), firmaInstructor: firmado? fakeSig(91) : null };
+  }
+  return { grupos:[g], formularios:[ est(1,"Estudiante Ejemplo Uno","Auxiliar de obra",true,6), est(2,"Estudiante Ejemplo Dos","Operario de maquinaria",false,4) ], sel:g.id, contador:2 };
+}
+S = load() || seed();
+if(!S.grupos.length){ S = seed(); }
+function grupo(id){ return S.grupos.find(function(g){return g.id===id;}); }
+function selGrupo(){ return grupo(S.sel) || S.grupos[0]; }
+function formsDe(gid){ return S.formularios.filter(function(f){return f.grupo===gid;}).sort(function(a,b){return a.numero<b.numero?-1:1;}); }
+
+// ================== Utilidades UI ==================
+var app = document.getElementById("app");
+var toastT;
+function toast(m){ var t=document.getElementById("toast"); t.textContent=m; t.hidden=false; clearTimeout(toastT); toastT=setTimeout(function(){t.hidden=true;},3200); }
+var browserDl = { save: function(o){ var u=URL.createObjectURL(o.data); var a=document.createElement("a"); a.href=u; a.download=o.filename; document.body.appendChild(a); a.click(); a.remove(); setTimeout(function(){URL.revokeObjectURL(u);},4000); return Promise.resolve({status:"saved"}); } };
+var enClaude = /claude\.ai|claudeusercontent|anthropic/.test(location.hostname);
+var downloads = enClaude ? null : browserDl;
+(async function(){ try{ if(window.claude && window.claude.use){ var d = await window.claude.use("downloads"); if(d){ downloads = d; render(); } } }catch(e){} })();
+
+// ================== PDF ==================
+var tplBytes = null;
+async function template(){
+  if(!tplBytes){ var r = await fetch("DF47.pdf"); if(!r.ok) throw new Error("No se pudo cargar el formato DF47"); tplBytes = new Uint8Array(await r.arrayBuffer()); }
+  return tplBytes.slice(0);
+}
+async function pdfDe(f){
+  var g = grupo(f.grupo);
+  return await window.fillDF47(PDFLib, await template(), {
+    numero:f.numero, grupo:g, estudiante:f.estudiante, salud:f.salud, embarazo:f.embarazo,
+    satisfaccion:f.satisfaccion, comentarios:f.comentarios, respuestas:f.respuestas, clave:CLAVE, firmaInstructor:f.firmaInstructor });
+}
+function nombreArchivo(f){ return "DF47_"+f.numero+"_"+(f.estudiante.nombre||"estudiante").normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^A-Za-z0-9]+/g,"_")+".pdf"; }
+async function descargar(f){
+  if(!downloads){ toast("La descarga no está disponible en esta vista. Usa Ver PDF."); return; }
+  try{ var b = await pdfDe(f); await downloads.save({filename:nombreArchivo(f), data:new Blob([b],{type:"application/pdf"})}); toast("PDF guardado"); }
+  catch(e){ if(e && e.code==="declined") return; toast("No se pudo guardar el PDF"); }
+}
+async function descargarTodos(g){
+  var fs = formsDe(g.id).filter(function(f){return f.firmaInstructor;});
+  if(!fs.length){ toast("Aún no hay formularios firmados por el instructor"); return; }
+  if(!downloads){ toast("La descarga no está disponible en esta vista."); return; }
+  try{
+    var z = new JSZip();
+    for(var i=0;i<fs.length;i++){ z.file(nombreArchivo(fs[i]), await pdfDe(fs[i])); }
+    var blob = await z.generateAsync({type:"blob"});
+    await downloads.save({filename:"DF47_grupo_"+(g.fecha||"")+".zip", data:blob}); toast(fs.length+" formularios guardados en un ZIP");
+  }catch(e){ if(e && e.code==="declined") return; toast("No se pudo generar el ZIP"); }
+}
+if(window.pdfjsLib){ try{ pdfjsLib.GlobalWorkerOptions.workerSrc = new URL("lib/pdf.worker.min.js", location.href).href; }catch(e){} }
+async function verPDF(f){
+  var m = document.getElementById("modal");
+  m.innerHTML = '<div class="sheet" role="dialog" aria-label="Vista previa del PDF"><div class="row"><b style="font-family:var(--f-display);font-size:18px;margin-right:auto">Formulario '+esc(f.numero)+' · '+esc(f.estudiante.nombre)+'</b>'+(downloads?'<button class="btn sm primary" id="mDl">Descargar PDF</button>':'')+'<button class="btn sm" id="mClose">Cerrar</button></div><div id="mPages" class="muted small">Generando el PDF en el formato DF47…</div></div>';
+  m.hidden = false;
+  m.onclick = function(ev){ if(ev.target===m) cerrar(); };
+  document.getElementById("mClose").onclick = cerrar;
+  var dlb = document.getElementById("mDl"); if(dlb) dlb.onclick = function(){ descargar(f); };
+  try{
+    var bytes = await pdfDe(f);
+    var doc = await pdfjsLib.getDocument({data:bytes}).promise;
+    var box = document.getElementById("mPages"); box.innerHTML=""; box.className="";
+    box.style.display="grid"; box.style.gap="10px";
+    for(var p=1;p<=doc.numPages;p++){
+      var page = await doc.getPage(p); var vp = page.getViewport({scale:2});
+      var c = document.createElement("canvas"); c.width=vp.width; c.height=vp.height; box.appendChild(c);
+      await page.render({canvasContext:c.getContext("2d"), viewport:vp}).promise;
+    }
+  }catch(e){ var b=document.getElementById("mPages"); if(b){ b.textContent="No se pudo mostrar el PDF: "+(e.message||e); } }
+}
+function cerrar(){ var m=document.getElementById("modal"); m.hidden=true; m.innerHTML=""; }
+document.addEventListener("keydown",function(e){ if(e.key==="Escape") cerrar(); });
+
+// ================== Panel de firma ==================
+function sigPad(el){
+  el.innerHTML = '<canvas aria-label="Espacio para firmar"></canvas><div class="hint">Firme aquí con el dedo o el mouse</div>';
+  var c = el.querySelector("canvas"), x = c.getContext("2d"), hint = el.querySelector(".hint"), drawing=false, has=false, last=null;
+  function size(){ var r=c.getBoundingClientRect(); c.width=Math.max(300,r.width*2); c.height=Math.max(100,r.height*2); x.lineWidth=5; x.lineCap="round"; x.lineJoin="round"; x.strokeStyle="#0d1d55"; has=false; hint.hidden=false; }
+  requestAnimationFrame(size);
+  function pt(e){ var r=c.getBoundingClientRect(); return {x:(e.clientX-r.left)*c.width/r.width, y:(e.clientY-r.top)*c.height/r.height}; }
+  c.addEventListener("pointerdown",function(e){ drawing=true; last=pt(e); c.setPointerCapture(e.pointerId); hint.hidden=true; });
+  c.addEventListener("pointermove",function(e){ if(!drawing) return; var p=pt(e); x.beginPath(); x.moveTo(last.x,last.y); x.lineTo(p.x,p.y); x.stroke(); last=p; has=true; });
+  ["pointerup","pointercancel","pointerleave"].forEach(function(t){ c.addEventListener(t,function(){ drawing=false; }); });
+  return { clear:function(){ x.clearRect(0,0,c.width,c.height); has=false; hint.hidden=false; }, empty:function(){ return !has; }, data:function(){ return c.toDataURL("image/png"); } };
+}
+
+// ================== Vistas ==================
+var view = "gestora";
+function route(){ var h=(location.hash||"").replace("#",""); view = ["gestora","estudiante","instructor"].indexOf(h)>=0? h : "gestora"; render(); window.scrollTo(0,0); }
+window.addEventListener("hashchange", route);
+
+function render(){
+  document.querySelectorAll(".roles a").forEach(function(a){ a.toggleAttribute("aria-current", a.dataset.r===view); if(a.dataset.r===view) a.setAttribute("aria-current","page"); });
+  document.querySelectorAll("#flow div").forEach(function(d){ d.classList.toggle("on", d.dataset.s===view); });
+  if(view==="gestora") vGestora(); else if(view==="estudiante") vEstudiante(); else vInstructor();
+}
+
+// ---------- Gestora
+var creando = false;
+function vGestora(){
+  var g = selGrupo(); var fs = g? formsDe(g.id) : [];
+  var listos = fs.filter(function(f){return f.firmaInstructor;}).length;
+  var h = '<div class="view"><div class="split">';
+  h += '<section class="panel"><span class="band">Grupos de formación</span><div class="groups">';
+  S.grupos.forEach(function(x){
+    var n = formsDe(x.id).length;
+    h += '<button class="gcard" data-g="'+x.id+'" aria-pressed="'+(g&&x.id===g.id)+'"><span class="code">'+FORMACION.codigo+' · '+fmtFecha(x.fecha)+(x.ejemplo?' · ejemplo':'')+'</span><b>'+esc(x.razon||"Sin empresa")+'</b><span class="small muted">'+n+' formulario'+(n===1?'':'s')+' · '+esc(x.instructor)+'</span></button>';
+  });
+  h += '</div><div class="row" style="margin-top:12px"><button class="btn primary" id="nuevo">+ Nuevo grupo</button><button class="btn ghost sm" id="reset">Reiniciar demo</button></div></section>';
+
+  h += '<section class="view" style="min-width:0">';
+  if(creando){
+    h += '<form class="panel" id="fGrupo"><span class="band">Nuevo grupo</span><div class="grid2">'+
+      '<label class="f span2">Formación<select id="g_form"><option value="DF47">DF47 · '+FORMACION.nombre+'</option>'+OTRAS.map(function(o){return '<option disabled>'+o+' · se agrega con su formato</option>';}).join("")+'</select></label>'+
+      fld("g_lugar","Lugar","Centro de Formación Prevention World, Neiva")+fld("g_met","Metodología","Teórico-práctica presencial")+
+      fld("g_fecha","Fecha",today(),"date")+fld("g_inst","Instructor","")+
+      fld("g_razon","Razón social de la empresa","")+fld("g_nit","NIT","")+fld("g_dir","Dirección","")+fld("g_tel","Teléfono","")+
+      '</div><div class="nav"><button type="button" class="btn" id="cancel">Cancelar</button><button class="btn primary">Crear grupo</button></div></form>';
+  } else if(g){
+    h += '<div class="panel"><span class="band">'+FORMACION.codigo+' · '+FORMACION.nombre+'</span>'+
+      '<dl class="kv"><dt>Empresa</dt><dd>'+esc(g.razon)+' · NIT '+esc(g.nit)+'</dd><dt>Lugar</dt><dd>'+esc(g.lugar)+'</dd><dt>Metodología</dt><dd>'+esc(g.metodologia)+'</dd><dt>Fecha</dt><dd>'+fmtFecha(g.fecha)+' · '+FORMACION.horas+' horas</dd><dt>Instructor</dt><dd>'+esc(g.instructor)+'</dd></dl>'+
+      '<p class="small muted" style="margin:14px 0 6px">Enlace para los estudiantes del grupo. En la versión final cada grupo tiene su propio enlace y código QR:</p>'+
+      '<div class="linkbox"><code>'+esc(location.origin+location.pathname.replace(/index\.html$/,""))+'#estudiante</code><a class="btn sm primary" href="#estudiante">Abrir como estudiante</a></div></div>';
+    h += '<div class="panel"><div class="row" style="margin-bottom:12px"><h2 style="font-size:22px;margin-right:auto">Formularios del grupo</h2><span class="pill '+(listos===fs.length&&fs.length?'ok':'warn')+'">'+listos+' de '+fs.length+' listos</span>'+
+      (downloads?'<button class="btn sm" id="zip"'+(listos?'':' disabled')+'>Descargar firmados (ZIP)</button>':'')+'</div>';
+    if(!fs.length){ h += '<div class="empty">Todavía nadie ha diligenciado este grupo. Abre el enlace como estudiante para probarlo.</div>'; }
+    else{
+      h += '<div class="tablewrap"><table><thead><tr><th>N.º</th><th>Participante</th><th>Identificación</th><th>Evaluación</th><th>Estado</th><th></th></tr></thead><tbody>';
+      fs.forEach(function(f){
+        var sc = score(f.respuestas);
+        h += '<tr><td class="num">'+f.numero+'</td><td>'+esc(f.estudiante.nombre)+(f.ejemplo?' <span class="pill ex">ejemplo</span>':'')+'</td><td class="num">'+esc(f.estudiante.cedula)+'</td><td class="score">'+sc.total+' / 25</td><td>'+(f.firmaInstructor?'<span class="pill ok">Listo para subir</span>':'<span class="pill warn">Falta firma del instructor</span>')+'</td>'+
+          '<td><div class="row" style="gap:6px;flex-wrap:nowrap"><button class="btn sm" data-ver="'+f.id+'">Ver PDF</button>'+(downloads?'<button class="btn sm" data-dl="'+f.id+'">Descargar</button>':'')+'</div></td></tr>';
+      });
+      h += '</tbody></table></div>';
+      if(!downloads) h += '<p class="small muted" style="margin:10px 0 0">La descarga no está disponible en esta vista. Ver PDF muestra el resultado.</p>';
+    }
+    h += '</div>';
+  }
+  h += '</section></div></div>';
+  app.innerHTML = h;
+  app.querySelectorAll("[data-g]").forEach(function(b){ b.onclick=function(){ S.sel=b.dataset.g; creando=false; save(); render(); }; });
+  app.querySelectorAll("[data-ver]").forEach(function(b){ b.onclick=function(){ verPDF(S.formularios.find(function(f){return f.id===b.dataset.ver;})); }; });
+  app.querySelectorAll("[data-dl]").forEach(function(b){ b.onclick=function(){ descargar(S.formularios.find(function(f){return f.id===b.dataset.dl;})); }; });
+  var z=document.getElementById("zip"); if(z) z.onclick=function(){ descargarTodos(g); };
+  document.getElementById("nuevo").onclick=function(){ creando=true; render(); };
+  var rs=document.getElementById("reset"); rs.onclick=function(){
+    if(rs.dataset.c){ S=seed(); save(); creando=false; toast("Demo reiniciada"); render(); }
+    else { rs.dataset.c="1"; rs.textContent="¿Seguro? Toca otra vez"; setTimeout(function(){ if(rs.isConnected){ rs.textContent="Reiniciar demo"; delete rs.dataset.c; } },3000); }
+  };
+  var fg=document.getElementById("fGrupo");
+  if(fg){
+    document.getElementById("cancel").onclick=function(){ creando=false; render(); };
+    fg.onsubmit=function(e){ e.preventDefault();
+      var v=function(id){ return document.getElementById(id).value.trim(); };
+      if(!v("g_inst")||!v("g_fecha")){ toast("Escribe al menos el instructor y la fecha"); return; }
+      var ng={ id:"g"+uid(), formacion:"DF47", lugar:v("g_lugar"), metodologia:v("g_met"), fecha:v("g_fecha"), instructor:v("g_inst"), razon:v("g_razon"), nit:v("g_nit"), direccion:v("g_dir"), telefono:v("g_tel") };
+      S.grupos.unshift(ng); S.sel=ng.id; creando=false; save(); toast("Grupo creado. Ya puedes compartir el enlace."); render(); };
+  }
+}
+function fld(id,lab,val,type,cls){ return '<label class="f '+(cls||'')+'" for="'+id+'">'+lab+'<input id="'+id+'" type="'+(type||"text")+'" value="'+esc(val||"")+'"></label>'; }
+
+// ---------- Estudiante
+var E = null; // borrador
+function nuevoBorrador(){ return { paso:0, est:{nombre:"",sexo:"",rh:"",cedula:"",cargo:"",email:"",celular:"",edad:"",eps:"",arl:"",contacto:"",contactoCel:""}, salud:SALUD.map(function(){return {r:"",cual:""};}), embarazo:["",""], resp:{}, sat:SAT.map(function(){return 0;}), comentarios:"", acepta:false, enviado:null }; }
+var PASOS = ["Datos del participante","Condiciones de salud","Evaluación","Satisfacción del servicio","Compromiso y firma"];
+var pad1 = null;
+function vEstudiante(){
+  var g = selGrupo(); if(!E || E.grupo!==g.id){ E = nuevoBorrador(); E.grupo=g.id; }
+  var h = '<div class="phone view">';
+  h += '<div class="panel"><span class="band">'+FORMACION.codigo+' · Brigadas integrales</span><div class="small muted">'+esc(g.razon||"")+' · '+fmtFecha(g.fecha)+' · Instructor: '+esc(g.instructor)+'</div>';
+  if(E.enviado){
+    h += '<div class="notice ok" style="margin-top:14px"><b>Formulario '+E.enviado+' enviado.</b> Gracias. El instructor lo revisará y lo firmará.</div><div class="nav"><button class="btn" id="otro">Diligenciar otro (siguiente estudiante)</button><a class="btn primary" href="#instructor">Ir a la vista del instructor</a></div></div></div>';
+    app.innerHTML=h; document.getElementById("otro").onclick=function(){ E=nuevoBorrador(); E.grupo=g.id; render(); }; return;
+  }
+  h += '<div class="row" style="justify-content:space-between;margin-top:14px"><b style="font-family:var(--f-display);font-size:20px">'+PASOS[E.paso]+'</b><span class="small muted">Paso '+(E.paso+1)+' de 5</span></div>';
+  h += '<div class="steps">'+PASOS.map(function(_,i){return '<i class="'+(i<=E.paso?'on':'')+'"></i>';}).join("")+'</div>';
+  if(E.paso===0) h += '<button class="btn sm ghost" id="demo" style="margin:-6px 0 10px -6px">Llenar todo con datos de ejemplo</button>';
+  h += '<form id="fEst" novalidate>'+pasoHTML(g)+'<div id="msg"></div><div class="nav">'+(E.paso>0?'<button type="button" class="btn" id="atras">Atrás</button>':'<span></span>')+'<button class="btn primary" id="sig">'+(E.paso===4?'Enviar formulario':'Continuar')+'</button></div></form></div></div>';
+  app.innerHTML = h;
+  bindPaso();
+}
+function pasoHTML(g){
+  var e=E.est, h="";
+  if(E.paso===0){
+    h += '<div class="grid2">'+ef("nombre","Nombres y apellidos","span2")+ef("cedula","N.º de identificación")+
+      '<label class="f" for="e_sexo">Sexo<select id="e_sexo"><option value="">Seleccione</option><option'+(e.sexo==="Mujer"?" selected":"")+'>Mujer</option><option'+(e.sexo==="Hombre"?" selected":"")+'>Hombre</option></select></label>'+
+      ef("rh","Grupo sanguíneo y RH")+ef("edad","Edad","","number")+ef("cargo","Cargo")+ef("celular","N.º celular","","tel")+ef("email","E-mail","span2","email")+ef("eps","EPS")+ef("arl","ARL")+
+      '</div><p class="band" style="margin:18px 0 10px">Datos en caso de emergencia</p><div class="grid2">'+ef("contacto","Nombre de contacto")+ef("contactoCel","N.º celular","","tel")+'</div>';
+  } else if(E.paso===1){
+    h += '<div>'+SALUD.map(function(q,i){ var s=E.salud[i];
+      return '<div class="hrow"><span>'+q+'</span><div class="yn">'+yn("s"+i,s.r)+'</div>'+(s.r==="si"?'<label class="f span2" style="flex-basis:100%" for="c'+i+'">¿Cuál?<input id="c'+i+'" value="'+esc(s.cual)+'"></label>':'')+'</div>'; }).join("")+'</div>';
+    if(E.est.sexo==="Mujer"){
+      h += '<p class="band" style="margin:16px 0 4px">Espacio solo para mujeres</p>'+
+        '<div class="hrow"><span>Me encuentro en estado de embarazo</span><div class="yn">'+yn("em0",E.embarazo[0])+'</div></div>'+
+        '<div class="hrow"><span>Comprendo los riesgos y prohibiciones legales para participar en el proceso de formación mientras me encuentre en cualquier etapa de embarazo.</span><div class="yn">'+yn("em1",E.embarazo[1])+'</div></div>';
+      if(E.embarazo[0]==="si") h += '<div class="notice bad">Según el formato, en estado de embarazo no se puede continuar el ingreso al proceso de formación. Comuníquese con la gestora.</div>';
+    }
+  } else if(E.paso===2){
+    h += '<p class="small muted" style="margin:0 0 12px">Marque la respuesta que considere correcta en cada pregunta.</p><div class="view">';
+    EVAL.forEach(function(ev){
+      var r = E.resp[ev.id]||[];
+      h += '<div class="topic"><h3>Evaluación de '+ev.t.toLowerCase()+'</h3>'+ev.q.map(function(q,qi){
+        return '<div class="q"><p>'+(qi+1)+'. '+esc(q[0])+'</p><div class="opts">'+q[1].map(function(o,oi){
+          return '<label class="opt"><input type="radio" name="'+ev.id+qi+'" value="'+oi+'"'+(r[qi]===oi?' checked':'')+'><b>'+L[oi]+'</b><span>'+esc(o)+'</span></label>'; }).join("")+'</div></div>'; }).join("")+'</div>';
+    });
+    h += '</div>';
+  } else if(E.paso===3){
+    h += '<p class="small muted" style="margin:0 0 8px">Califique cada aspecto: 5 Excelente · 4 Bueno · 3 Aceptable · 2 Regular · 1 Deficiente.</p>';
+    h += SAT.map(function(q,i){ return '<div class="hrow"><span>'+q+'</span><div class="rate" role="radiogroup">'+[5,4,3,2,1].map(function(n){ return '<label title="'+SAT_ESC[n]+'"><input type="radio" name="sat'+i+'" value="'+n+'"'+(E.sat[i]===n?' checked':'')+'>'+n+'</label>'; }).join("")+'</div></div>'; }).join("");
+    h += '<label class="f" for="e_com" style="margin-top:10px">Felicitaciones, sugerencias o comentarios<textarea id="e_com" maxlength="240">'+esc(E.comentarios)+'</textarea></label>';
+  } else {
+    h += '<div class="legal"><p><b>Compromiso del participante.</b> Doy fe de que conozco y me comprometo a cumplir el protocolo de bioseguridad y el código de buen comportamiento para participantes de los procesos de formación y entrenamiento, y las normas y políticas de seguridad y salud en el trabajo del Instituto Prevention World QHSE S.A.S.</p><p><b>Observaciones.</b> Manifiesto que la información consignada es verídica y que en este momento no padezco ningún impedimento de salud para participar.</p><p><b>Tratamiento de datos.</b> De acuerdo con la Ley 1581 de 2012 y el Decreto 1377 de 2013, autorizo al Instituto Prevention World QHSE S.A.S. el tratamiento de mis datos personales según su política EE13.</p></div>';
+    h += '<label class="opt" style="margin:12px 0"><input type="checkbox" id="acepta"'+(E.acepta?' checked':'')+'><span>He leído y acepto el compromiso, las observaciones y el tratamiento de mis datos.</span></label>';
+    h += '<div class="sig"><span class="f" style="font-size:12px;font-family:var(--f-display);font-weight:600;letter-spacing:.06em;color:var(--muted)">FIRMA DEL PARTICIPANTE · REGISTRO DE ASISTENCIA '+fmtFecha(g.fecha)+'</span><div class="sigpad" id="pad"></div><div class="row"><button type="button" class="btn sm" id="borrar">Borrar firma</button></div></div>';
+  }
+  return h;
+}
+function ef(k,lab,cls,type){ return '<label class="f '+(cls||"")+'" for="e_'+k+'">'+lab+'<input id="e_'+k+'" type="'+(type||"text")+'" value="'+esc(E.est[k])+'"></label>'; }
+function yn(name,val){ return '<label><input type="radio" name="'+name+'" value="si"'+(val==="si"?" checked":"")+'>Sí</label><label><input type="radio" name="'+name+'" value="no"'+(val==="no"?" checked":"")+'>No</label>'; }
+function leer(){
+  var f=document.getElementById("fEst");
+  if(E.paso===0){ Object.keys(E.est).forEach(function(k){ var el=document.getElementById("e_"+k); if(el) E.est[k]=el.value.trim(); }); }
+  if(E.paso===1){ E.salud.forEach(function(s,i){ var r=f.querySelector('input[name="s'+i+'"]:checked'); s.r=r?r.value:""; var c=document.getElementById("c"+i); if(c) s.cual=c.value.trim(); if(s.r!=="si") s.cual=""; });
+    [0,1].forEach(function(i){ var r=f.querySelector('input[name="em'+i+'"]:checked'); E.embarazo[i]=r?r.value:""; }); }
+  if(E.paso===2){ EVAL.forEach(function(ev){ E.resp[ev.id]=ev.q.map(function(_,qi){ var r=f.querySelector('input[name="'+ev.id+qi+'"]:checked'); return r?Number(r.value):null; }); }); }
+  if(E.paso===3){ E.sat=SAT.map(function(_,i){ var r=f.querySelector('input[name="sat'+i+'"]:checked'); return r?Number(r.value):0; }); E.comentarios=document.getElementById("e_com").value.trim(); }
+  if(E.paso===4){ E.acepta=document.getElementById("acepta").checked; }
+}
+function validar(){
+  if(E.paso===0){ var falta=["nombre","cedula","sexo","edad","eps","arl","contacto","contactoCel"].filter(function(k){return !E.est[k];});
+    if(falta.length) return "Completa los campos: nombres, identificación, sexo, edad, EPS, ARL y el contacto de emergencia."; }
+  if(E.paso===1){ if(E.salud.some(function(s){return !s.r;})) return "Responde Sí o No en todas las preguntas de salud.";
+    if(E.salud.some(function(s){return s.r==="si"&&!s.cual;}) ) return "Cuando respondes Sí, escribe cuál.";
+    if(E.est.sexo==="Mujer"){ if(!E.embarazo[0]||!E.embarazo[1]) return "Responde las dos preguntas del espacio para mujeres."; if(E.embarazo[0]==="si") return "No es posible continuar el ingreso al proceso de formación en estado de embarazo."; } }
+  if(E.paso===2){ var n=0; EVAL.forEach(function(ev){ (E.resp[ev.id]||[]).forEach(function(a){ if(a==null) n++; }); }); if(n) return "Faltan "+n+" pregunta"+(n>1?"s":"")+" por responder."; }
+  if(E.paso===3){ if(E.sat.some(function(v){return !v;})) return "Califica los 9 aspectos de la encuesta."; }
+  if(E.paso===4){ if(!E.acepta) return "Debes aceptar el compromiso y el tratamiento de datos."; if(pad1.empty()) return "Falta tu firma."; }
+  return "";
+}
+function bindPaso(){
+  var f=document.getElementById("fEst");
+  if(E.paso===4){ pad1 = sigPad(document.getElementById("pad")); document.getElementById("borrar").onclick=function(){ pad1.clear(); }; }
+  if(E.paso===1){ f.addEventListener("change",function(ev){ if(ev.target.name && /^(s\d|em0)$/.test(ev.target.name)){ leer(); vEstudiante(); } }); }
+  var d=document.getElementById("demo"); if(d) d.onclick=function(){
+    var n=S.contador+1;
+    E.est={nombre:"Participante de prueba "+n,sexo:"Hombre",rh:"A+",cedula:"10750000"+String(n).padStart(2,"0"),cargo:"Brigadista",email:"participante"+n+"@ejemplo.com",celular:"300 123 45"+String(n).padStart(2,"0"),edad:"31",eps:"EPS de ejemplo",arl:"ARL de ejemplo",contacto:"Familiar de ejemplo",contactoCel:"300 765 4321"};
+    E.salud=[{r:"si",cual:""},{r:"no",cual:""},{r:"si",cual:"Acetaminofén"},{r:"no",cual:""},{r:"no",cual:""}];
+    E.resp=randomAns(5); E.sat=[5,4,5,5,4,5,5,4,5]; E.comentarios="Buena formación, me gustaron las prácticas."; E.acepta=true; E.paso=4; render(); toast("Datos de ejemplo cargados. Solo falta firmar.");
+  };
+  var a=document.getElementById("atras"); if(a) a.onclick=function(){ leer(); E.paso--; render(); window.scrollTo(0,0); };
+  f.onsubmit=function(ev){ ev.preventDefault(); leer(); var m=validar(); var box=document.getElementById("msg");
+    if(m){ box.innerHTML='<div class="notice bad" style="margin-top:12px">'+esc(m)+'</div>'; return; }
+    if(E.paso<4){ E.paso++; render(); window.scrollTo(0,0); return; }
+    S.contador++; var num=pad(S.contador);
+    var est=Object.assign({},E.est,{firma:pad1.data()});
+    S.formularios.push({ id:"f"+uid(), grupo:E.grupo, numero:num, creado:Date.now(), estudiante:est, salud:E.salud, embarazo:E.est.sexo==="Mujer"?E.embarazo:null, satisfaccion:E.sat, comentarios:E.comentarios, respuestas:E.resp, firmaInstructor:null });
+    save(); E.enviado=num; render(); window.scrollTo(0,0);
+  };
+}
+
+// ---------- Instructor
+var pad2=null, iSel=null;
+function vInstructor(){
+  var g=selGrupo(); var fs=formsDe(g.id); var pend=fs.filter(function(f){return !f.firmaInstructor;});
+  if(!iSel || !fs.find(function(f){return f.id===iSel;})) iSel = (pend[0]||fs[0]||{}).id;
+  var f = fs.find(function(x){return x.id===iSel;});
+  var h='<div class="view"><div class="split"><section class="panel"><span class="band">Por firmar · '+pend.length+'</span><div class="groups">';
+  if(!fs.length) h+='<div class="empty">No hay formularios en este grupo.</div>';
+  fs.forEach(function(x){ var sc=score(x.respuestas);
+    h+='<button class="gcard" data-f="'+x.id+'" aria-pressed="'+(x.id===iSel)+'"><span class="code">Formulario '+x.numero+'</span><b>'+esc(x.estudiante.nombre)+'</b><span class="row small" style="gap:8px"><span class="muted">'+sc.total+' / 25</span>'+(x.firmaInstructor?'<span class="pill ok">Firmado</span>':'<span class="pill warn">Pendiente</span>')+'</span></button>'; });
+  h+='</div><p class="small muted" style="margin:12px 0 0">Grupo: '+esc(g.razon)+' · '+fmtFecha(g.fecha)+'</p></section><section class="view" style="min-width:0">';
+  if(f){
+    var sc=score(f.respuestas);
+    h+='<div class="panel"><span class="band">Formulario '+f.numero+'</span><div class="row" style="margin-bottom:10px"><h2 style="font-size:24px;margin-right:auto">'+esc(f.estudiante.nombre)+'</h2><span class="muted small">C.C. '+esc(f.estudiante.cedula)+' · '+esc(f.estudiante.cargo)+'</span></div>';
+    h+='<div class="scores">'+EVAL.map(function(ev){ return '<div><b>'+sc.by[ev.id]+'/5</b>'+ev.t+'</div>'; }).join("")+'</div>';
+    var alertas=f.salud.map(function(s,i){ return s.r==="si"&&i>0? SALUD[i].replace("¿","").replace("?","")+": "+s.cual : null; }).filter(Boolean);
+    if(alertas.length) h+='<div class="notice info" style="margin-top:12px"><b>Autoreporte de salud:</b> '+esc(alertas.join(" · "))+'</div>';
+    h+='<div class="row" style="margin-top:12px"><button class="btn sm" id="ver">Ver PDF</button></div></div>';
+    if(f.firmaInstructor){
+      h+='<div class="panel"><div class="notice ok">Firmado. El PDF ya está listo para que la gestora lo suba a la plataforma.</div>'+(pend.length?'<div class="nav"><span></span><button class="btn primary" id="next">Siguiente pendiente</button></div>':'')+'</div>';
+    } else {
+      h+='<div class="panel"><span class="band">Firma del instructor</span><p class="small muted" style="margin:0 0 8px">'+esc(g.instructor)+' · firma este formulario después de revisarlo.</p><div class="sigpad" id="pad2"></div><div class="nav"><button class="btn sm" id="borrar2">Borrar</button><button class="btn primary" id="firmar">Firmar formulario '+f.numero+'</button></div></div>';
+    }
+  }
+  h+='</section></div></div>'; app.innerHTML=h;
+  app.querySelectorAll("[data-f]").forEach(function(b){ b.onclick=function(){ iSel=b.dataset.f; render(); }; });
+  var v=document.getElementById("ver"); if(v) v.onclick=function(){ verPDF(f); };
+  var nx=document.getElementById("next"); if(nx) nx.onclick=function(){ iSel=pend[0].id; render(); };
+  if(document.getElementById("pad2")){
+    pad2=sigPad(document.getElementById("pad2"));
+    document.getElementById("borrar2").onclick=function(){ pad2.clear(); };
+    document.getElementById("firmar").onclick=function(){ if(pad2.empty()){ toast("Falta la firma del instructor"); return; }
+      f.firmaInstructor=pad2.data(); save(); toast("Formulario "+f.numero+" firmado");
+      var p2=formsDe(g.id).filter(function(x){return !x.firmaInstructor;}); iSel = p2[0]? p2[0].id : f.id; render(); };
+  }
+}
+
+route();
+})();
+</script>
+
+</body>
+</html>
