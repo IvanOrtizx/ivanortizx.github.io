@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="en">
+<head>
+<title>iaHuila AI Studio</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="AI content studio: commercials, AI characters, mascots and social videos for brands anywhere in the world.">
+<meta property="og:title" content="iaHuila · AI content for your brand">
+<meta property="og:description" content="AI commercials, characters and videos people actually want to watch and share.">
+<meta property="og:image" content="https://camott.com/ia_huila/img/t_neiva.jpg">
+<meta property="og:url" content="https://camott.com/ia_huila/en/">
+<link rel="icon" href="../img/logo.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: relato en capítulos que se leen de arriba abajo, como una cinta VHS nocturna: IA → impacto → iaHuila → números → tu marca → WhatsApp */
+:root {
+  --bg: #120b24;
+  --bg-2: #1c1236;
+  --line: #3a2d5c;
+  --fg: #f6efe4;
+  --muted: #b9acd3;
+  --sun: #ff6a1a;
+  --magenta: #ff2e88;
+  --gold: #ffcf3f;
+  --teal: #2fd4c9;
+  --ink: #120b24;
+  --wa: #1fa855;
+  --display: "Bricolage Grotesque", "Arial Black", system-ui, sans-serif;
+  --body: "Instrument Sans", "Helvetica Neue", Arial, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { animation: none !important; transition: none !important; } }
+body { background: var(--bg); color: var(--fg); font-family: var(--body); font-size: 17px; line-height: 1.6; overflow-x: hidden; }
+.wrap { max-width: 1080px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.narrow { max-width: 720px; }
+h1, h2, h3 { font-family: var(--display); font-weight: 800; letter-spacing: -0.02em; line-height: 1.02; margin: 0; text-wrap: balance; }
+p { margin: 0; }
+a { color: inherit; }
+.chapter { font-family: var(--mono); font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: var(--gold); display: inline-flex; align-items: center; gap: 10px; }
+.chapter::before { content: ""; width: 9px; height: 9px; border-radius: 50%; background: #ff3b3b; }
+.scan { position: relative; }
+.scan::after { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(0deg, rgba(255,255,255,.035) 0 1px, transparent 1px 3px); pointer-events: none; }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; font-weight: 700; font-size: 17px; border-radius: 999px; padding: 16px 26px; text-decoration: none; font-family: var(--body); }
+.btn:focus-visible, a:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
+.btn-wa { background: var(--wa); color: #fff; }
+.btn-ghost { border: 1.5px solid var(--line); }
+
+/* 0 · Apertura */
+.open { overflow: hidden; padding-block: 24px 80px; }
+.open::before { content: ""; position: absolute; width: 760px; height: 760px; right: -260px; top: -280px; border-radius: 50%; background: radial-gradient(circle, rgba(255,106,26,.55), rgba(255,46,136,.18) 45%, transparent 70%); pointer-events: none; }
+.open .wrap { position: relative; z-index: 1; }
+.nav { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.brand { display: flex; align-items: center; gap: 10px; font-family: var(--display); font-weight: 800; font-size: 20px; text-decoration: none; }
+.brand img { width: 44px; height: 44px; border-radius: 50%; border: 2px solid var(--gold); }
+.nav .mini { font-weight: 700; font-size: 14px; text-decoration: none; border: 1.5px solid var(--line); border-radius: 999px; padding: 8px 14px; }
+.open-grid { display: grid; grid-template-columns: 1.2fr .8fr; gap: 44px; align-items: center; margin-top: 56px; }
+.open h1 { font-size: clamp(44px, 7.4vw, 92px); margin-top: 18px; }
+.open h1 em { font-style: normal; color: var(--sun); }
+.open .lead { font-size: 20px; color: var(--muted); max-width: 32ch; margin-top: 22px; }
+.down { display: inline-block; margin-top: 30px; font-family: var(--mono); font-size: 13px; color: var(--muted); text-decoration: none; }
+.tape { justify-self: center; width: 100%; max-width: 340px; border-radius: 18px; overflow: hidden; border: 1.5px solid var(--line); transform: rotate(2.5deg); box-shadow: 0 30px 60px rgba(0,0,0,.5); position: relative; }
+.tape img { display: block; width: 100%; }
+.tape .rec { position: absolute; top: 12px; right: 14px; font-family: var(--mono); font-size: 12px; display: flex; align-items: center; gap: 6px; z-index: 2; }
+.tape .rec::before { content: ""; width: 9px; height: 9px; border-radius: 50%; background: #ff3b3b; }
+
+/* Capítulos */
+section.ch { padding-block: 88px; border-top: 1.5px solid var(--line); }
+section.ch h2 { font-size: clamp(34px, 5vw, 58px); margin-top: 16px; }
+.say { font-size: clamp(19px, 2.2vw, 22px); color: var(--muted); margin-top: 22px; max-width: 46ch; }
+.say strong { color: var(--fg); font-weight: 600; }
+
+/* 1 · La IA */
+.before-after { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 40px; }
+.ba { border-radius: 18px; padding: 24px; border: 1.5px solid var(--line); }
+.ba h3 { font-size: 22px; margin-bottom: 14px; }
+.ba ul { margin: 0; padding-left: 20px; color: var(--muted); display: grid; gap: 6px; }
+.ba.now { background: linear-gradient(140deg, rgba(255,106,26,.16), rgba(255,46,136,.12)); border-color: rgba(255,106,26,.5); }
+.ba.now ul { color: var(--fg); }
+.ba .k { font-family: var(--mono); font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); display: block; margin-bottom: 6px; }
+
+/* 2 · ¿Impacta? */
+.impact { background: var(--bg-2); }
+.quote-big { font-family: var(--display); font-weight: 800; font-size: clamp(28px, 4vw, 44px); line-height: 1.1; margin-top: 40px; max-width: 22ch; }
+.quote-big span { color: var(--magenta); }
+.signals { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 40px; }
+.signal { border-top: 3px solid var(--sun); padding-top: 16px; }
+.signal:nth-child(2) { border-color: var(--magenta); } .signal:nth-child(3) { border-color: var(--teal); }
+.signal h3 { font-size: 22px; margin-bottom: 8px; }
+.signal p { color: var(--muted); font-size: 16px; }
+
+/* 3 · iaHuila */
+.reel { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; margin-top: 44px; }
+.reel figure { margin: 0; }
+.reel img { width: 100%; border-radius: 12px; display: block; }
+.reel figcaption { font-size: 14px; color: var(--muted); margin-top: 8px; }
+.reel figcaption b { display: block; color: var(--fg); font-family: var(--display); font-size: 17px; }
+
+/* 4 · Números */
+.stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; margin-top: 44px; border-top: 1.5px solid var(--line); }
+.stat { padding: 22px 16px 0 0; }
+.stat b { font-family: var(--display); font-weight: 800; font-size: clamp(34px, 4.6vw, 54px); display: block; line-height: 1; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+.stat:nth-child(1) b { color: var(--gold); } .stat:nth-child(2) b { color: var(--sun); } .stat:nth-child(3) b { color: var(--magenta); } .stat:nth-child(4) b { color: var(--teal); }
+.stat span { font-size: 15px; color: var(--muted); display: block; margin-top: 10px; }
+.voices { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 40px; }
+.voices span { background: var(--bg-2); border: 1.5px solid var(--line); border-radius: 999px; padding: 9px 16px; font-size: 15px; }
+
+/* 5 · Tu marca */
+.offer { background: var(--fg); color: var(--ink); border-top: 0; }
+.offer .chapter { color: #8a3b0f; }
+.offer .say { color: #4d4462; }
+.offer .say strong { color: var(--ink); }
+.gets { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 40px; }
+.get { border: 2px solid var(--ink); border-radius: 16px; padding: 20px; }
+.get h3 { font-size: 20px; margin-bottom: 6px; }
+.get p { font-size: 15px; color: #4d4462; }
+.get.hl { background: var(--ink); color: var(--fg); }
+.get.hl p { color: var(--muted); }
+.for { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px; }
+.for span { font-family: var(--mono); font-size: 13px; background: #efe3d0; border-radius: 999px; padding: 7px 14px; }
+
+/* Cierre */
+.close { text-align: center; padding-block: 96px 72px; overflow: hidden; }
+.close::before { content: ""; position: absolute; width: 700px; height: 700px; left: 50%; top: 40%; transform: translate(-50%, -50%); border-radius: 50%; background: radial-gradient(circle, rgba(255,46,136,.35), transparent 65%); pointer-events: none; }
+.close .wrap { position: relative; z-index: 1; display: grid; justify-items: center; gap: 22px; }
+.close h2 { font-size: clamp(38px, 6vw, 72px); max-width: 16ch; }
+.close h2 em { font-style: normal; color: var(--gold); }
+.close .say { margin-top: 0; }
+.phone { color: var(--muted); font-size: 15px; }
+.phone b { color: var(--fg); font-family: var(--mono); user-select: all; }
+
+footer { border-top: 1.5px solid var(--line); padding-block: 26px 40px; color: var(--muted); font-size: 14px; }
+footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; }
+
+@media (max-width: 900px) {
+  .open-grid { grid-template-columns: 1fr; }
+  .reel { grid-template-columns: repeat(3, 1fr); }
+  .reel figure:nth-child(n+4) { display: none; }
+  .gets { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  section.ch { padding-block: 64px; }
+  .before-after, .signals { grid-template-columns: 1fr; }
+  .stats { grid-template-columns: 1fr 1fr; }
+  .reel { grid-template-columns: 1fr 1fr; }
+  .reel figure:nth-child(3) { display: none; }
+}
+/* Todo centrado */
+.open .wrap, section.ch .wrap, .close .wrap { text-align: center; }
+.open-grid { grid-template-columns: 1fr; justify-items: center; gap: 40px; }
+.open h1, section.ch h2, .quote-big { margin-left: auto; margin-right: auto; }
+.open h1 { max-width: 16ch; }
+section.ch h2 { max-width: 20ch; }
+.open .lead, .say { margin-left: auto; margin-right: auto; }
+.tape { transform: rotate(-1.5deg); }
+.ba ul { list-style: none; padding-left: 0; }
+.signal, .stat, .get { text-align: center; }
+.stat { padding: 22px 8px 0; }
+.voices, .for { justify-content: center; }
+.chapter { justify-content: center; }
+footer .wrap { justify-content: center; text-align: center; flex-direction: column; align-items: center; gap: 6px; }
+
+/* Lista de servicios y pasos */
+.gets { grid-template-columns: repeat(3, 1fr); }
+.get .ic { font-size: 30px; display:block; margin-bottom: 10px; }
+.steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 40px; counter-reset: s; }
+.step { border: 1.5px solid var(--line); border-radius: 16px; padding: 22px 18px; background: var(--bg-2); text-align: center; }
+.step b { display: inline-grid; place-items: center; width: 38px; height: 38px; border-radius: 50%; background: var(--sun); color: var(--ink); font-family: var(--display); font-size: 18px; margin-bottom: 12px; }
+.step:nth-child(2) b { background: var(--magenta); color:#fff } .step:nth-child(3) b { background: var(--gold); } .step:nth-child(4) b { background: var(--teal); }
+.step h3 { font-size: 20px; margin-bottom: 6px; }
+.step p { color: var(--muted); font-size: 15px; }
+.where { display:flex; flex-wrap:wrap; justify-content:center; gap:10px; margin-top:28px; }
+.where span { font-family: var(--mono); font-size: 13px; border:1.5px solid var(--line); border-radius:999px; padding:7px 14px; }
+.lang { font-family: var(--mono); font-size: 13px; text-decoration:none; color: var(--muted); margin-right: 6px; }
+.lang:hover { color: var(--fg); }
+.navr { display:flex; align-items:center; gap:10px; }
+@media (max-width: 900px) { .steps { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 640px) { .steps { grid-template-columns: 1fr; } .gets { grid-template-columns: 1fr; } }
+</style>
+<style>html,body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+
+<header class="open scan">
+  <div class="wrap">
+    <nav class="nav">
+      <a class="brand" href="#start" id="start"><img src="../img/logo.jpg" alt="iaHuila logo">iaHuila</a>
+      <div class="navr"><a class="lang" href="../" hreflang="es">ES</a><a class="mini wa-link" href="https://wa.me/573213973458" target="_blank" rel="noopener">Let's talk</a></div>
+    </nav>
+    <div class="open-grid">
+      <div>
+        <span class="chapter">Rewind</span>
+        <h1>What if your brand could be <em>anywhere</em>… at any time?</h1>
+        <p class="lead">This is the story of how we started telling stories about one region of Colombia with AI, and how today we create content for brands across the country and abroad.</p>
+        <a class="down" href="#ai">▼ Press play</a>
+      </div>
+      <div class="tape scan">
+        <span class="rec">REC</span>
+        <img src="../img/t_neiva.jpg" alt="Frame from an AI-generated video: a futuristic city">
+      </div>
+    </div>
+  </div>
+</header>
+
+<section class="ch" id="ai">
+  <div class="wrap">
+    <span class="chapter">Chapter 1 · The AI</span>
+    <h2>What used to take a film crew now fits in one idea.</h2>
+    <p class="say">AI can now create what could never be filmed: <strong>a city in the year 2099, a mascot that comes to life, a spokesperson who talks for your brand every week.</strong> No cameras, no locations, no waiting for months.</p>
+    <div class="before-after">
+      <div class="ba">
+        <span class="k">Before</span>
+        <h3>A traditional video</h3>
+        <ul>
+          <li>Crew, actors, locations and permits</li>
+          <li>Days or weeks of shooting</li>
+          <li>Limited to what's in front of the camera</li>
+        </ul>
+      </div>
+      <div class="ba now">
+        <span class="k">Now</span>
+        <h3>An AI video</h3>
+        <ul>
+          <li>Any setting, real or impossible</li>
+          <li>Ready in days</li>
+          <li>Your brand inside a story people remember</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="ch impact">
+  <div class="wrap">
+    <span class="chapter">Chapter 2 · Does it work?</span>
+    <h2>People don't share ads. They share what surprises them.</h2>
+    <p class="quote-big">When a video shows something <span>no one has seen before</span>, people stop, comment and send it to someone.</p>
+    <div class="signals">
+      <div class="signal"><h3>Stops the scroll</h3><p>The absurd and the impossible hit in the first second. That's when people decide to keep watching.</p></div>
+      <div class="signal"><h3>Gets shared</h3><p>Humor and identity make people send it to their family, friends and group chats.</p></div>
+      <div class="signal"><h3>Gets remembered</h3><p>A brand inside a story sticks in people's minds far more than a brand in an ad.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="ch">
+  <div class="wrap">
+    <span class="chapter">Chapter 3 · The experiment</span>
+    <h2>It all started with one question: what if we told our region's story with AI?</h2>
+    <p class="say">In October 2026 we launched <strong>@ia_huila</strong> to test an idea: exaggerated, surreal and funny AI videos about Huila, our region in Colombia. <strong>Our city in the year 2099, ancient statues coming to life, witches flying over town.</strong> It worked faster than we ever imagined.</p>
+    <div class="reel">
+      <figure><img src="../img/t_neiva.jpg" alt="Neiva 2099 video"><figcaption><b>121.7K</b>Neiva 2099</figcaption></figure>
+      <figure><img src="../img/t_sanagustin.jpg" alt="San Agustín video"><figcaption><b>76.5K</b>San Agustín</figcaption></figure>
+      <figure><img src="../img/t_barrio.jpg" alt="El Barrio video"><figcaption><b>82K</b>El Barrio</figcaption></figure>
+      <figure><img src="../img/t_olave.jpg" alt="Olave video"><figcaption><b>73K</b>Olave</figcaption></figure>
+      <figure><img src="../img/t_jagua.jpg" alt="La Jagua video"><figcaption><b>40.7K</b>La Jagua</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section class="ch">
+  <div class="wrap">
+    <span class="chapter">Chapter 4 · The numbers</span>
+    <h2>In one month, people answered.</h2>
+    <p class="say">A brand-new account with no track record reached hundreds of thousands of views in its first weeks. Then brands from other cities and other countries started reaching out.</p>
+    <div class="stats">
+      <div class="stat"><b>790K+</b><span>views in the first month on TikTok and Instagram</span></div>
+      <div class="stat"><b>28K</b><span>average views per video on TikTok</span></div>
+      <div class="stat"><b>121.7K</b><span>views on our top video</span></div>
+      <div class="stat"><b>3,700+</b><span>followers in the first weeks</span></div>
+    </div>
+    <p class="say" style="margin-top:40px">Today we create content for brands in:</p>
+    <div class="where"><span>Colombia</span><span>United States</span><span>Anywhere online</span></div>
+  </div>
+</section>
+
+<section class="ch offer">
+  <div class="wrap">
+    <span class="chapter">Chapter 5 · Your brand</span>
+    <h2>Now, the story can be yours.</h2>
+    <p class="say">Whatever your business and wherever you are, we create the AI content you need: <strong>made for people to watch, remember and share.</strong></p>
+    <div class="gets">
+      <div class="get hl"><span class="ic">🎬</span><h3>Commercials</h3><p>Ads with story, humor or emotion, in settings that would be impossible to film.</p></div>
+      <div class="get"><span class="ic">🧑‍🎤</span><h3>AI characters &amp; influencers</h3><p>An AI spokesperson for your brand: same face, same voice, in every video.</p></div>
+      <div class="get"><span class="ic">🤖</span><h3>Mascots brought to life</h3><p>Your mascot or brand character walking, talking and acting in your real locations.</p></div>
+      <div class="get"><span class="ic">📱</span><h3>Monthly content</h3><p>Video packages for TikTok, Reels and Facebook, with strategy, scripts and editing.</p></div>
+      <div class="get"><span class="ic">📦</span><h3>Products in action</h3><p>Your product in any place, era or situation, with no photo shoot or film crew.</p></div>
+      <div class="get"><span class="ic">🎞️</span><h3>Stories &amp; short films</h3><p>Longer, emotional pieces for launches, campaigns or your brand's story.</p></div>
+    </div>
+    <div class="for"><span>Startups</span><span>Brands</span><span>Companies</span><span>Agencies</span><span>Campaigns &amp; launches</span></div>
+  </div>
+</section>
+
+<section class="ch">
+  <div class="wrap">
+    <span class="chapter">Chapter 6 · How we work</span>
+    <h2>From your idea to the final video, fully remote.</h2>
+    <p class="say">We work 100% online with clients in any city and any country, in English or Spanish.</p>
+    <div class="steps">
+      <div class="step"><b>1</b><h3>Tell us</h3><p>What you sell, who you talk to and what you want to achieve.</p></div>
+      <div class="step"><b>2</b><h3>The idea</h3><p>We propose the concept, script and style.</p></div>
+      <div class="step"><b>3</b><h3>Production</h3><p>We create the scenes, voices, music and edit.</p></div>
+      <div class="step"><b>4</b><h3>Ready to post</h3><p>Delivered in your formats, with one round of revisions.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="close scan">
+  <div class="wrap narrow">
+    <span class="chapter">End of tape</span>
+    <h2>Shall we shoot the <em>next chapter</em> together?</h2>
+    <p class="say">Tell us your idea on WhatsApp and we'll send you a proposal tailored to your brand.</p>
+    <a class="btn btn-wa wa-link" id="wa" href="https://wa.me/573213973458" target="_blank" rel="noopener">Message us on WhatsApp</a>
+    <p class="phone">or call <b>+57 321 397 3458</b></p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>iaHuila · Camilo Ortiz Motta · @ia_huila on TikTok and Instagram</span>
+    <span>Content generated with artificial intelligence.</span>
+  </div>
+</footer>
+
+<script>
+(function () {
+  // El enlace de cada bio termina en #tiktok, #instagram o #facebook para saber de dónde llega la persona
+  const map = { tiktok: "TikTok", instagram: "Instagram", ig: "Instagram", facebook: "Facebook", fb: "Facebook" };
+  const src = map[(location.hash || "").replace("#", "").toLowerCase()];
+  const msg = "Hi Camilo 👋 I found you on the iaHuila page" + (src ? " (" + src + " link)" : "") + ". I'm interested in AI content for my brand.";
+  const href = "https://wa.me/573213973458?text=" + encodeURIComponent(msg);
+  document.querySelectorAll(".wa-link").forEach((a) => { a.href = href; });
+})();
+</script>
+
+</body>
+</html>

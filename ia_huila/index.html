@@ -4,9 +4,9 @@
 <title>iaHuila Estudio</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Videos con inteligencia artificial para personas, marcas y empresas, con el sabor del Huila.">
-<meta property="og:title" content="iaHuila · Videos con IA para tu marca">
-<meta property="og:description" content="El Huila como nunca lo habías visto. Lleva tu marca al universo de iaHuila.">
+<meta name="description" content="Estudio de contenido con inteligencia artificial: comerciales, personajes, mascotas y videos para redes para marcas de Colombia y el mundo.">
+<meta property="og:title" content="iaHuila · Contenido con IA para tu marca">
+<meta property="og:description" content="Comerciales, personajes y videos con IA que la gente sí quiere ver y compartir.">
 <meta property="og:image" content="https://camott.com/ia_huila/img/t_neiva.jpg">
 <meta property="og:url" content="https://camott.com/ia_huila/">
 <link rel="icon" href="img/logo.jpg">
@@ -163,28 +163,44 @@ section.ch h2 { max-width: 20ch; }
 .voices, .for { justify-content: center; }
 .chapter { justify-content: center; }
 footer .wrap { justify-content: center; text-align: center; flex-direction: column; align-items: center; gap: 6px; }
+
+/* Lista de servicios y pasos */
+.gets { grid-template-columns: repeat(3, 1fr); }
+.get .ic { font-size: 30px; display:block; margin-bottom: 10px; }
+.steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 40px; counter-reset: s; }
+.step { border: 1.5px solid var(--line); border-radius: 16px; padding: 22px 18px; background: var(--bg-2); text-align: center; }
+.step b { display: inline-grid; place-items: center; width: 38px; height: 38px; border-radius: 50%; background: var(--sun); color: var(--ink); font-family: var(--display); font-size: 18px; margin-bottom: 12px; }
+.step:nth-child(2) b { background: var(--magenta); color:#fff } .step:nth-child(3) b { background: var(--gold); } .step:nth-child(4) b { background: var(--teal); }
+.step h3 { font-size: 20px; margin-bottom: 6px; }
+.step p { color: var(--muted); font-size: 15px; }
+.where { display:flex; flex-wrap:wrap; justify-content:center; gap:10px; margin-top:28px; }
+.where span { font-family: var(--mono); font-size: 13px; border:1.5px solid var(--line); border-radius:999px; padding:7px 14px; }
+.lang { font-family: var(--mono); font-size: 13px; text-decoration:none; color: var(--muted); margin-right: 6px; }
+.lang:hover { color: var(--fg); }
+.navr { display:flex; align-items:center; gap:10px; }
+@media (max-width: 900px) { .steps { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 640px) { .steps { grid-template-columns: 1fr; } .gets { grid-template-columns: 1fr; } }
 </style>
 <style>html,body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
 </head>
 <body>
 
-
 <header class="open scan">
   <div class="wrap">
     <nav class="nav">
       <a class="brand" href="#inicio" id="inicio"><img src="img/logo.jpg" alt="Logo de iaHuila">iaHuila</a>
-      <a class="mini wa-link" href="https://wa.me/573213973458" target="_blank" rel="noopener">Hablemos</a>
+      <div class="navr"><a class="lang" href="en/" hreflang="en">EN</a><a class="mini wa-link" href="https://wa.me/573213973458" target="_blank" rel="noopener">Hablemos</a></div>
     </nav>
     <div class="open-grid">
       <div>
         <span class="chapter">Rebobinemos</span>
-        <h1>¿Y si tu marca pudiera estar <em>en cualquier lugar</em> del Huila… y del tiempo?</h1>
-        <p class="lead">Esta es la historia de cómo la inteligencia artificial empezó a contar el Huila, y de cómo puede contar la tuya.</p>
+        <h1>¿Y si tu marca pudiera estar <em>en cualquier lugar</em>… y en cualquier época?</h1>
+        <p class="lead">Esta es la historia de cómo empezamos contando una región con inteligencia artificial, y de cómo hoy creamos contenido para marcas de todo el país y de afuera.</p>
         <a class="down" href="#ia">▼ Dale play</a>
       </div>
       <div class="tape scan">
         <span class="rec">REC</span>
-        <img src="img/t_neiva.jpg" alt="Fotograma del video Neiva 2099">
+        <img src="img/t_neiva.jpg" alt="Fotograma de un video hecho con IA: una ciudad futurista">
       </div>
     </div>
   </div>
@@ -194,14 +210,14 @@ footer .wrap { justify-content: center; text-align: center; flex-direction: colu
   <div class="wrap">
     <span class="chapter">Capítulo 1 · La IA</span>
     <h2>Lo que antes costaba un rodaje, hoy cabe en una idea.</h2>
-    <p class="say">La inteligencia artificial ya permite crear escenas que nunca se podrían grabar: <strong>una ciudad en el año 2099, estatuas que cobran vida, nieve en Neiva.</strong> Sin cámaras, sin locaciones y sin esperar semanas.</p>
+    <p class="say">La inteligencia artificial ya permite crear lo que nunca se podría grabar: <strong>una ciudad en el año 2099, una mascota que cobra vida, un vocero que habla por tu marca todas las semanas.</strong> Sin cámaras, sin locaciones y sin esperar meses.</p>
     <div class="before-after">
       <div class="ba">
         <span class="k">Antes</span>
         <h3>Un video tradicional</h3>
         <ul>
-          <li>Equipo, locaciones y permisos</li>
-          <li>Días de grabación</li>
+          <li>Equipo, actores, locaciones y permisos</li>
+          <li>Días o semanas de grabación</li>
           <li>Limitado a lo que existe frente a la cámara</li>
         </ul>
       </div>
@@ -225,7 +241,7 @@ footer .wrap { justify-content: center; text-align: center; flex-direction: colu
     <p class="quote-big">Cuando un video muestra algo que <span>nadie había visto</span>, la gente se detiene, lo comenta y se lo manda a alguien.</p>
     <div class="signals">
       <div class="signal"><h3>Detiene el scroll</h3><p>Lo absurdo y lo imposible se ven en el primer segundo. Ahí se decide si alguien sigue mirando.</p></div>
-      <div class="signal"><h3>Se comparte</h3><p>El humor y el orgullo regional hacen que la gente lo envíe a su familia y a sus grupos.</p></div>
+      <div class="signal"><h3>Se comparte</h3><p>El humor y la identidad hacen que la gente lo envíe a su familia, a sus amigos y a sus grupos.</p></div>
       <div class="signal"><h3>Se recuerda</h3><p>Una marca dentro de una historia se queda en la memoria más que una marca en un anuncio.</p></div>
     </div>
   </div>
@@ -233,9 +249,9 @@ footer .wrap { justify-content: center; text-align: center; flex-direction: colu
 
 <section class="ch">
   <div class="wrap">
-    <span class="chapter">Capítulo 3 · iaHuila</span>
-    <h2>Así nació iaHuila: el Huila como nunca lo habías visto.</h2>
-    <p class="say">En octubre de 2026 empezamos a publicar videos hechos con IA sobre lo nuestro: <strong>Neiva en el año 2099, los indígenas de San Agustín con herramientas modernas, las brujas de La Jagua, la nieve en Neiva.</strong> Exagerados, surrealistas y con el humor y el orgullo del opita.</p>
+    <span class="chapter">Capítulo 3 · El experimento</span>
+    <h2>Todo empezó con una pregunta: ¿y si contamos el Huila con IA?</h2>
+    <p class="say">En octubre de 2026 abrimos <strong>@ia_huila</strong> para probar una idea: videos con IA exagerados, surrealistas y con humor sobre nuestra región. <strong>Neiva en el año 2099, estatuas milenarias que cobran vida, brujas que vuelan sobre el pueblo.</strong> Funcionó más rápido de lo que imaginamos.</p>
     <div class="reel">
       <figure><img src="img/t_neiva.jpg" alt="Video Neiva 2099"><figcaption><b>121,7 mil</b>Neiva 2099</figcaption></figure>
       <figure><img src="img/t_sanagustin.jpg" alt="Video San Agustín"><figcaption><b>76,5 mil</b>San Agustín</figcaption></figure>
@@ -249,22 +265,16 @@ footer .wrap { justify-content: center; text-align: center; flex-direction: colu
 <section class="ch">
   <div class="wrap">
     <span class="chapter">Capítulo 4 · Los números</span>
-    <h2>En un mes, el Huila respondió.</h2>
-    <p class="say">Una cuenta nueva, sin trayectoria, que en sus primeras semanas sumó cientos de miles de vistas.</p>
+    <h2>En un mes, la gente respondió.</h2>
+    <p class="say">Una cuenta nueva, sin trayectoria, que en sus primeras semanas sumó cientos de miles de vistas. Y entonces empezaron a escribirnos marcas de otras ciudades y de otros países.</p>
     <div class="stats">
       <div class="stat"><b>790 mil+</b><span>vistas en el primer mes, entre TikTok e Instagram</span></div>
       <div class="stat"><b>28 mil</b><span>vistas promedio por video en TikTok</span></div>
       <div class="stat"><b>121,7 mil</b><span>vistas en el video más visto</span></div>
       <div class="stat"><b>3.700+</b><span>seguidores en sus primeras semanas</span></div>
     </div>
-    <p class="say" style="margin-top:40px">Y lo más valioso no son las vistas, es lo que la gente dice:</p>
-    <div class="voices">
-      <span>«La mejor cuenta ❤️»</span>
-      <span>«Día 9 pidiendo a Garzón»</span>
-      <span>«Del Huila para el mundo»</span>
-      <span>«Huila siempre»</span>
-      <span>«¿Y Yaguará?»</span>
-    </div>
+    <p class="say" style="margin-top:40px">Hoy creamos contenido para marcas de:</p>
+    <div class="where"><span>Huila</span><span>Manizales</span><span>Cali</span><span>Todo Colombia</span><span>Estados Unidos</span></div>
   </div>
 </section>
 
@@ -272,13 +282,30 @@ footer .wrap { justify-content: center; text-align: center; flex-direction: colu
   <div class="wrap">
     <span class="chapter">Capítulo 5 · Tu marca</span>
     <h2>Ahora, la historia puede ser la tuya.</h2>
-    <p class="say">Llevamos tu marca, tu producto o tu negocio al universo de iaHuila: <strong>un video pensado para que la gente lo vea, lo recuerde y lo comparta.</strong></p>
+    <p class="say">Sea cual sea tu negocio y estés donde estés, creamos el contenido con IA que necesitas: <strong>pensado para que la gente lo vea, lo recuerde y lo comparta.</strong></p>
     <div class="gets">
-      <div class="get"><h3>La idea</h3><p>Creamos el concepto y la historia a partir de tu marca y de lo que funciona en la región.</p></div>
-      <div class="get"><h3>La producción</h3><p>Escenas generadas con IA, música, tu logo real y el formato que necesites.</p></div>
-      <div class="get hl"><h3>La comunidad</h3><p>Si quieres, lo publicamos en colaboración con iaHuila para llegar a nuestra audiencia.</p></div>
+      <div class="get hl"><span class="ic">🎬</span><h3>Comerciales</h3><p>Anuncios con historia, humor o emoción, en escenarios que serían imposibles de grabar.</p></div>
+      <div class="get"><span class="ic">🧑‍🎤</span><h3>Personajes e influencers</h3><p>Un vocero con IA para tu marca: mismo rostro, misma voz, en cada video.</p></div>
+      <div class="get"><span class="ic">🤖</span><h3>Mascotas que cobran vida</h3><p>Tu mascota o personaje de marca caminando, hablando y actuando en tus propios espacios.</p></div>
+      <div class="get"><span class="ic">📱</span><h3>Contenido mensual</h3><p>Paquetes de videos para TikTok, Reels y Facebook, con estrategia, guion y edición.</p></div>
+      <div class="get"><span class="ic">📦</span><h3>Productos en acción</h3><p>Tu producto en cualquier lugar, época o situación, sin sesión de fotos ni rodaje.</p></div>
+      <div class="get"><span class="ic">🎞️</span><h3>Historias y cortos</h3><p>Piezas más largas y emocionales para lanzamientos, campañas o la historia de tu marca.</p></div>
     </div>
-    <div class="for"><span>Personas</span><span>Emprendimientos</span><span>Marcas</span><span>Empresas</span><span>Campañas y lanzamientos</span></div>
+    <div class="for"><span>Emprendimientos</span><span>Marcas</span><span>Empresas</span><span>Agencias</span><span>Campañas y lanzamientos</span></div>
+  </div>
+</section>
+
+<section class="ch">
+  <div class="wrap">
+    <span class="chapter">Capítulo 6 · Cómo trabajamos</span>
+    <h2>De tu idea al video, sin salir de tu oficina.</h2>
+    <p class="say">Trabajamos 100% en línea con clientes de cualquier ciudad y país.</p>
+    <div class="steps">
+      <div class="step"><b>1</b><h3>Nos cuentas</h3><p>Qué vendes, a quién le hablas y qué quieres lograr.</p></div>
+      <div class="step"><b>2</b><h3>La idea</h3><p>Te proponemos el concepto, el guion y el estilo.</p></div>
+      <div class="step"><b>3</b><h3>La producción</h3><p>Generamos escenas, voces, música y edición.</p></div>
+      <div class="step"><b>4</b><h3>Listo para publicar</h3><p>Entregamos en tus formatos, con una ronda de ajustes.</p></div>
+    </div>
   </div>
 </section>
 
@@ -288,7 +315,7 @@ footer .wrap { justify-content: center; text-align: center; flex-direction: colu
     <h2>¿Grabamos el <em>siguiente capítulo</em> juntos?</h2>
     <p class="say">Cuéntanos tu idea por WhatsApp y te enviamos una propuesta a la medida de tu marca.</p>
     <a class="btn btn-wa wa-link" id="wa" href="https://wa.me/573213973458" target="_blank" rel="noopener">Escríbenos por WhatsApp</a>
-    <p class="phone">o al <b>321 397 3458</b></p>
+    <p class="phone">o al <b>+57 321 397 3458</b></p>
   </div>
 </section>
 
@@ -304,7 +331,7 @@ footer .wrap { justify-content: center; text-align: center; flex-direction: colu
   // El enlace de cada bio termina en #tiktok, #instagram o #facebook para saber de dónde llega la persona
   const map = { tiktok: "TikTok", instagram: "Instagram", ig: "Instagram", facebook: "Facebook", fb: "Facebook" };
   const src = map[(location.hash || "").replace("#", "").toLowerCase()];
-  const msg = "Hola Camilo 🗿 Vengo de la página de iaHuila" + (src ? " (enlace de " + src + ")" : "") + ". Me interesa un video para mi marca.";
+  const msg = "Hola Camilo 👋 Vengo de la página de iaHuila" + (src ? " (enlace de " + src + ")" : "") + ". Me interesa crear contenido con IA para mi marca.";
   const href = "https://wa.me/573213973458?text=" + encodeURIComponent(msg);
   document.querySelectorAll(".wa-link").forEach((a) => { a.href = href; });
 })();
