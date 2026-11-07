@@ -222,6 +222,39 @@ footer .wrap { justify-content: center; text-align: center; flex-direction: colu
 .navr { display:flex; align-items:center; gap:10px; }
 @media (max-width: 900px) { .steps { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 640px) { .steps { grid-template-columns: 1fr; } .gets { grid-template-columns: 1fr; } }
+
+/* Lista de servicios y pasos */
+.gets { grid-template-columns: repeat(3, 1fr); }
+.get .ic { font-size: 30px; display:block; margin-bottom: 10px; }
+.steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 40px; counter-reset: s; }
+.step { border: 1.5px solid var(--line); border-radius: 16px; padding: 22px 18px; background: var(--bg-2); text-align: center; }
+.step b { display: inline-grid; place-items: center; width: 38px; height: 38px; border-radius: 50%; background: var(--sun); color: var(--ink); font-family: var(--display); font-size: 18px; margin-bottom: 12px; }
+.step:nth-child(2) b { background: var(--magenta); color:#fff } .step:nth-child(3) b { background: var(--gold); } .step:nth-child(4) b { background: var(--teal); }
+.step h3 { font-size: 20px; margin-bottom: 6px; }
+.step p { color: var(--muted); font-size: 15px; }
+.where { display:flex; flex-wrap:wrap; justify-content:center; gap:10px; margin-top:28px; }
+.where span { font-family: var(--mono); font-size: 13px; border:1.5px solid var(--line); border-radius:999px; padding:7px 14px; }
+.lang { font-family: var(--body); display:inline-flex; align-items:center; gap:7px; font-weight:700; font-size:13px; text-decoration:none; color: var(--fg); border:1.5px solid rgba(255,207,63,.55); background: rgba(255,207,63,.08); border-radius:999px; padding:7px 12px; transition: background .2s, border-color .2s; }
+.lang:hover { background: rgba(255,207,63,.18); border-color: var(--gold); }
+.lang svg { width:20px; height:14px; border-radius:2px; display:block; box-shadow: 0 0 0 1px rgba(255,255,255,.25); }
+.cta-row { display:flex; flex-wrap:wrap; gap:12px; justify-content:center; margin-top:30px; }
+.open .lead { max-width: 40ch; }
+.stats { margin-top: 36px; }
+.marquee { margin-top: 44px; margin-left: calc(50% - 50vw); margin-right: calc(50% - 50vw); overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); }
+.track { display: flex; gap: 16px; width: max-content; animation: slide 48s linear infinite; }
+.marquee:hover .track { animation-play-state: paused; }
+.track figure { margin: 0; width: 200px; flex: none; position: relative; }
+.track img { width: 100%; aspect-ratio: 360/478; object-fit: cover; border-radius: 14px; display: block; border: 1.5px solid var(--line); }
+.track figcaption { font-size: 14px; color: var(--muted); margin-top: 8px; text-align: center; }
+.track figcaption b { display: block; color: var(--fg); font-family: var(--display); font-size: 18px; }
+.rk { position: absolute; top: 10px; left: 10px; z-index: 1; font-family: var(--mono); font-size: 12px; font-weight: 500; background: rgba(18,11,36,.78); color: var(--gold); border-radius: 999px; padding: 4px 9px; }
+@keyframes slide { to { transform: translateX(calc(-50% - 8px)); } }
+@media (max-width: 640px) { .track figure { width: 150px; } .track { animation-duration: 40s; } }
+@media (prefers-reduced-motion: reduce) { .marquee { overflow-x: auto; } .track { animation: none; } }
+
+.navr { display:flex; align-items:center; gap:10px; }
+@media (max-width: 900px) { .steps { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 640px) { .steps { grid-template-columns: 1fr; } .gets { grid-template-columns: 1fr; } }
 </style>
 <style>html,body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
 </head>
@@ -259,12 +292,25 @@ footer .wrap { justify-content: center; text-align: center; flex-direction: colu
     <span class="chapter">The proof</span>
     <h2>We tested it on ourselves first.</h2>
     <p class="say">In October 2026 we launched <strong>@ia_huila</strong>: exaggerated, surreal and funny AI videos about Huila, our region in Colombia. <strong>In one month, people answered.</strong></p>
-    <div class="reel">
-      <figure><img src="../img/t_abuelitas.jpg" alt="Abuelitas video"><figcaption><b>171.8K</b>Abuelitas</figcaption></figure>
-      <figure><img src="../img/t_barrio.jpg" alt="El Barrio video"><figcaption><b>136.7K</b>El Barrio</figcaption></figure>
-      <figure><img src="../img/t_neiva.jpg" alt="Neiva 2099 video"><figcaption><b>126K</b>Neiva 2099</figcaption></figure>
-      <figure><img src="../img/t_bolivar.jpg" alt="Bolívar 26 video"><figcaption><b>92K</b>Bolívar 26</figcaption></figure>
-      <figure><img src="../img/t_sanagustin.jpg" alt="San Agustín video"><figcaption><b>79.5K</b>San Agustín</figcaption></figure>
+    <div class="marquee" aria-label="Our top 8 videos">
+      <div class="track">
+        <figure><span class="rk">#1</span><img src="../img/t_abuelitas.jpg" alt="Abuelitas video" loading="lazy"><figcaption><b>171.8K</b>Abuelitas</figcaption></figure>
+        <figure><span class="rk">#2</span><img src="../img/t_barrio.jpg" alt="El Barrio video" loading="lazy"><figcaption><b>136.7K</b>El Barrio</figcaption></figure>
+        <figure><span class="rk">#3</span><img src="../img/t_neiva.jpg" alt="Neiva 2099 video" loading="lazy"><figcaption><b>126K</b>Neiva 2099</figcaption></figure>
+        <figure><span class="rk">#4</span><img src="../img/t_bolivar.jpg" alt="Bolívar 26 video" loading="lazy"><figcaption><b>92K</b>Bolívar 26</figcaption></figure>
+        <figure><span class="rk">#5</span><img src="../img/t_sanagustin.jpg" alt="San Agustín video" loading="lazy"><figcaption><b>79.5K</b>San Agustín</figcaption></figure>
+        <figure><span class="rk">#6</span><img src="../img/t_olave.jpg" alt="Olave video" loading="lazy"><figcaption><b>75K</b>Olave</figcaption></figure>
+        <figure><span class="rk">#7</span><img src="../img/t_jagua.jpg" alt="La Jagua video" loading="lazy"><figcaption><b>44.1K</b>La Jagua</figcaption></figure>
+        <figure><span class="rk">#8</span><img src="../img/t_rivera.jpg" alt="Rivera video" loading="lazy"><figcaption><b>42.3K</b>Rivera</figcaption></figure>
+        <figure><span class="rk">#1</span><img src="../img/t_abuelitas.jpg" aria-hidden="true" alt="Abuelitas video" loading="lazy"><figcaption><b>171.8K</b>Abuelitas</figcaption></figure>
+        <figure><span class="rk">#2</span><img src="../img/t_barrio.jpg" aria-hidden="true" alt="El Barrio video" loading="lazy"><figcaption><b>136.7K</b>El Barrio</figcaption></figure>
+        <figure><span class="rk">#3</span><img src="../img/t_neiva.jpg" aria-hidden="true" alt="Neiva 2099 video" loading="lazy"><figcaption><b>126K</b>Neiva 2099</figcaption></figure>
+        <figure><span class="rk">#4</span><img src="../img/t_bolivar.jpg" aria-hidden="true" alt="Bolívar 26 video" loading="lazy"><figcaption><b>92K</b>Bolívar 26</figcaption></figure>
+        <figure><span class="rk">#5</span><img src="../img/t_sanagustin.jpg" aria-hidden="true" alt="San Agustín video" loading="lazy"><figcaption><b>79.5K</b>San Agustín</figcaption></figure>
+        <figure><span class="rk">#6</span><img src="../img/t_olave.jpg" aria-hidden="true" alt="Olave video" loading="lazy"><figcaption><b>75K</b>Olave</figcaption></figure>
+        <figure><span class="rk">#7</span><img src="../img/t_jagua.jpg" aria-hidden="true" alt="La Jagua video" loading="lazy"><figcaption><b>44.1K</b>La Jagua</figcaption></figure>
+        <figure><span class="rk">#8</span><img src="../img/t_rivera.jpg" aria-hidden="true" alt="Rivera video" loading="lazy"><figcaption><b>42.3K</b>Rivera</figcaption></figure>
+      </div>
     </div>
     <div class="stats">
       <div class="stat"><b>1M+</b><span>views in the first month</span></div>
