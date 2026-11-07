@@ -391,6 +391,7 @@ section > .wrap{position:relative;z-index:1}
         <p class="nm">Finca Hotel Villa Martha</p>
         <p class="ad">Kilómetro 6 vía Puerto López, Vda. Barcelona<br>Villavicencio, Meta</p>
         <a class="btn solid" target="_blank" rel="noopener" href="https://www.google.com/maps/dir//finca+hotel+villa+martha/data=!4m6!4m5!1m1!4e2!1m2!1m1!1s0x8e3e25703fad16c5:0x390c4f64852303f1?sa=X&amp;ved=1t:155782&amp;ictx=111">Cómo llegar</a>
+        <p style="margin:12px 0 0"><a class="btn guia" href="alojamiento/">Guía de alojamiento</a></p>
       </div>
     </div>
   </div>
@@ -456,6 +457,7 @@ section > .wrap{position:relative;z-index:1}
     <div class="label" style="color:var(--sand)">Fecha límite</div>
     <div class="deadline">30 de diciembre de 2026</div>
     <p class="info">Por favor ten en cuenta esta fecha: es la misma para <b>abonar la mitad del hospedaje</b>, según las indicaciones que te dimos.</p>
+    <p style="margin:-8px 0 26px"><a class="btn ghost guia" href="alojamiento/">Ver guía de alojamiento</a></p>
 
     <form id="form" novalidate>
       <p class="prev-ans" id="prevAns" hidden></p>
@@ -720,6 +722,9 @@ function iniciarInvitacion(){
     }).catch(()=>{});
   }
 
+  // Botones de la guía de alojamiento conservan el enlace del invitado
+  document.querySelectorAll("a.guia").forEach(a=>a.href="alojamiento/"+location.search);
+
   // Sobre + música
   const song=$("#song"), mus=$("#music");
   let abierto=false;
@@ -733,6 +738,12 @@ function iniciarInvitacion(){
     mus.hidden=false;
     setTimeout(()=>{ window.scrollTo(0,0); $("#intro").classList.add("gone"); document.body.classList.remove("locked"); }, 2100);
   });
+  // Si llega desde la guía a confirmar, se salta el sobre
+  if(location.hash==="#confirmar"){
+    abierto=true; $("#intro").classList.add("gone"); document.body.classList.remove("locked");
+    mus.hidden=false; sonando(false);
+    setTimeout(()=>$("#confirmar").scrollIntoView(),60);
+  }
   mus.addEventListener("click", ()=>{ if(song.paused) song.play().then(()=>sonando(true)).catch(()=>{}); else { song.pause(); sonando(false); } });
 
   // Cuenta regresiva
