@@ -180,6 +180,27 @@ footer .wrap { justify-content: center; text-align: center; flex-direction: colu
 .navr { display:flex; align-items:center; gap:10px; }
 @media (max-width: 900px) { .steps { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 640px) { .steps { grid-template-columns: 1fr; } .gets { grid-template-columns: 1fr; } }
+
+/* Lista de servicios y pasos */
+.gets { grid-template-columns: repeat(3, 1fr); }
+.get .ic { font-size: 30px; display:block; margin-bottom: 10px; }
+.steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 40px; counter-reset: s; }
+.step { border: 1.5px solid var(--line); border-radius: 16px; padding: 22px 18px; background: var(--bg-2); text-align: center; }
+.step b { display: inline-grid; place-items: center; width: 38px; height: 38px; border-radius: 50%; background: var(--sun); color: var(--ink); font-family: var(--display); font-size: 18px; margin-bottom: 12px; }
+.step:nth-child(2) b { background: var(--magenta); color:#fff } .step:nth-child(3) b { background: var(--gold); } .step:nth-child(4) b { background: var(--teal); }
+.step h3 { font-size: 20px; margin-bottom: 6px; }
+.step p { color: var(--muted); font-size: 15px; }
+.where { display:flex; flex-wrap:wrap; justify-content:center; gap:10px; margin-top:28px; }
+.where span { font-family: var(--mono); font-size: 13px; border:1.5px solid var(--line); border-radius:999px; padding:7px 14px; }
+.lang { font-family: var(--body); display:inline-flex; align-items:center; gap:7px; font-weight:700; font-size:13px; text-decoration:none; color: var(--fg); border:1.5px solid rgba(255,207,63,.55); background: rgba(255,207,63,.08); border-radius:999px; padding:7px 12px; transition: background .2s, border-color .2s; }
+.lang:hover { background: rgba(255,207,63,.18); border-color: var(--gold); }
+.lang svg { width:20px; height:14px; border-radius:2px; display:block; box-shadow: 0 0 0 1px rgba(255,255,255,.25); }
+.cta-row { display:flex; flex-wrap:wrap; gap:12px; justify-content:center; margin-top:30px; }
+.open .lead { max-width: 40ch; }
+.stats { margin-top: 36px; }
+.navr { display:flex; align-items:center; gap:10px; }
+@media (max-width: 900px) { .steps { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 640px) { .steps { grid-template-columns: 1fr; } .gets { grid-template-columns: 1fr; } }
 </style>
 <style>html,body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
 </head>
@@ -189,14 +210,20 @@ footer .wrap { justify-content: center; text-align: center; flex-direction: colu
   <div class="wrap">
     <nav class="nav">
       <a class="brand" href="#inicio" id="inicio"><img src="img/logo.jpg" alt="Logo de iaHuila">iaHuila</a>
-      <div class="navr"><a class="lang" href="en/" hreflang="en">EN</a><a class="mini wa-link" href="https://wa.me/573213973458" target="_blank" rel="noopener">Hablemos</a></div>
+      <div class="navr">
+        <a class="lang" href="en/" hreflang="en" lang="en"><svg viewBox="0 0 20 14" aria-hidden="true"><rect width="20" height="14" fill="#fff"/><g fill="#b22234"><rect width="20" height="1.08"/><rect y="2.15" width="20" height="1.08"/><rect y="4.31" width="20" height="1.08"/><rect y="6.46" width="20" height="1.08"/><rect y="8.62" width="20" height="1.08"/><rect y="10.77" width="20" height="1.08"/><rect y="12.92" width="20" height="1.08"/></g><rect width="9" height="7.54" fill="#3c3b6e"/></svg>English</a>
+        <a class="mini wa-link" href="https://wa.me/573213973458" target="_blank" rel="noopener">Hablemos</a>
+      </div>
     </nav>
     <div class="open-grid">
       <div>
-        <span class="chapter">Rebobinemos</span>
-        <h1>¿Y si tu marca pudiera estar <em>en cualquier lugar</em>… y en cualquier época?</h1>
-        <p class="lead">Esta es la historia de cómo empezamos contando una región con inteligencia artificial, y de cómo hoy creamos contenido para marcas de todo el país y de afuera.</p>
-        <a class="down" href="#ia">▼ Dale play</a>
+        <span class="chapter">Estudio de contenido con IA</span>
+        <h1>Creamos tu contenido con <em>inteligencia artificial.</em></h1>
+        <p class="lead">Comerciales, personajes y videos para redes que detienen el scroll, se comparten y se recuerdan. Para marcas de todo Colombia y del mundo.</p>
+        <div class="cta-row">
+          <a class="btn btn-wa wa-link" href="https://wa.me/573213973458" target="_blank" rel="noopener">Escríbenos por WhatsApp</a>
+          <a class="btn btn-ghost" href="#prueba">Mira lo que hemos hecho ▼</a>
+        </div>
       </div>
       <div class="tape scan">
         <span class="rec">REC</span>
@@ -206,52 +233,11 @@ footer .wrap { justify-content: center; text-align: center; flex-direction: colu
   </div>
 </header>
 
-<section class="ch" id="ia">
+<section class="ch" id="prueba">
   <div class="wrap">
-    <span class="chapter">Capítulo 1 · La IA</span>
-    <h2>Lo que antes costaba un rodaje, hoy cabe en una idea.</h2>
-    <p class="say">La inteligencia artificial ya permite crear lo que nunca se podría grabar: <strong>una ciudad en el año 2099, una mascota que cobra vida, un vocero que habla por tu marca todas las semanas.</strong> Sin cámaras, sin locaciones y sin esperar meses.</p>
-    <div class="before-after">
-      <div class="ba">
-        <span class="k">Antes</span>
-        <h3>Un video tradicional</h3>
-        <ul>
-          <li>Equipo, actores, locaciones y permisos</li>
-          <li>Días o semanas de grabación</li>
-          <li>Limitado a lo que existe frente a la cámara</li>
-        </ul>
-      </div>
-      <div class="ba now">
-        <span class="k">Ahora</span>
-        <h3>Un video con IA</h3>
-        <ul>
-          <li>Cualquier escenario, real o imposible</li>
-          <li>Listo en días</li>
-          <li>Tu marca dentro de una historia que se recuerda</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="ch impact">
-  <div class="wrap">
-    <span class="chapter">Capítulo 2 · ¿Impacta?</span>
-    <h2>La gente no comparte anuncios. Comparte lo que la sorprende.</h2>
-    <p class="quote-big">Cuando un video muestra algo que <span>nadie había visto</span>, la gente se detiene, lo comenta y se lo manda a alguien.</p>
-    <div class="signals">
-      <div class="signal"><h3>Detiene el scroll</h3><p>Lo absurdo y lo imposible se ven en el primer segundo. Ahí se decide si alguien sigue mirando.</p></div>
-      <div class="signal"><h3>Se comparte</h3><p>El humor y la identidad hacen que la gente lo envíe a su familia, a sus amigos y a sus grupos.</p></div>
-      <div class="signal"><h3>Se recuerda</h3><p>Una marca dentro de una historia se queda en la memoria más que una marca en un anuncio.</p></div>
-    </div>
-  </div>
-</section>
-
-<section class="ch">
-  <div class="wrap">
-    <span class="chapter">Capítulo 3 · El experimento</span>
-    <h2>Todo empezó con una pregunta: ¿y si contamos el Huila con IA?</h2>
-    <p class="say">En octubre de 2026 abrimos <strong>@ia_huila</strong> para probar una idea: videos con IA exagerados, surrealistas y con humor sobre nuestra región. <strong>Neiva en el año 2099, estatuas milenarias que cobran vida, brujas que vuelan sobre el pueblo.</strong> Funcionó más rápido de lo que imaginamos.</p>
+    <span class="chapter">La prueba</span>
+    <h2>Lo probamos primero con nosotros.</h2>
+    <p class="say">En octubre de 2026 creamos <strong>@ia_huila</strong>: videos con IA sobre el Huila, exagerados, surrealistas y con humor. <strong>En un mes, la gente respondió.</strong></p>
     <div class="reel">
       <figure><img src="img/t_neiva.jpg" alt="Video Neiva 2099"><figcaption><b>121,7 mil</b>Neiva 2099</figcaption></figure>
       <figure><img src="img/t_sanagustin.jpg" alt="Video San Agustín"><figcaption><b>76,5 mil</b>San Agustín</figcaption></figure>
@@ -259,60 +245,36 @@ footer .wrap { justify-content: center; text-align: center; flex-direction: colu
       <figure><img src="img/t_olave.jpg" alt="Video Olave"><figcaption><b>73 mil</b>Olave</figcaption></figure>
       <figure><img src="img/t_jagua.jpg" alt="Video La Jagua"><figcaption><b>40,7 mil</b>La Jagua</figcaption></figure>
     </div>
-  </div>
-</section>
-
-<section class="ch">
-  <div class="wrap">
-    <span class="chapter">Capítulo 4 · Los números</span>
-    <h2>En un mes, la gente respondió.</h2>
-    <p class="say">Una cuenta nueva, sin trayectoria, que en sus primeras semanas sumó cientos de miles de vistas. Y entonces empezaron a escribirnos marcas de otras ciudades y de otros países.</p>
     <div class="stats">
-      <div class="stat"><b>790 mil+</b><span>vistas en el primer mes, entre TikTok e Instagram</span></div>
+      <div class="stat"><b>790 mil+</b><span>vistas en el primer mes</span></div>
       <div class="stat"><b>28 mil</b><span>vistas promedio por video en TikTok</span></div>
       <div class="stat"><b>121,7 mil</b><span>vistas en el video más visto</span></div>
-      <div class="stat"><b>3.700+</b><span>seguidores en sus primeras semanas</span></div>
+      <div class="stat"><b>3.700+</b><span>seguidores en las primeras semanas</span></div>
     </div>
-    <p class="say" style="margin-top:40px">Hoy creamos contenido para marcas de:</p>
-    <div class="where"><span>Huila</span><span>Manizales</span><span>Cali</span><span>Todo Colombia</span><span>Estados Unidos</span></div>
   </div>
 </section>
 
 <section class="ch offer">
   <div class="wrap">
-    <span class="chapter">Capítulo 5 · Tu marca</span>
-    <h2>Ahora, la historia puede ser la tuya.</h2>
-    <p class="say">Sea cual sea tu negocio y estés donde estés, creamos el contenido con IA que necesitas: <strong>pensado para que la gente lo vea, lo recuerde y lo comparta.</strong></p>
+    <span class="chapter">Para tu marca</span>
+    <h2>Ahora lo hacemos para ti.</h2>
+    <p class="say">Sea cual sea tu negocio y estés donde estés, <strong>creamos el contenido con IA que necesitas.</strong></p>
     <div class="gets">
-      <div class="get hl"><span class="ic">🎬</span><h3>Comerciales</h3><p>Anuncios con historia, humor o emoción, en escenarios que serían imposibles de grabar.</p></div>
-      <div class="get"><span class="ic">🧑‍🎤</span><h3>Personajes e influencers</h3><p>Un vocero con IA para tu marca: mismo rostro, misma voz, en cada video.</p></div>
-      <div class="get"><span class="ic">🤖</span><h3>Mascotas que cobran vida</h3><p>Tu mascota o personaje de marca caminando, hablando y actuando en tus propios espacios.</p></div>
-      <div class="get"><span class="ic">📱</span><h3>Contenido mensual</h3><p>Paquetes de videos para TikTok, Reels y Facebook, con estrategia, guion y edición.</p></div>
-      <div class="get"><span class="ic">📦</span><h3>Productos en acción</h3><p>Tu producto en cualquier lugar, época o situación, sin sesión de fotos ni rodaje.</p></div>
-      <div class="get"><span class="ic">🎞️</span><h3>Historias y cortos</h3><p>Piezas más largas y emocionales para lanzamientos, campañas o la historia de tu marca.</p></div>
+      <div class="get hl"><span class="ic">🎬</span><h3>Comerciales</h3><p>Anuncios con historia, humor o emoción, en escenarios imposibles de grabar.</p></div>
+      <div class="get"><span class="ic">🧑‍🎤</span><h3>Personajes e influencers</h3><p>Un vocero con IA para tu marca: mismo rostro y misma voz en cada video.</p></div>
+      <div class="get"><span class="ic">🤖</span><h3>Mascotas que cobran vida</h3><p>Tu personaje de marca caminando, hablando y actuando en tus propios espacios.</p></div>
+      <div class="get"><span class="ic">📱</span><h3>Contenido mensual</h3><p>Paquetes de videos para TikTok, Reels y Facebook, con guion y edición.</p></div>
+      <div class="get"><span class="ic">📦</span><h3>Productos en acción</h3><p>Tu producto en cualquier lugar o situación, sin sesión de fotos ni rodaje.</p></div>
+      <div class="get"><span class="ic">🎞️</span><h3>Historias y cortos</h3><p>Piezas más largas y emocionales para lanzamientos y campañas.</p></div>
     </div>
-    <div class="for"><span>Emprendimientos</span><span>Marcas</span><span>Empresas</span><span>Agencias</span><span>Campañas y lanzamientos</span></div>
-  </div>
-</section>
-
-<section class="ch">
-  <div class="wrap">
-    <span class="chapter">Capítulo 6 · Cómo trabajamos</span>
-    <h2>De tu idea al video, sin salir de tu oficina.</h2>
-    <p class="say">Trabajamos 100% en línea con clientes de cualquier ciudad y país.</p>
-    <div class="steps">
-      <div class="step"><b>1</b><h3>Nos cuentas</h3><p>Qué vendes, a quién le hablas y qué quieres lograr.</p></div>
-      <div class="step"><b>2</b><h3>La idea</h3><p>Te proponemos el concepto, el guion y el estilo.</p></div>
-      <div class="step"><b>3</b><h3>La producción</h3><p>Generamos escenas, voces, música y edición.</p></div>
-      <div class="step"><b>4</b><h3>Listo para publicar</h3><p>Entregamos en tus formatos, con una ronda de ajustes.</p></div>
-    </div>
+    <div class="for"><span>Emprendimientos</span><span>Marcas</span><span>Empresas</span><span>Agencias</span><span>100% en línea</span></div>
   </div>
 </section>
 
 <section class="close scan">
   <div class="wrap narrow">
-    <span class="chapter">Fin de la cinta</span>
-    <h2>¿Grabamos el <em>siguiente capítulo</em> juntos?</h2>
+    <span class="chapter">Hablemos</span>
+    <h2>¿Creamos <em>el tuyo?</em></h2>
     <p class="say">Cuéntanos tu idea por WhatsApp y te enviamos una propuesta a la medida de tu marca.</p>
     <a class="btn btn-wa wa-link" id="wa" href="https://wa.me/573213973458" target="_blank" rel="noopener">Escríbenos por WhatsApp</a>
     <p class="phone">o al <b>+57 321 397 3458</b></p>
