@@ -68,6 +68,9 @@ La sección «Inscríbete y asegura tu cupo» de la página principal usa la mis
   en las propiedades del script (no está en GitHub), así nadie puede inventar entradas.
 - La columna **Asistió** sirve para marcar el ingreso la noche del evento.
 - Para mensajes masivos, filtra «Acepta mensajes = Sí» y exporta la lista.
+- **Anunciar la fecha a los inscritos:** la función `anunciarFecha` envía un correo con la fecha
+  confirmada y su mismo QR a quienes se inscribieron antes de anunciarla (columna **Fecha avisada**).
+  Ejecútala una vez; si hay más de ~100 inscritos, crea un activador diario para `anunciarFecha`.
 
 **Importante:** cada vez que cambies el código del Apps Script, ve a
 Implementar › Gestionar implementaciones › editar (lápiz) › Versión: «Nueva versión» › Implementar.

@@ -13,7 +13,7 @@ window.BARAYA_JUEGO = {
     activo: true,
     premio: "Premio sorpresa al mejor puntaje",
     patrocinador: "",              // ej.: "Café La Plaza"
-    cierre: "",                    // ej.: "2027-02-12T18:00:00-05:00" (vacío = por confirmar)
+    cierre: "2027-02-17T23:59:00-05:00",   // 3 días antes del estreno (20 de febrero)
     premios: [],                   // ej.: ["1.er puesto: …", "2.º puesto: …", "3.er puesto: …"]
     textoFinal: "Los 3 mejores puntajes jugarán la final en vivo en la pantalla gigante de la Plaza Botero la noche del estreno."
   }

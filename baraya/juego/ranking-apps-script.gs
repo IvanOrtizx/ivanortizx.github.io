@@ -6,23 +6,24 @@
  *  - Ranking:        Nombre | Puntos | Contacto | Fecha | Duración (s) | Banderas | Metros
  *  - Patrocinadores: Nombre | Nivel (Diamante/Oro/Plata/Aliado) | Logo (URL) | Activo (Sí/No)
  *  - Inscritos:      Código | Nombre | Celular | Correo | Municipio | Personas | Acepta datos |
- *                    Acepta mensajes | Fecha | Asistió | Token | Enlace entrada
+ *                    Acepta mensajes | Fecha | Asistió | Token | Enlace entrada |
+ *                    Correo enviado | Fecha avisada
  *
  * Después de cambiar este código: Implementar › Gestionar implementaciones ›
  * editar (lápiz) › Versión: «Nueva versión» › Implementar. La URL no cambia.
  */
-const CIERRE = '';                 // Cierre del ranking del juego. Vacío = abierto.
+const CIERRE = '2027-02-17T23:59:00-05:00';   // Cierre del ranking del juego (3 días antes del estreno).
 const MAX_POR_SEGUNDO = 60;        // Puntos máximos por segundo de juego (anti-trampas).
 const CUPO_INSCRIPCIONES = 3000;   // Personas que se pueden inscribir (una inscripción = una persona).
 const CIERRE_INSCRIPCIONES = '';   // Cierre de inscripciones. Vacío = abierto.
 const ENVIAR_CORREO = true;        // Confirmación con QR por correo. Gmail gratuito permite ~100 al día:
                                    // si se agota, queda «Pendiente» y se envía con enviarPendientes().
 const URL_ENTRADA = 'https://camott.com/baraya/entrada/';
-const FECHA_EVENTO = 'Febrero de 2027 (te confirmaremos el día exacto)';
+const FECHA_EVENTO = 'Sábado 20 de febrero de 2027';
 
 const ENC_RANK = ['Nombre','Puntos','Contacto','Fecha','Duración (s)','Banderas','Metros'];
 const ENC_PAT  = ['Nombre','Nivel','Logo (URL)','Activo (Sí/No)'];
-const ENC_INS  = ['Código','Nombre','Celular','Correo','Municipio','Personas','Acepta datos','Acepta mensajes','Fecha','Asistió','Token','Enlace entrada','Correo enviado'];
+const ENC_INS  = ['Código','Nombre','Celular','Correo','Municipio','Personas','Acepta datos','Acepta mensajes','Fecha','Asistió','Token','Enlace entrada','Correo enviado','Fecha avisada'];
 
 function hoja_(nombre, encabezados) {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
@@ -155,7 +156,7 @@ function inscribir_(d) {
   if (personas > c.restantes) return { ok: false, lleno: true, error: c.restantes > 0 ? 'Solo quedan ' + c.restantes + ' cupos.' : 'Los cupos se agotaron.', restantes: c.restantes };
   const codigo = 'BAR-' + String(ins.sh.getLastRow()).padStart(4, '0');
   const token = token_(codigo);
-  ins.sh.appendRow([codigo, nombre, "'" + celular, correo, municipio, personas, 'Sí', d.aceptaMensajes === true ? 'Sí' : 'No', new Date(), '', token, enlace_(codigo, token), '']);
+  ins.sh.appendRow([codigo, nombre, "'" + celular, correo, municipio, personas, 'Sí', d.aceptaMensajes === true ? 'Sí' : 'No', new Date(), '', token, enlace_(codigo, token), '', 'No aplica']);
   const fila = ins.sh.getLastRow();
   ins.sh.getRange(fila, 13).setValue(correoConfirmacion_(correo, nombre, codigo, personas, token));
   return { ok: true, codigo: codigo, token: token, nombre: nombre, personas: personas, restantes: cupos_().restantes };
@@ -179,8 +180,49 @@ function enviarPendientes() {
     if (String(f[12]) !== 'Pendiente') continue;
     if (MailApp.getRemainingDailyQuota() < 1) break;
     const t = f[10] || asegurarToken_(ins.sh, i + 2, f[0]);
-    ins.sh.getRange(i + 2, 13).setValue(correoConfirmacion_(String(f[3]), String(f[1]), f[0], 1, t));
+    const r = correoConfirmacion_(String(f[3]), String(f[1]), f[0], 1, t);
+    ins.sh.getRange(i + 2, 13).setValue(r);
+    if (r === 'Sí') ins.sh.getRange(i + 2, 14).setValue('No aplica');   // su confirmación ya trae la fecha
   }
+}
+
+/* Avisa la fecha confirmada a quienes se inscribieron antes de anunciarla.
+   Ejecútala una vez (botón ▶ Ejecutar). Si hay más de ~100 inscritos, Gmail se detiene
+   por el día: crea un activador diario de anunciarFecha y sigue sola hasta terminar.
+   En la columna «Fecha avisada» queda «Sí» para cada persona avisada. */
+function anunciarFecha() {
+  const ins = inscritos_();
+  var enviados = 0;
+  for (var i = 0; i < ins.filas.length; i++) {
+    const f = ins.filas[i];
+    if (String(f[13])) continue;                        // ya avisado o no aplica
+    if (String(f[12]) === 'Pendiente') continue;        // le llegará la confirmación con la fecha
+    const correo = String(f[3]);
+    if (!/.+@.+\..+/.test(correo)) { ins.sh.getRange(i + 2, 14).setValue('Sin correo'); continue; }
+    if (MailApp.getRemainingDailyQuota() < 1) break;
+    const t = f[10] || asegurarToken_(ins.sh, i + 2, f[0]);
+    const link = enlace_(f[0], t), nombre = String(f[1]).split(' ')[0];
+    try {
+      MailApp.sendEmail({
+        to: correo,
+        name: 'Baraya · El Prócer Independentista',
+        subject: '¡Ya tenemos fecha! Estreno de «Baraya» el ' + FECHA_EVENTO.toLowerCase(),
+        htmlBody:
+          '<div style="font-family:Georgia,serif;color:#EEE1C2;background:#140E09;padding:30px;max-width:560px;margin:auto;text-align:center;border:1px solid #C9A44C">' +
+          '<p style="letter-spacing:3px;font-size:12px;color:#CDBB95;margin:0">PRESENTACIÓN DEL CORTOMETRAJE</p>' +
+          '<h1 style="font-size:34px;letter-spacing:6px;margin:6px 0;font-weight:normal">BARAYA</h1>' +
+          '<p style="font-style:italic;color:#C9A44C;margin:0 0 20px">El prócer independentista</p>' +
+          '<h2 style="font-size:22px;margin:0 0 10px;font-weight:normal">¡' + nombre + ', ya tenemos fecha!</h2>' +
+          '<p style="font-size:30px;color:#C9A44C;margin:6px 0">' + FECHA_EVENTO + '</p>' +
+          '<p style="font-size:16px;line-height:1.55">Plaza Botero, Olave Tower · Neiva<br>Apertura de puertas: 5:45 p. m. · Proyección: 7:40 p. m.</p>' +
+          '<p style="font-size:16px;line-height:1.55">Tu entrada sigue siendo la misma: código <b style="color:#C9A44C">' + f[0] + '</b>. Preséntala en la entrada para recibir tu manilla.</p>' +
+          '<p style="margin:20px 0"><a href="' + link + '" style="background:#9C2018;color:#F6EAD0;padding:12px 22px;text-decoration:none;font-weight:bold">Ver mi entrada con el QR</a></p>' +
+          '<p style="font-size:14px;color:#CDBB95">Mientras tanto, juega «Baraya: La Campaña» y gana un premio la noche del estreno: camott.com/baraya/juego</p></div>'
+      });
+      ins.sh.getRange(i + 2, 14).setValue('Sí'); enviados++;
+    } catch (err) { break; }
+  }
+  Logger.log('Avisos enviados hoy: ' + enviados);
 }
 
 /* ---------- Puntos de entrada ---------- */
