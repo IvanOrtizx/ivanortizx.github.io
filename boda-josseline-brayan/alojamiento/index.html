@@ -110,12 +110,24 @@ footer small{display:block;font-family:var(--f-sans);font-size:10.5px;letter-spa
 footer small a{color:var(--emerald);font-weight:500}
 footer .mine{display:inline-block;margin-top:8px;font-family:var(--f-sans);font-size:12px;letter-spacing:.06em;color:var(--emerald);text-underline-offset:3px}
 
+#music{position:fixed;right:calc(16px + env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:40;display:flex;align-items:center;gap:8px;height:48px;padding:0 16px 0 14px;border-radius:999px;border:0;background:var(--emerald);color:#fdfeff;font-family:var(--f-sans);font-size:12px;letter-spacing:.08em;box-shadow:0 8px 20px -6px rgba(20,47,87,.6);cursor:pointer}
+#music:focus-visible{outline:2px solid var(--sand);outline-offset:3px}
+#music svg{width:20px;height:20px;flex:none}
+#music.playing{padding:0;width:48px;justify-content:center}
+#music.playing span{display:none}
+#music.playing svg{animation:spin 6s linear infinite}
+#music:not(.playing){animation:latido 2.4s ease-in-out infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes latido{50%{transform:scale(1.06)}}
 @media (max-width:420px){.day{grid-template-columns:58px minmax(0,1fr);gap:12px}.day .when b{font-size:38px}.point{grid-template-columns:36px minmax(0,1fr);gap:12px;padding:14px}.point svg{width:34px;height:34px}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><symbol id="palma" viewBox="0 0 170 125"><path d="M8 112Q60 70 152 8" stroke="currentColor" stroke-width="1.4" fill="none"/><g fill="currentColor"><ellipse cx="16.5" cy="0" rx="16.5" ry="2.5" transform="translate(14.7 106.7) rotate(-89.3)"/><ellipse cx="16.5" cy="0" rx="16.5" ry="2.5" transform="translate(14.7 106.7) rotate(12.4)"/><ellipse cx="16.0" cy="0" rx="16.0" ry="2.5" transform="translate(21.6 101.2) rotate(-87.7)"/><ellipse cx="16.0" cy="0" rx="16.0" ry="2.5" transform="translate(21.6 101.2) rotate(11.8)"/><ellipse cx="15.6" cy="0" rx="15.6" ry="2.4" transform="translate(28.9 95.5) rotate(-86.2)"/><ellipse cx="15.6" cy="0" rx="15.6" ry="2.4" transform="translate(28.9 95.5) rotate(11.1)"/><ellipse cx="15.1" cy="0" rx="15.1" ry="2.4" transform="translate(36.5 89.8) rotate(-84.7)"/><ellipse cx="15.1" cy="0" rx="15.1" ry="2.4" transform="translate(36.5 89.8) rotate(10.3)"/><ellipse cx="14.6" cy="0" rx="14.6" ry="2.3" transform="translate(44.4 83.8) rotate(-83.2)"/><ellipse cx="14.6" cy="0" rx="14.6" ry="2.3" transform="translate(44.4 83.8) rotate(9.6)"/><ellipse cx="14.1" cy="0" rx="14.1" ry="2.2" transform="translate(52.6 77.7) rotate(-81.7)"/><ellipse cx="14.1" cy="0" rx="14.1" ry="2.2" transform="translate(52.6 77.7) rotate(8.8)"/><ellipse cx="13.6" cy="0" rx="13.6" ry="2.2" transform="translate(61.2 71.4) rotate(-80.3)"/><ellipse cx="13.6" cy="0" rx="13.6" ry="2.2" transform="translate(61.2 71.4) rotate(8.0)"/><ellipse cx="13.2" cy="0" rx="13.2" ry="2.1" transform="translate(70.0 65.0) rotate(-78.8)"/><ellipse cx="13.2" cy="0" rx="13.2" ry="2.1" transform="translate(70.0 65.0) rotate(7.2)"/><ellipse cx="12.7" cy="0" rx="12.7" ry="2.0" transform="translate(79.2 58.4) rotate(-77.4)"/><ellipse cx="12.7" cy="0" rx="12.7" ry="2.0" transform="translate(79.2 58.4) rotate(6.3)"/><ellipse cx="12.2" cy="0" rx="12.2" ry="2.0" transform="translate(88.6 51.7) rotate(-76.0)"/><ellipse cx="12.2" cy="0" rx="12.2" ry="2.0" transform="translate(88.6 51.7) rotate(5.5)"/><ellipse cx="11.7" cy="0" rx="11.7" ry="1.9" transform="translate(98.4 44.8) rotate(-74.7)"/><ellipse cx="11.7" cy="0" rx="11.7" ry="1.9" transform="translate(98.4 44.8) rotate(4.6)"/><ellipse cx="11.2" cy="0" rx="11.2" ry="1.9" transform="translate(108.5 37.8) rotate(-73.3)"/><ellipse cx="11.2" cy="0" rx="11.2" ry="1.9" transform="translate(108.5 37.8) rotate(3.7)"/><ellipse cx="10.7" cy="0" rx="10.7" ry="1.8" transform="translate(118.9 30.5) rotate(-72.0)"/><ellipse cx="10.7" cy="0" rx="10.7" ry="1.8" transform="translate(118.9 30.5) rotate(2.8)"/><ellipse cx="10.3" cy="0" rx="10.3" ry="1.7" transform="translate(129.6 23.2) rotate(-70.6)"/><ellipse cx="10.3" cy="0" rx="10.3" ry="1.7" transform="translate(129.6 23.2) rotate(1.9)"/><ellipse cx="9.8" cy="0" rx="9.8" ry="1.7" transform="translate(140.7 15.7) rotate(-69.3)"/><ellipse cx="9.8" cy="0" rx="9.8" ry="1.7" transform="translate(140.7 15.7) rotate(1.0)"/></g></symbol></defs></svg>
+
+<button id="music" type="button" aria-label="Reproducir música"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2.5"/><path d="M12 3a9 9 0 0 1 9 9"/></svg><span>Escuchar canción</span></button>
+<audio id="song" src="como-no-voy-a-decirlo.mp3" loop preload="auto"></audio>
 
 <header class="top">
   <svg class="frond tl" aria-hidden="true"><use href="#palma"/></svg><svg class="frond br" aria-hidden="true"><use href="#palma"/></svg>
@@ -156,11 +168,11 @@ footer .mine{display:inline-block;margin-top:8px;font-family:var(--f-sans);font-
     <div class="points">
       <div class="point">
         <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.3"><rect x="8" y="6" width="24" height="30" rx="2"/><path d="M14 13h12M14 19h12M14 25h7"/><circle cx="29" cy="30" r="6" fill="var(--paper-2)"/><path d="M26.5 30l2 2 3.5-4"/></svg>
-        <div><h3>Asignación</h3><p>Las habitaciones se asignarán a medida que vayan confirmando su asistencia.</p></div>
+        <div><h3>Asignación</h3><p id="txtAsig">Las habitaciones se asignarán a medida que vayan confirmando su asistencia.</p></div>
       </div>
       <div class="point">
         <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M4 30V14M4 22h32v8M36 30v-6"/><path d="M8 22v-4a3 3 0 0 1 3-3h6a3 3 0 0 1 3 3v4M20 22v-4a3 3 0 0 1 3-3h6a3 3 0 0 1 3 3v4"/></svg>
-        <div><h3>Distribución</h3><p>Para poder alojar a nuestros seres queridos, en algunos casos se compartirá habitación, respetando siempre la comodidad y privacidad de tu cama.</p></div>
+        <div><h3>Distribución</h3><p id="txtDist">Para poder alojar a nuestros seres queridos, en algunos casos se compartirá habitación, respetando siempre la comodidad y privacidad de tu cama.</p></div>
       </div>
     </div>
   </div>
@@ -173,7 +185,7 @@ footer .mine{display:inline-block;margin-top:8px;font-family:var(--f-sans);font-
     <div class="timeline">
       <div class="day" id="sabado">
         <div class="when"><b>20</b><span>Sábado</span><i>Marzo</i></div>
-        <ol class="steps">
+        <ol class="steps" id="it-sab">
           <li><div class="t">Desde las 8:00 a.m.</div><div class="d">Ingreso y entrega de habitaciones (check-in)</div></li>
           <li><div class="t">Hasta la 1:00 p.m.</div><div class="d">Piscina abierta<small>Se pausa para los preparativos y la boda</small></div></li>
           <li><div class="t">7:00 p.m.</div><div class="d">Recepción de la boda</div></li>
@@ -181,14 +193,14 @@ footer .mine{display:inline-block;margin-top:8px;font-family:var(--f-sans);font-
       </div>
       <div class="day" id="domingo">
         <div class="when"><b>21</b><span>Domingo</span><i>Marzo</i></div>
-        <ol class="steps">
+        <ol class="steps" id="it-dom">
           <li><div class="t">Desde las 8:00 a.m.</div><div class="d">Reapertura de la piscina</div></li>
           <li><div class="t">Alimentación <span class="pendiente">Por confirmar</span></div><div class="d">Estamos validando las opciones de alimentación para el domingo y oportunamente se las comunicaremos.</div></li>
         </ol>
       </div>
       <div class="day" id="lunes">
         <div class="when"><b>22</b><span>Lunes</span><i>Festivo</i></div>
-        <ol class="steps">
+        <ol class="steps" id="it-lun">
           <li><div class="t">Plan retorno</div><div class="d">Salida y regreso a casa<small>Estaremos muy pendientes de la logística y del flujo vehicular en la vía para coordinar el viaje de regreso con tranquilidad.</small></div></li>
         </ol>
       </div>
@@ -229,6 +241,42 @@ footer .mine{display:inline-block;margin-top:8px;font-family:var(--f-sans);font-
 </footer>
 
 <script>
+const API_URL = "https://script.google.com/macros/s/AKfycbzUj_AIt7TV0dpNMD7t6KD8MxE8OyWH9qnKdixkgZywEtjsJyuGfbUY-SjLIPJtoJg/exec";
+const $ = id => document.getElementById(id);
+
+// Música: arranca con el primer toque en la página o con el botón
+(function(){
+  const song=$("song"), b=$("music");
+  const on=v=>{ b.classList.toggle("playing",v); b.setAttribute("aria-label", v?"Pausar música":"Reproducir música"); };
+  const play=()=>song.play().then(()=>on(true)).catch(()=>on(false));
+  song.volume=.7;
+  b.addEventListener("click", e=>{ e.stopPropagation(); quitar(); if(song.paused) play(); else { song.pause(); on(false); } });
+  const primero=e=>{ quitar(); if(song.paused) play(); };
+  const quitar=()=>["pointerdown","keydown"].forEach(t=>document.removeEventListener(t,primero,true));
+  ["pointerdown","keydown"].forEach(t=>document.addEventListener(t,primero,true));
+})();
+
+// Contenido editable por los novios desde el panel
+fetch(API_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({action:"config"})})
+  .then(r=>r.json()).then(r=>{
+    const a=r && r.ok && r.alojamiento; if(!a) return;
+    if(a.asignacion) $("txtAsig").textContent=a.asignacion;
+    if(a.distribucion) $("txtDist").textContent=a.distribucion;
+    ["sab","dom","lun"].forEach(k=>{
+      const ol=$("it-"+k), items=(a.dias||{})[k]||[];
+      ol.innerHTML="";
+      if(!items.length){ const li=document.createElement("li"); li.innerHTML='<div class="d"><small>Pronto les contaremos el plan de este día.</small></div>'; ol.append(li); return; }
+      items.forEach(it=>{
+        const li=document.createElement("li"), t=document.createElement("div"), d=document.createElement("div");
+        t.className="t"; t.textContent=it.hora||"";
+        if(it.pendiente){ const c=document.createElement("span"); c.className="pendiente"; c.textContent="Por confirmar"; t.append(" ",c); }
+        d.className="d"; d.textContent=it.actividad||"";
+        if(it.nota){ const s=document.createElement("small"); s.textContent=it.nota; d.append(s); }
+        li.append(t,d); ol.append(li);
+      });
+    });
+  }).catch(()=>{});
+
 // Mantiene el enlace personalizado del invitado al volver a la invitación (sin contar otra apertura)
 (function(){
   const q = new URLSearchParams(location.search);

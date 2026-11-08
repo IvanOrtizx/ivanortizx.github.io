@@ -288,6 +288,18 @@ section > .wrap{position:relative;z-index:1}
 .p-ceremonia .full{grid-column:1/-1}
 .p-ceremonia .bt{grid-column:1/-1;display:flex;gap:8px;flex-wrap:wrap}
 @media (max-width:760px){.p-ceremonia{grid-template-columns:1fr}}
+.aloj-ed{display:grid;gap:14px;margin-top:12px}
+.aloj-ed > label{display:grid;gap:4px;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.aloj-ed textarea{resize:vertical;font-size:15px;line-height:1.4}
+.dia-ed{border:1px solid var(--line);border-radius:8px;padding:12px;display:grid;gap:8px;background:var(--paper)}
+.dia-tit{font-family:var(--f-serif);font-size:20px;font-weight:600;color:var(--emerald-deep)}
+.fila{display:grid;grid-template-columns:150px minmax(0,1fr) minmax(0,1fr) auto auto;gap:6px;align-items:center}
+.fila .p-in{padding:8px 10px;font-size:14.5px;background:#fff}
+.fila .pc{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--muted);white-space:nowrap}
+.fila .x{border:1px solid var(--line);background:#fff;color:#8b3346;border-radius:6px;width:34px;height:34px;cursor:pointer;font-size:18px;line-height:1}
+.dia-ed .mas{justify-self:start}
+.aloj-ed .bt{display:flex;gap:8px;flex-wrap:wrap}
+@media (max-width:760px){.fila{grid-template-columns:1fr 1fr;padding-bottom:10px;border-bottom:1px dashed var(--line)}.fila .h,.fila .a,.fila .n{grid-column:1/-1}}
 @media (prefers-reduced-motion:reduce){.frond,.hoja{animation:none}}
 </style>
 </head>
@@ -563,6 +575,22 @@ section > .wrap{position:relative;z-index:1}
       </form>
     </div>
 
+    <div class="p-card" style="margin-top:16px" id="alojCard">
+      <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:baseline">
+        <div style="font-weight:500;color:var(--emerald-deep)">Guía de alojamiento</div>
+        <a class="p-btn sec2 chico" href="alojamiento/" target="_blank" rel="noopener">Ver guía</a>
+      </div>
+      <p class="sub" style="margin-top:4px">Lo que cambien aquí aparece en la guía de alojamiento para todos los invitados al guardar.</p>
+      <div class="aloj-ed">
+        <label>Asignación de habitaciones<textarea class="p-in" id="alAsig" rows="2"></textarea></label>
+        <label>Distribución<textarea class="p-in" id="alDist" rows="3"></textarea></label>
+        <div class="dia-ed" data-k="sab"><div class="dia-tit">Sábado 20 de marzo</div><div class="filas"></div><button type="button" class="p-btn sec2 chico mas">+ Agregar actividad</button></div>
+        <div class="dia-ed" data-k="dom"><div class="dia-tit">Domingo 21 de marzo</div><div class="filas"></div><button type="button" class="p-btn sec2 chico mas">+ Agregar actividad</button></div>
+        <div class="dia-ed" data-k="lun"><div class="dia-tit">Lunes 22 de marzo · festivo</div><div class="filas"></div><button type="button" class="p-btn sec2 chico mas">+ Agregar actividad</button></div>
+        <div class="bt"><button class="p-btn" type="button" id="alGuardar">Guardar guía</button><button class="p-btn peligro" type="button" id="alRestaurar">Volver al texto original</button><span class="sub" id="alEstado" style="align-self:center"></span></div>
+      </div>
+    </div>
+
     <div class="p-head">
       <h2>Invitados</h2>
       <div class="p-tools">
@@ -656,8 +684,9 @@ async function local(p){
       if("respuesta" in c){ if(c.respuesta==="si"||c.respuesta==="no"){ g.respuesta=c.respuesta; g.asistentes=c.respuesta==="si"?(+g.asistentes||+g.cupos||1):0; if(!g.respondido) g.respondido=now; } else { g.respuesta=""; g.asistentes=0; g.quienes=""; g.respondido=""; } }
       save(); return {ok:true,guest:g}; }
     case "delete": { pin(); all=all.filter(g=>g.id!==p.id); save(); return {ok:true}; }
-    case "config": return {ok:true, ceremonia:store.get(LK+"-cere",null)};
+    case "config": return {ok:true, ceremonia:store.get(LK+"-cere",null), alojamiento:store.get(LK+"-aloj",null)};
     case "setConfig": { pin(); store.set(LK+"-cere", p.ceremonia||null); return {ok:true, ceremonia:p.ceremonia||null}; }
+    case "setAlojamiento": { pin(); store.set(LK+"-aloj", p.alojamiento||null); return {ok:true, alojamiento:p.alojamiento||null}; }
   }
   throw new Error("accion_desconocida");
 }
@@ -933,8 +962,49 @@ function iniciarPanel(){
   if(guardado) entrar(guardado, true);
   $("#pinForm").addEventListener("submit", e=>{ e.preventDefault(); entrar($("#pinIn").value.trim()); });
   $("#btnRecargar").addEventListener("click", ()=>cargar());
+  // ---- Guía de alojamiento (editable) ----
+  const ALOJ_ORIGINAL = {
+    asignacion: "Las habitaciones se asignarán a medida que vayan confirmando su asistencia.",
+    distribucion: "Para poder alojar a nuestros seres queridos, en algunos casos se compartirá habitación, respetando siempre la comodidad y privacidad de tu cama.",
+    dias: {
+      sab: [ {hora:"Desde las 8:00 a.m.", actividad:"Ingreso y entrega de habitaciones (check-in)", nota:"", pendiente:false},
+             {hora:"Hasta la 1:00 p.m.", actividad:"Piscina abierta", nota:"Se pausa para los preparativos y la boda", pendiente:false},
+             {hora:"7:00 p.m.", actividad:"Recepción de la boda", nota:"", pendiente:false} ],
+      dom: [ {hora:"Desde las 8:00 a.m.", actividad:"Reapertura de la piscina", nota:"", pendiente:false},
+             {hora:"Alimentación", actividad:"Estamos validando las opciones de alimentación para el domingo y oportunamente se las comunicaremos.", nota:"", pendiente:true} ],
+      lun: [ {hora:"Plan retorno", actividad:"Salida y regreso a casa", nota:"Estaremos muy pendientes de la logística y del flujo vehicular en la vía para coordinar el viaje de regreso con tranquilidad.", pendiente:false} ]
+    }
+  };
+  function filaAloj(it){
+    const d=document.createElement("div"); d.className="fila";
+    d.innerHTML='<input class="p-in h" placeholder="Hora o título"><input class="p-in a" placeholder="Actividad"><input class="p-in n" placeholder="Nota (opcional)"><label class="pc"><input type="checkbox" class="pe"> Por confirmar</label><button type="button" class="x" aria-label="Quitar actividad">×</button>';
+    d.querySelector(".h").value=it.hora||""; d.querySelector(".a").value=it.actividad||""; d.querySelector(".n").value=it.nota||""; d.querySelector(".pe").checked=!!it.pendiente;
+    d.querySelector(".x").onclick=()=>d.remove();
+    return d;
+  }
+  function pintarAloj(a){
+    a = a || ALOJ_ORIGINAL;
+    $("#alAsig").value=a.asignacion||""; $("#alDist").value=a.distribucion||"";
+    document.querySelectorAll(".dia-ed").forEach(b=>{ const f=b.querySelector(".filas"); f.innerHTML=""; ((a.dias||{})[b.dataset.k]||[]).forEach(it=>f.append(filaAloj(it))); });
+  }
+  function leerAloj(){
+    const dias={};
+    document.querySelectorAll(".dia-ed").forEach(b=>{ dias[b.dataset.k]=[...b.querySelectorAll(".fila")].map(r=>({hora:r.querySelector(".h").value.trim(), actividad:r.querySelector(".a").value.trim(), nota:r.querySelector(".n").value.trim(), pendiente:r.querySelector(".pe").checked})).filter(x=>x.hora||x.actividad); });
+    return {asignacion:$("#alAsig").value.trim(), distribucion:$("#alDist").value.trim(), dias};
+  }
+  document.querySelectorAll(".dia-ed .mas").forEach(b=>b.onclick=()=>{ const r=filaAloj({}); b.previousElementSibling.append(r); r.querySelector(".h").focus(); });
+  async function guardarAloj(a, btn, msg){
+    btn.disabled=true;
+    try{ await op({action:"setAlojamiento", alojamiento:a}); $("#alEstado").textContent="Publicado en la guía."; toast(msg); if(!a) pintarAloj(null); }
+    catch(e){ toast(errTxt(e)); $("#alEstado").textContent=errTxt(e); }
+    btn.disabled=false;
+  }
+  $("#alGuardar").addEventListener("click", ()=>guardarAloj(leerAloj(), $("#alGuardar"), "Guía de alojamiento guardada"));
+  $("#alRestaurar").addEventListener("click", ()=>guardarAloj(null, $("#alRestaurar"), "La guía volvió al texto original"));
+  pintarAloj(null);
+
   async function cargarCere(){
-    try{ const r=await API.call({action:"config"}); const c=r.ceremonia||{};
+    try{ const r=await API.call({action:"config"}); if(r.alojamiento) pintarAloj(r.alojamiento); const c=r.ceremonia||{};
       $("#cNom").value=c.nombre||""; $("#cDir").value=c.direccion||""; $("#cHora").value=c.hora||""; $("#cMapa").value=c.mapa||"";
       $("#cEstado").textContent = c.nombre ? "Publicado en la invitación." : "Aún dice “Lugar por confirmar”.";
     }catch(e){ $("#cEstado").textContent = errTxt(e); }
