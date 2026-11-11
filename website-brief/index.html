@@ -79,7 +79,33 @@
   .err { color: var(--pink); font-size: 13px; font-weight: 700; margin-top: 6px; display: none; }
   .invalid { border-color: var(--pink) !important; }
   footer { text-align: center; font-size: 13px; color: var(--muted); padding: 0 16px 30px; }
+
+  .drop { display: block; cursor: pointer; }
+  .drop input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+  .dz { display: block; text-align: center; border: 2px dashed var(--line); border-radius: 14px; padding: 18px 12px; font-weight: 700; font-size: 14.5px; color: var(--muted); background: #fffdf9; transition: all .15s; }
+  .drop:hover .dz, .drop input:focus-visible + .dz { border-color: var(--orange); color: var(--orange); }
+  .files { display: flex; flex-direction: column; gap: 6px; margin-top: 8px; }
+  .fi { display: flex; align-items: center; justify-content: space-between; gap: 8px; background: #f6efe3; border-radius: 10px; padding: 8px 10px; font-size: 13.5px; font-weight: 600; }
+  .fi span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .fi small { color: var(--muted); font-weight: 600; white-space: nowrap; }
+  .fi.bad { background: #ffe1ec; color: #a1124c; }
+  .fi button { background: none; color: var(--muted); padding: 2px 6px; font-size: 18px; line-height: 1; border-radius: 6px; }
+  .alt { margin-top: 14px; font-size: 13.5px; }
+  .link { background: none; color: var(--yellow); padding: 0; font-size: 13.5px; text-decoration: underline; font-weight: 700; }
+  button:disabled { opacity: .6; cursor: wait; }
+
+  .overlay { position: fixed; inset: 0; background: rgba(18,13,46,.75); display: none; align-items: center; justify-content: center; padding: 16px; z-index: 50; }
+  .overlay.show { display: flex; }
+  .modal { background: #fff; border-radius: 22px; max-width: 420px; width: 100%; padding: 28px 22px; text-align: center; }
+  .modal .ok { width: 64px; height: 64px; border-radius: 50%; margin: 0 auto 12px; display: grid; place-items: center; font-size: 32px; font-weight: 900; color: #fff; background: linear-gradient(135deg, var(--orange), var(--pink)); }
+  .modal h3 { font-size: 24px; margin: 0 0 6px; letter-spacing: -.02em; }
+  .modal p { color: var(--muted); font-size: 15px; margin: 0 0 18px; }
+  .modal .btns { flex-direction: column; }
+  .modal .btns button { flex: none; width: 100%; }
+  .modal .b-mail { background: var(--ink); color: #fff; }
+  .modal .close { background: none; color: var(--muted); font-size: 14px; padding: 8px; }
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
 
@@ -88,7 +114,7 @@
     <span class="tag">WEBSITE BRIEF · iaHUILA</span>
     <h1>Tell us about <span>your business</span></h1>
     <p>Fill this out so I have everything I need to build the front end of your website. Answer what you can; you can skip anything you're not sure about and we'll figure it out together.</p>
-    <div class="meta"><span>About 15 minutes</span><span>Your answers are saved on this device</span><span>Sent by WhatsApp or email</span></div>
+    <div class="meta"><span>About 15 minutes</span><span>Your answers are saved on this device</span><span>Download a PDF copy</span></div>
   </div>
 </header>
 
@@ -157,11 +183,9 @@
     <div class="bh"><div class="num n4">4</div><h2>About you</h2></div>
     <p class="bdesc">People hire people. A short "About" section builds trust.</p>
     <div class="field"><label class="q" for="bio">Your story or bio</label><span class="hint">A few sentences about you and why you started the business.</span><textarea id="bio" name="Bio"></textarea></div>
-    <div class="field"><label class="q">Can you send a professional photo of yourself?</label>
-      <div class="chips" data-name="Profile photo" data-single="1">
-        <label><input type="checkbox" value="Yes, I'll send it by WhatsApp"><span>Yes, I'll send it</span></label>
-        <label><input type="checkbox" value="No photo for now"><span>No photo for now</span></label>
-      </div>
+    <div class="field"><label class="q" for="f_photo">Upload a professional photo of yourself</label><span class="hint">JPG or PNG, up to 10 MB. You can skip it for now.</span>
+      <label class="drop"><input type="file" id="f_photo" data-label="Profile photo" accept="image/*"><span class="dz">Tap to choose a photo</span></label>
+      <div class="files" data-for="f_photo"></div>
     </div>
   </section>
 
@@ -178,11 +202,9 @@
   <section class="block">
     <div class="bh"><div class="num n6">6</div><h2>Look and feel</h2></div>
     <p class="bdesc">How the website should look.</p>
-    <div class="field"><label class="q">Do you have a logo?</label>
-      <div class="chips" data-name="Logo" data-single="1">
-        <label><input type="checkbox" value="Yes, I'll send it by WhatsApp"><span>Yes, I'll send it</span></label>
-        <label><input type="checkbox" value="No logo yet"><span>No logo yet</span></label>
-      </div>
+    <div class="field"><label class="q" for="f_logo">Upload your logo</label><span class="hint">PNG, SVG, PDF or AI. If you have several versions, upload them all.</span>
+      <label class="drop"><input type="file" id="f_logo" data-label="Logo" accept="image/*,.svg,.pdf,.ai,.eps" multiple><span class="dz">Tap to choose your logo files</span></label>
+      <div class="files" data-for="f_logo"></div>
     </div>
     <div class="field"><label class="q">Brand colors</label><span class="hint">Pick them here, or type the codes if you have them.</span>
       <div class="colors">
@@ -230,11 +252,9 @@
     <div class="bh"><div class="num n8">8</div><h2>Forms, contract and payment</h2></div>
     <p class="bdesc">So the client system matches how you work.</p>
     <div class="field"><label class="q" for="discovery_q">What do you want to ask in the general (discovery) form?</label><span class="hint">Write your questions, or leave it empty and I'll suggest them for you to approve.</span><textarea id="discovery_q" name="Discovery form questions"></textarea></div>
-    <div class="field"><label class="q">Do you have a contract template?</label>
-      <div class="chips" data-name="Contract template" data-single="1">
-        <label><input type="checkbox" value="Yes, I'll send it"><span>Yes, I'll send it</span></label>
-        <label><input type="checkbox" value="No, I need one"><span>No, I need one</span></label>
-      </div>
+    <div class="field"><label class="q" for="f_contract">Upload your contract template</label><span class="hint">PDF or Word. If you don't have one yet, leave it empty.</span>
+      <label class="drop"><input type="file" id="f_contract" data-label="Contract template" accept=".pdf,.doc,.docx,.pages,.txt"><span class="dz">Tap to choose your contract</span></label>
+      <div class="files" data-for="f_contract"></div>
     </div>
     <div class="field"><label class="q">Stripe account</label>
       <div class="chips" data-name="Stripe" data-single="1">
@@ -266,30 +286,50 @@
     <div class="bh"><div class="num n1">+</div><h2>Anything else?</h2></div>
     <div class="field"><label class="q" for="extra">Ideas, sections or details you want on the website</label><textarea id="extra" name="Anything else"></textarea></div>
     <div class="field"><label class="q" for="launch">Ideal launch date</label><input type="text" id="launch" name="Ideal launch date"></div>
+    <div class="field"><label class="q" for="f_other">Other files</label><span class="hint">Photos of your work, brand guide, fonts or anything that helps. Up to 10 MB each.</span>
+      <label class="drop"><input type="file" id="f_other" data-label="Other file" multiple><span class="dz">Tap to choose files</span></label>
+      <div class="files" data-for="f_other"></div>
+    </div>
   </section>
 
   <section class="send">
     <div class="bh"><div class="num n2">✓</div><h2>Send your brief</h2></div>
-    <p>Tap the button and your answers open in WhatsApp, ready to send. After that, send your logo, photo and contract template in the same chat.</p>
+    <p>Tap "Send brief" and your answers and files will be sent. You'll also be able to download a PDF copy of everything you shared.</p>
     <div class="err" id="err">Please fill in the fields marked with * (business name, your name, what you do and email).</div>
     <div class="btns">
-      <button type="button" class="b-wa" id="sendWa">Send by WhatsApp</button>
-      <button type="button" class="b-mail" id="sendMail">Send by email</button>
-      <button type="button" class="b-copy" id="copy">Copy answers</button>
+      <button type="button" class="b-wa" id="sendMain">Send brief</button>
+      <button type="button" class="b-mail" id="pdfBtn">Download PDF</button>
     </div>
     <div class="status" id="status" role="status" aria-live="polite"></div>
+    <p class="alt">Having trouble? <button type="button" class="link" id="sendWa">Send the answers by WhatsApp</button> and share the files in the same chat.</p>
   </section>
 
 </form>
 </main>
 <footer>Made by Camilo Ortiz Motta · iaHuila</footer>
 
+<div class="overlay" id="done" role="dialog" aria-modal="true" aria-labelledby="doneTitle">
+  <div class="modal">
+    <div class="ok">✓</div>
+    <h3 id="doneTitle">Your brief was sent!</h3>
+    <p id="doneText">Thank you. I received your answers and files, and I'll get back to you soon.</p>
+    <div class="btns">
+      <button type="button" class="b-wa" id="donePdf">Download my PDF</button>
+      <button type="button" class="close" id="doneClose">Close</button>
+    </div>
+  </div>
+</div>
+
 <script>
 (function () {
+  // Paste the Apps Script Web app URL (ends in /exec) here.
+  var ENDPOINT = '';
   var WA = '573213973458';
-  var MAIL = 'ivancamiloortizmotta@gmail.com';
   var KEY = 'iahuila-website-brief-v1';
+  var MAX_MB = 10;
   var form = document.getElementById('brief');
+  var status = document.getElementById('status');
+  var picked = {}; // input id -> array of File
 
   // color pickers sync
   ['c1', 'c2', 'c3'].forEach(function (id) {
@@ -305,25 +345,69 @@
     });
   });
 
-  function collect() {
+  // file inputs
+  function fmtSize(b) { return b > 1048576 ? (b / 1048576).toFixed(1) + ' MB' : Math.max(1, Math.round(b / 1024)) + ' KB'; }
+  function renderFiles(id) {
+    var box = document.querySelector('.files[data-for="' + id + '"]');
+    box.innerHTML = '';
+    (picked[id] || []).forEach(function (f, idx) {
+      var big = f.size > MAX_MB * 1048576;
+      var row = document.createElement('div');
+      row.className = 'fi' + (big ? ' bad' : '');
+      var name = document.createElement('span'); name.textContent = f.name;
+      var size = document.createElement('small'); size.textContent = big ? 'Too big (max ' + MAX_MB + ' MB)' : fmtSize(f.size);
+      var rm = document.createElement('button'); rm.type = 'button'; rm.setAttribute('aria-label', 'Remove ' + f.name); rm.textContent = '×';
+      rm.addEventListener('click', function () { picked[id].splice(idx, 1); renderFiles(id); progress(); });
+      row.appendChild(name); row.appendChild(size); row.appendChild(rm);
+      box.appendChild(row);
+    });
+  }
+  form.querySelectorAll('input[type=file]').forEach(function (inp) {
+    inp.addEventListener('change', function () {
+      var list = Array.prototype.slice.call(inp.files || []);
+      picked[inp.id] = inp.multiple ? (picked[inp.id] || []).concat(list) : list.slice(0, 1);
+      inp.value = '';
+      renderFiles(inp.id); progress();
+    });
+  });
+  function allFiles() {
     var out = [];
-    var sections = form.querySelectorAll('section.block');
-    sections.forEach(function (sec) {
+    form.querySelectorAll('input[type=file]').forEach(function (inp) {
+      (picked[inp.id] || []).forEach(function (f) { if (f.size <= MAX_MB * 1048576) out.push({ field: inp.dataset.label, file: f }); });
+    });
+    return out;
+  }
+
+  // answers
+  function sections() {
+    var out = [];
+    form.querySelectorAll('section.block').forEach(function (sec) {
       var title = sec.querySelector('h2').textContent.trim();
-      var lines = [];
+      var items = [];
       sec.querySelectorAll('input[name], textarea[name], select[name]').forEach(function (el) {
         var v = (el.value || '').trim();
-        if (v) lines.push(el.name + ': ' + v);
+        if (v) items.push([el.name, v]);
       });
       sec.querySelectorAll('.chips[data-name]').forEach(function (g) {
         var vals = Array.prototype.map.call(g.querySelectorAll('input:checked'), function (i) { return i.value; });
-        if (vals.length) lines.push(g.dataset.name + ': ' + vals.join(', '));
+        if (vals.length) items.push([g.dataset.name, vals.join(', ')]);
       });
-      if (lines.length) out.push('*' + title.toUpperCase() + '*\n' + lines.join('\n'));
+      sec.querySelectorAll('input[type=file]').forEach(function (inp) {
+        var names = (picked[inp.id] || []).filter(function (f) { return f.size <= MAX_MB * 1048576; }).map(function (f) { return f.name; });
+        if (names.length) items.push([inp.dataset.label + ' (uploaded)', names.join(', ')]);
+      });
+      if (items.length) out.push({ title: title, items: items });
     });
-    return 'WEBSITE BRIEF\n\n' + out.join('\n\n');
+    return out;
+  }
+  function asText(withStars) {
+    return 'WEBSITE BRIEF\n\n' + sections().map(function (s) {
+      var t = withStars ? '*' + s.title.toUpperCase() + '*' : s.title.toUpperCase();
+      return t + '\n' + s.items.map(function (i) { return i[0] + ': ' + i[1]; }).join('\n');
+    }).join('\n\n');
   }
 
+  // save / load (text answers only)
   function state() {
     var s = { f: {}, c: {} };
     form.querySelectorAll('input[name], textarea[name], select[name]').forEach(function (el) { s.f[el.id] = el.value; });
@@ -357,7 +441,9 @@
     fields.forEach(function (el) { if ((el.value || '').trim()) filled++; });
     var groups = form.querySelectorAll('.chips[data-name]');
     groups.forEach(function (g) { if (g.querySelector('input:checked')) filled++; });
-    var pct = Math.round(filled / (fields.length + groups.length) * 100);
+    var fileInputs = form.querySelectorAll('input[type=file]');
+    fileInputs.forEach(function (i) { if ((picked[i.id] || []).length) filled++; });
+    var pct = Math.round(filled / (fields.length + groups.length + fileInputs.length) * 100);
     document.getElementById('bar').style.width = pct + '%';
     document.getElementById('ptxt').textContent = pct + '% complete';
   }
@@ -374,29 +460,98 @@
     return ok;
   }
 
-  var status = document.getElementById('status');
+  // PDF
+  function makePdf() {
+    if (!window.jspdf) { status.textContent = 'The PDF tool did not load. Check your connection and try again.'; return; }
+    var doc = new window.jspdf.jsPDF({ unit: 'mm', format: 'a4' });
+    var W = 210, M = 16, y = 0, maxW = W - M * 2;
+    var biz = (document.getElementById('biz_name').value || 'Your business').trim();
+    function header() {
+      doc.setFillColor(18, 13, 46); doc.rect(0, 0, W, 38, 'F');
+      doc.setFillColor(255, 107, 31); doc.rect(0, 38, W, 1.6, 'F');
+      doc.setTextColor(255, 255, 255); doc.setFont('helvetica', 'bold'); doc.setFontSize(9);
+      doc.text('WEBSITE BRIEF', M, 13);
+      doc.setFontSize(20); doc.text(doc.splitTextToSize(biz, maxW)[0], M, 25);
+      doc.setFont('helvetica', 'normal'); doc.setFontSize(9); doc.setTextColor(220, 215, 235);
+      doc.text('Submitted ' + new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }), M, 32);
+      y = 50;
+    }
+    function ensure(h) { if (y + h > 282) { doc.addPage(); y = 18; } }
+    header();
+    sections().forEach(function (s) {
+      ensure(16);
+      doc.setFillColor(255, 246, 234); doc.roundedRect(M, y - 5, maxW, 9, 2, 2, 'F');
+      doc.setTextColor(26, 20, 48); doc.setFont('helvetica', 'bold'); doc.setFontSize(12);
+      doc.text(s.title, M + 3, y + 1.2); y += 11;
+      s.items.forEach(function (it) {
+        var lines = doc.splitTextToSize(String(it[1]), maxW);
+        ensure(6 + Math.min(lines.length, 3) * 5);
+        doc.setFont('helvetica', 'bold'); doc.setFontSize(9); doc.setTextColor(255, 107, 31);
+        doc.text(String(it[0]).toUpperCase(), M, y); y += 4.6;
+        doc.setFont('helvetica', 'normal'); doc.setFontSize(10.5); doc.setTextColor(40, 34, 60);
+        lines.forEach(function (ln) { ensure(5.2); doc.text(ln, M, y); y += 5.2; });
+        y += 2.6;
+      });
+      y += 3;
+    });
+    var pages = doc.getNumberOfPages();
+    for (var i = 1; i <= pages; i++) {
+      doc.setPage(i); doc.setFont('helvetica', 'normal'); doc.setFontSize(8); doc.setTextColor(140, 132, 160);
+      doc.text('Made by Camilo Ortiz Motta - iaHuila', M, 291);
+      doc.text(i + ' / ' + pages, W - M, 291, { align: 'right' });
+    }
+    doc.save('Website brief - ' + biz.replace(/[\\\/:*?"<>|#]/g, '-') + '.pdf');
+  }
+
+  function toB64(file) {
+    return new Promise(function (res, rej) {
+      var r = new FileReader();
+      r.onload = function () { res(String(r.result).split(',')[1]); };
+      r.onerror = rej;
+      r.readAsDataURL(file);
+    });
+  }
+
+  function showDone() {
+    document.getElementById('done').classList.add('show');
+    document.getElementById('donePdf').focus();
+  }
+  document.getElementById('donePdf').addEventListener('click', makePdf);
+  document.getElementById('doneClose').addEventListener('click', function () { document.getElementById('done').classList.remove('show'); });
+
+  function openWa() {
+    window.open('https://wa.me/' + WA + '?text=' + encodeURIComponent(asText(true)), '_blank');
+  }
+
+  var mainBtn = document.getElementById('sendMain');
+  mainBtn.addEventListener('click', function () {
+    if (!valid()) return;
+    if (!ENDPOINT) { openWa(); status.textContent = 'WhatsApp opened. Tap send, then share your files in the same chat.'; return; }
+    mainBtn.disabled = true; status.textContent = 'Sending your brief and files... please keep this page open.';
+    var files = allFiles();
+    Promise.all(files.map(function (f) { return toB64(f.file); })).then(function (b64s) {
+      var payload = {
+        business: document.getElementById('biz_name').value.trim(),
+        name: document.getElementById('your_name').value.trim(),
+        email: document.getElementById('email').value.trim(),
+        text: asText(false),
+        files: files.map(function (f, i) { return { field: f.field, name: f.file.name, type: f.file.type, data: b64s[i] }; })
+      };
+      return fetch(ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(payload) });
+    }).then(function (r) { return r.json(); }).then(function (res) {
+      mainBtn.disabled = false;
+      if (res && res.ok) { status.textContent = 'Sent!'; showDone(); }
+      else { throw new Error(res && res.error); }
+    }).catch(function () {
+      mainBtn.disabled = false;
+      status.textContent = 'We could not send it right now. Please use the WhatsApp option below, or try again in a minute.';
+    });
+  });
+
+  document.getElementById('pdfBtn').addEventListener('click', function () { if (valid()) makePdf(); });
   document.getElementById('sendWa').addEventListener('click', function () {
     if (!valid()) return;
-    window.open('https://wa.me/' + WA + '?text=' + encodeURIComponent(collect()), '_blank');
-    status.textContent = 'WhatsApp opened. Tap send, then share your logo and files in the same chat.';
-  });
-  document.getElementById('sendMail').addEventListener('click', function () {
-    if (!valid()) return;
-    var biz = document.getElementById('biz_name').value.trim();
-    window.location.href = 'mailto:' + MAIL + '?subject=' + encodeURIComponent('Website brief - ' + biz) + '&body=' + encodeURIComponent(collect());
-    status.textContent = 'Your email app opened with the answers. If it is cut off, use "Copy answers" and paste them in the email.';
-  });
-  document.getElementById('copy').addEventListener('click', function () {
-    var text = collect();
-    function done() { status.textContent = 'Answers copied. Paste them in WhatsApp or email.'; }
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(text).then(done, fallback);
-    } else { fallback(); }
-    function fallback() {
-      var ta = document.createElement('textarea'); ta.value = text; document.body.appendChild(ta); ta.select();
-      try { document.execCommand('copy'); done(); } catch (e) { status.textContent = 'Could not copy automatically.'; }
-      document.body.removeChild(ta);
-    }
+    openWa(); status.textContent = 'WhatsApp opened. Tap send, then share your files in the same chat.';
   });
 
   form.addEventListener('input', function (e) { if (e.target.classList) e.target.classList.remove('invalid'); save(); progress(); });
