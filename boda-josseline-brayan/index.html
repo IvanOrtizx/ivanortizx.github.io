@@ -230,6 +230,13 @@ body.modo-panel{background:var(--paper);font-family:var(--f-sans);font-size:15px
 .est-enviada{background:#e2ebf4;color:#3d5a85}
 .est-confirmado{background:#dcefe3;color:#1f6b45}
 .est-no{background:#f5e1e3;color:#8b3346}
+.ed-form{display:block}
+.ed-grid{display:grid;grid-template-columns:minmax(0,2fr) 90px minmax(0,1.3fr);gap:10px;align-items:end}
+.ed-grid label{display:grid;gap:4px;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);min-width:0}
+.ed-grid .full{grid-column:1/-1}
+.ed-nota{font-size:13px;margin:10px 0}
+.ed-form .acc{justify-content:flex-start}
+@media (max-width:760px){.ed-grid{grid-template-columns:1fr 1fr}.ed-grid label:first-child{grid-column:1/-1}}
 .inv select{border:1px solid var(--line);border-radius:6px;padding:6px 8px;background:var(--paper);font-size:13px;color:var(--ink);width:auto}
 .vacio{text-align:center;color:var(--muted);padding:34px 16px;border:1px dashed var(--line);border-radius:10px}
 details.p-card summary{cursor:pointer;font-weight:500;color:var(--emerald-deep)}
@@ -695,6 +702,13 @@ async function local(p){
       if("enviado" in c) g.enviado=c.enviado?(g.enviado||now):"";
       if("respuesta" in c){ if(c.respuesta==="si"||c.respuesta==="no"){ g.respuesta=c.respuesta; g.asistentes=c.respuesta==="si"?(+g.asistentes||+g.cupos||1):0; if(!g.respondido) g.respondido=now; } else { g.respuesta=""; g.asistentes=0; g.quienes=""; g.respondido=""; } }
       save(); return {ok:true,guest:g}; }
+    case "edit": { pin(); const g=find(p.id); if(!g) throw new Error("no_encontrado"); const c=p.cambios||{};
+      if("nombre" in c){ const n=String(c.nombre||"").trim().slice(0,80); if(!n) throw new Error("falta_nombre"); g.nombre=n; }
+      if("cupos" in c) g.cupos=Math.max(1,Math.min(30,+c.cupos||1));
+      if("personas" in c) g.personas=String(c.personas||"").trim().slice(0,300);
+      if("telefono" in c) g.telefono=soloDigitos(c.telefono);
+      if(+g.asistentes>+g.cupos) g.asistentes=g.cupos;
+      save(); return {ok:true,guest:g}; }
     case "delete": { pin(); all=all.filter(g=>g.id!==p.id); save(); return {ok:true}; }
     case "config": return {ok:true, ceremonia:store.get(LK+"-cere",null), alojamiento:store.get(LK+"-aloj",null)};
     case "setConfig": { pin(); store.set(LK+"-cere", p.ceremonia||null); return {ok:true, ceremonia:p.ceremonia||null}; }
@@ -1089,6 +1103,7 @@ function iniciarPanel(){
     const vis=lista.filter(g=>(!q||String(g.nombre).toLowerCase().includes(q)) && (!filtro||estado(g)===filtro));
     if(!vis.length){ const v=document.createElement("div"); v.className="vacio"; v.textContent = lista.length ? "Ningún invitado coincide." : "Aún no hay invitados. Escribe el primer nombre arriba y toca “Agregar invitado”."; cont.append(v); return; }
     vis.forEach(g=>{
+      if(editando===g.id){ cont.append(formEditar(g)); return; }
       const est=estado(g);
       const row=document.createElement("div"); row.className="inv";
       const info=document.createElement("div"); info.style.minWidth="0";
@@ -1122,9 +1137,33 @@ function iniciarPanel(){
         if(bDel.dataset.c){ bDel.disabled=true; try{ await op({action:"delete", id:g.id}); lista=lista.filter(x=>x.id!==g.id); render(); toast("Invitado eliminado"); }catch(e){ toast(errTxt(e)); bDel.disabled=false; } }
         else { bDel.dataset.c="1"; bDel.textContent="¿Seguro? Toca otra vez"; setTimeout(()=>{ if(bDel.isConnected && !bDel.disabled){ delete bDel.dataset.c; bDel.textContent="Eliminar"; } },3000); }
       });
-      acc.append(bDel);
+      acc.append(boton("Editar","sec2 chico",()=>{ editando=g.id; render(); const i=document.getElementById("ed-nom"); if(i) i.focus(); }), bDel);
       row.append(info,acc); cont.append(row);
     });
+  }
+  // Editar nombre, cupos, nombres de cada persona y celular sin cambiar el enlace
+  let editando=null;
+  function formEditar(g){
+    const f=document.createElement("form"); f.className="inv ed-form";
+    f.innerHTML='<div class="ed-grid">'
+      +'<label>Nombre en la invitación<input class="p-in" id="ed-nom" required></label>'
+      +'<label>Cupos<input class="p-in" id="ed-cup" type="number" min="1" max="30"></label>'
+      +'<label>Celular (opcional)<input class="p-in" id="ed-cel" inputmode="tel"></label>'
+      +'<label class="full">Nombres de cada persona (opcional, separados por coma)<input class="p-in" id="ed-per"></label>'
+      +'</div><p class="sub ed-nota">El enlace sigue siendo el mismo: si ya lo enviaron, el invitado verá los datos nuevos al abrirlo.</p>'
+      +'<div class="acc"><button class="p-btn chico" type="submit">Guardar cambios</button><button class="p-btn sec2 chico" type="button" id="ed-cancel">Cancelar</button></div>';
+    f.querySelector("#ed-nom").value=g.nombre||""; f.querySelector("#ed-cup").value=+g.cupos||1;
+    f.querySelector("#ed-cel").value=g.telefono||""; f.querySelector("#ed-per").value=g.personas||"";
+    f.querySelector("#ed-cancel").onclick=()=>{ editando=null; render(); };
+    f.addEventListener("submit", async e=>{
+      e.preventDefault();
+      const cambios={ nombre:f.querySelector("#ed-nom").value.trim(), cupos:+f.querySelector("#ed-cup").value||1, telefono:f.querySelector("#ed-cel").value, personas:f.querySelector("#ed-per").value.trim() };
+      if(!cambios.nombre){ f.querySelector("#ed-nom").focus(); toast("Escribe el nombre de la invitación"); return; }
+      const b=f.querySelector('button[type=submit]'); b.disabled=true;
+      try{ const r=await op({action:"edit", id:g.id, cambios}); Object.assign(g, r.guest||cambios); editando=null; render(); toast("Invitado actualizado"); }
+      catch(err){ toast(errTxt(err)); b.disabled=false; }
+    });
+    return f;
   }
   function boton(t,c,f){ const b=document.createElement("button"); b.type="button"; b.className="p-btn "+c; b.textContent=t; b.onclick=f; return b; }
 }
