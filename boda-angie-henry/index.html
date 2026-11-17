@@ -435,13 +435,13 @@ section > .wrap{position:relative;z-index:1}
         <div class="hora">3:30 <small>p.m.</small></div>
         <h3>Ceremonia religiosa</h3>
         <p class="nm">Capilla Padres Pasionistas</p>
-        <a class="btn solid" id="mapCere" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Capilla+Padres+Pasionistas">Cómo llegar</a>
+        <a class="btn solid" id="mapCere" target="_blank" rel="noopener" href="https://maps.app.goo.gl/XMRiVQvR6gam1Vqy6">Cómo llegar</a>
       </div>
       <div class="place">
         <div class="hora">6:00 <small>p.m.</small></div>
         <h3>Recepción</h3>
         <p class="nm">Casa Evangelyn</p>
-        <a class="btn solid" id="mapRecep" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Casa+Evangelyn">Cómo llegar</a>
+        <a class="btn solid" id="mapRecep" target="_blank" rel="noopener" href="https://maps.app.goo.gl/2ETR1x7bNncCqiAdA">Cómo llegar</a>
       </div>
     </div>
   </div>
@@ -466,6 +466,8 @@ section > .wrap{position:relative;z-index:1}
   <div class="wrap">
     <div class="label">Confirma tu asistencia</div>
     <h2>¿Nos acompañas?</h2>
+    <div class="label" style="color:var(--sand)">Fecha límite para confirmar asistencia</div>
+    <div class="deadline">30 de noviembre de 2026</div>
     <p class="info">Por favor confirma tu asistencia con <b>nombres y apellidos completos</b>.</p>
 
     <form id="form" novalidate>
@@ -601,7 +603,7 @@ const CONFIG = {
   cancion: "",                               // archivo mp3 de la canción (pendiente)
   pinPanel: "1912",                          // código del panel solo en modo prueba (el real está en Code.gs)
   fechaBoda: "2026-12-19T15:30:00-05:00",
-  fechaLimite: "2026-12-19T00:00:00-05:00",
+  fechaLimite: "2026-11-30T23:59:59-05:00",
   cuposSinNombre: 4                          // máximo de asistentes en la invitación general
 };
 /* ========================================================= */
@@ -849,7 +851,7 @@ function iniciarInvitacion(){
   // Confirmación (con nombres y apellidos completos)
   $("#attYes").addEventListener("change",actualizarAsis); $("#attNo").addEventListener("change",actualizarAsis);
   if(Date.now() > new Date(CONFIG.fechaLimite).getTime()){
-    $("#ok").textContent="Si aún no has confirmado, escríbeles directamente a los novios.";
+    $("#ok").textContent="El plazo para confirmar era el 30 de noviembre. Si aún no lo has hecho, escríbeles directamente a los novios.";
   }
   const completo = s => s.trim().split(/\s+/).filter(w=>w.length>1).length>=2;
   $("#form").addEventListener("submit", async e=>{
@@ -906,7 +908,7 @@ function iniciarPanel(){
   const KA="boda-ah-2026-ajustes", KP="boda-ah-2026-pin";
   let lista=[], pin="", filtro="";
   const baseDefecto = CONFIG.sitio || (location.origin + location.pathname);
-  const plantillaDefecto = "Hola, {nombre} 💌\nCon mucha alegría queremos invitarte a nuestra boda el sábado 19 de diciembre de 2026. Tienes {cupos} reservados.\n\nAbre tu invitación aquí:\n{enlace}\n\nPor favor confirma tu asistencia con nombres y apellidos completos.\nCon cariño, Angie & Henry";
+  const plantillaDefecto = "Hola, {nombre} 💌\nCon mucha alegría queremos invitarte a nuestra boda el sábado 19 de diciembre de 2026. Tienes {cupos} reservados.\n\nAbre tu invitación aquí:\n{enlace}\n\nPor favor confirma antes del 30 de noviembre con nombres y apellidos completos.\nCon cariño, Angie & Henry";
   let ajustes = Object.assign({ base: baseDefecto, plantilla: plantillaDefecto }, store.get(KA, {}));
   $("#baseUrl").value = ajustes.base; $("#plantilla").value = ajustes.plantilla;
   $("#verGenerica").href = ajustes.base;
