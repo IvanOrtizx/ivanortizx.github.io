@@ -346,6 +346,10 @@ section > .wrap{position:relative;z-index:1}
 .gal{grid-template-columns:1fr 1fr}
 .place .nm{font-size:22px;margin-bottom:18px}
 .rsvp .info{margin-bottom:22px}
+.dress-tags{display:flex;justify-content:center;flex-wrap:wrap;gap:10px;margin-top:4px}
+.dress-tags span{font-family:var(--f-sans);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--emerald-deep);border:1px solid var(--line);border-radius:999px;padding:8px 16px;background:#fdfcf7}
+.ref{margin:16px auto 0;max-width:460px;background:#fff;border-radius:8px;padding:10px;box-shadow:0 14px 30px -22px rgba(58,66,35,.5)}
+.ref img{display:block;width:100%;height:auto;border-radius:4px;cursor:zoom-in}
 .dress-ic{display:flex;justify-content:center;gap:48px;margin:6px 0 10px}
 .dress-ic div{display:grid;justify-items:center;gap:6px}
 .dress-ic svg{width:46px;height:46px;color:var(--emerald)}
@@ -471,12 +475,15 @@ section > .wrap{position:relative;z-index:1}
   <svg class="frond tr" aria-hidden="true"><use href="#palma"/></svg>
   <div class="wrap">
     <div class="label">Código de vestimenta</div>
-    <h2>Formal</h2>
-    <div class="dress-ic">
-      <div><svg viewBox="0 0 44 44" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M15 6l7 6 7-6 8 4-3 9h-4v19H14V19h-4l-3-9 8-4Z"/><path d="M19 9l3 6 3-6M22 15v8"/></svg><span>Caballeros</span></div>
-      <div><svg viewBox="0 0 44 44" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M17 4v8l-3 8 4 2-6 18h20l-6-18 4-2-3-8V4"/><path d="M17 12h10"/></svg><span>Damas</span></div>
+    <h2>Vestimenta</h2>
+    <div class="dress-tags"><span>Aire libre</span><span>Semi formal</span></div>
+    <div class="label" style="color:var(--muted);margin-top:18px">Colores no permitidos</div>
+    <div class="swatches">
+      <span class="sw"><i style="background:#ffffff"></i>Blanco</span>
+      <span class="sw"><i style="background:linear-gradient(135deg,#f3e5c8,#e2cc9f 55%,#f0dfbd)"></i>Champagne</span>
     </div>
-    <p class="dress-txt">Te esperamos con vestimenta formal.</p>
+    <p class="note">Por favor evita los colores fuertes. Te sugerimos tonos suaves como los de estas ideas:</p>
+    <figure class="ref"><img src="img/vestuario.jpg" alt="Ideas de vestuario: vestidos y enterizos en tonos pastel para damas, camisas claras y pantalones beige para caballeros" loading="lazy"></figure>
   </div>
 </section>
 
@@ -863,7 +870,7 @@ function iniciarInvitacion(){
 
   // Visor de fotos
   (function(){
-    const imgs=[...document.querySelectorAll(".gal img")], v=$("#visor"), vi=v.querySelector("img");
+    const imgs=[...document.querySelectorAll(".gal img, .ref img")], v=$("#visor"), vi=v.querySelector("img");
     let i=0, x0=null;
     const ver=k=>{ i=(k+imgs.length)%imgs.length; vi.src=imgs[i].src; vi.alt=imgs[i].alt; };
     imgs.forEach((im,k)=>im.addEventListener("click",()=>{ ver(k); v.hidden=false; v.querySelector(".x").focus(); }));
