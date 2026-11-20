@@ -140,13 +140,6 @@ const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 let x3d = null;
 let currentPart = null;
 
-const PART_SERVICE = {
-  headers: 'Headers and intakes',
-  cat: 'Catalytic converter',
-  muffler: 'Muffler or exhaust repair',
-  tips: 'Performance exhaust'
-};
-
 function frame(w, h) {
   const H = hero3d.getBoundingClientRect();
   const r = stageCar.getBoundingClientRect();
@@ -171,11 +164,6 @@ function initParts() {
     setPart(currentPart === b.dataset.part && b.classList.contains('chip') ? null : b.dataset.part);
   }));
   $('[data-part-close]', panel).addEventListener('click', () => setPart(null));
-  $('[data-ask]', panel).addEventListener('click', () => {
-    const sel = $('#f-service');
-    if (sel && currentPart) sel.value = PART_SERVICE[currentPart];
-    setTimeout(() => { const n = $('#f-name'); if (n) n.focus({ preventScroll: true }); }, 600);
-  });
   $$('[data-goto-part]').forEach(b => b.addEventListener('click', () => {
     hero.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' });
     setTimeout(() => setPart(b.dataset.gotoPart), reduced ? 0 : 450);
@@ -350,7 +338,8 @@ function updateVideoTitles() {
 }
 
 /* =====================================================================
-   Contact form -> Web3Forms -> shop email
+   Contact form -> Google Apps Script -> back office (Google Sheet)
+   Collects name, email, phone and how they heard about the shop for CRM follow-up.
    ===================================================================== */
 function captureUtm() {
   const q = new URLSearchParams(location.search);
@@ -386,8 +375,8 @@ function initForm() {
     const bad = [];
 
     if (name.length < 2) { problems.push(t('errName')); bad.push(f.name); }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) { problems.push(t('errEmail')); bad.push(f.email); }
     if (!(digits.length === 10 || (digits.length === 11 && digits[0] === '1'))) { problems.push(t('errPhone')); bad.push(f.phone); }
-    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) { problems.push(t('errEmail')); bad.push(f.email); }
     if (!f.consent.checked) { problems.push(t('errConsent')); bad.push(f.consent); }
     [f.name, f.phone, f.email, f.consent].forEach(el => mark(el, bad.includes(el)));
     if (bad.length) {
@@ -403,48 +392,30 @@ function initForm() {
       return;
     }
 
-    if (!CONFIG.web3formsKey) {
+    if (!CONFIG.formEndpoint) {
       setStatus('error', t('offline'));
       return;
     }
 
-    const service = f.service.value;
-    // the email the shop receives (labels in English, empty fields left out)
-    const fields = {
-      'Name': name,
-      'Phone': phone,
-      'Email': email,
-      'Vehicle': f.vehicle.value.trim(),
-      'Needs help with': service,
-      'Message': f.message.value.trim(),
-      'Contact by': (form.querySelector('input[name="contactPref"]:checked') || {}).value || '',
-      'Language': lang === 'es' ? 'Spanish' : 'English',
-      'Heard about us': f.source.value,
-      'Wants specials and offers': f.offers.checked ? 'Yes' : 'No',
-      'Agreed to be contacted': 'Yes: ' + $('[data-i18n="form.consent"]').textContent.trim(),
-      'UTM source': utm('utm_source'),
-      'UTM medium': utm('utm_medium'),
-      'UTM campaign': utm('utm_campaign')
-    };
-    const payload = {
-      access_key: CONFIG.web3formsKey,
-      subject: `New website contact: ${name}${service ? ` (${service})` : ''}`,
-      from_name: 'Super Muffler website',
-      botcheck: false
-    };
-    if (email) payload.replyto = email;
-    Object.entries(fields).forEach(([k, v]) => { if (v) payload[k] = v; });
+    const payload = new URLSearchParams({
+      name, email, phone,
+      source: f.source.value,
+      consent: 'yes',
+      consentText: $('[data-i18n="form.consent"]').textContent.trim(),
+      lang,
+      page: location.origin + location.pathname,
+      referrer: document.referrer || '',
+      utm_source: utm('utm_source'),
+      utm_medium: utm('utm_medium'),
+      utm_campaign: utm('utm_campaign')
+    });
 
     submit.disabled = true;
     setStatus('sending', t('sending'));
     try {
-      const res = await fetch('https://api.web3forms.com/submit', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify(payload)
-      });
+      const res = await fetch(CONFIG.formEndpoint, { method: 'POST', body: payload });
       const data = await res.json().catch(() => ({}));
-      if (!res.ok || !data.success) throw new Error(data.message || 'Rejected');
+      if (!res.ok || data.ok === false) throw new Error(data.error || 'Rejected');
       form.reset();
       setStatus('ok', t('ok').replace('{n}', name.split(' ')[0]));
     } catch (err) {

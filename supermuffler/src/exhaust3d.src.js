@@ -521,7 +521,7 @@ export function mountExhaust(container, opts = {}) {
   function updateParticles(dt) {
     const um = parts.muffler.u + 0.05;
     flow.forEach((f, i) => {
-      f.u += f.speed * dt; if (f.u > 1) f.u -= 1;
+      f.u = (f.u + f.speed * dt) % 1; if (f.u < 0) f.u += 1;
       const lut = luts[f.side], fi = f.u * LUT, i0 = Math.floor(fi), t = fi - i0;
       const a = lut[i0], b = lut[Math.min(i0 + 1, LUT)];
       pPos[i * 3] = a.x + (b.x - a.x) * t;
@@ -727,7 +727,8 @@ export function mountExhaust(container, opts = {}) {
   let raf = 0, last = performance.now(), time = 0, running = false;
   function tick(now) {
     raf = requestAnimationFrame(tick);
-    const dt = Math.min(0.05, (now - last) / 1000); last = now; time += dt;
+    // rAF timestamps can be slightly older than the moment the loop restarted: never step backwards
+    const dt = clamp((now - last) / 1000, 0, 0.05); last = Math.max(last, now); time += dt;
     updateIntro(dt);
     setGoal(focused, time);
     const k = reducedMotion ? 20 : 3.2;

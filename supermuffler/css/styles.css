@@ -380,7 +380,10 @@ svg { fill: currentColor; }
 .contact { background: var(--navy); color: var(--white); }
 .contact-grid { display: grid; gap: 32px; }
 .contact-copy p { margin-top: 14px; font-size: 1.15rem; color: rgba(255, 255, 255, .86); max-width: 30rem; }
-.contact-copy .note { font-size: 1rem; color: rgba(255, 255, 255, .7); border-left: 3px solid var(--yellow); padding-left: 14px; }
+/* estimate note: the shop's own "call or visit for an estimate" rule, marked like a highlighter */
+.estimate-note { margin-top: 24px; background: var(--yellow); color: var(--ink); border-radius: var(--radius); padding: 18px 20px 20px; max-width: 30rem; }
+.contact-copy .estimate-note p { margin: 0 0 14px; color: var(--ink); font-size: 1.1rem; line-height: 1.45; }
+.estimate-note strong { display: block; font-family: var(--display); font-weight: 800; font-size: 1.6rem; line-height: 1.05; margin-bottom: 4px; }
 .lead-form { display: grid; grid-template-columns: 1fr; gap: 16px 18px; background: var(--white); color: var(--ink); border-radius: 10px; padding: clamp(20px, 4vw, 34px); }
 .field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
 .field label, .pref legend { font-family: var(--display); font-weight: 600; font-size: 1.12rem; line-height: 1.2; }
@@ -428,7 +431,7 @@ svg { fill: currentColor; }
 /* mobile action bar */
 .action-bar {
   position: fixed; left: 0; right: 0; bottom: 0; z-index: 60;
-  display: grid; grid-template-columns: repeat(3, 1fr);
+  display: grid; grid-template-columns: repeat(2, 1fr);
   background: var(--navy-deep); border-top: 3px solid var(--red);
   padding-bottom: env(safe-area-inset-bottom);
 }
