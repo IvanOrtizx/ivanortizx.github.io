@@ -52,7 +52,7 @@ GitHub (Settings de la cuenta > Pages > Add a domain) para que nadie más lo pue
 - **Calificación de Google (4.8, 133 reseñas):** está escrita a mano en `index.html` y `js/i18n.js`. Actualizarla de vez en cuando.
 - **Videos:** agregar el ID de cada video en `js/config.js` > `videos` (hay ejemplos comentados).
 - **Fotos de la galería:** van en `img/gallery/` en dos tamaños (`nombre-sm.webp` de 560 px y `nombre.webp` de 1080 px).
-- **Logos de marcas:** hoy se muestran como texto. Si el taller consigue los logos oficiales, se reemplazan en la sección `brands`.
+- **Logos de marcas:** están en `img/brands/`. Para agregar una marca, poner su logo ahí y sumar una línea en la sección `brands` de `index.html`. Los logos amarillos van con `class="is-dark"` (fondo negro).
 
 ## 5. Escena 3D
 
