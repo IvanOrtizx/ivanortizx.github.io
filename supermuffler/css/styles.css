@@ -344,10 +344,9 @@ svg { fill: currentColor; }
 .video-card .play { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 64px; height: 64px; border-radius: 50%; background: var(--red); display: grid; place-items: center; }
 .video-card .play::before { content: ""; border-left: 20px solid var(--white); border-top: 12px solid transparent; border-bottom: 12px solid transparent; margin-left: 5px; }
 .video-card .v-title { position: absolute; left: 0; right: 0; bottom: 0; padding: 30px 14px 12px; background: linear-gradient(transparent, rgba(8, 18, 48, .9)); font-family: var(--display); font-weight: 600; font-size: 1.15rem; text-align: left; }
-.video-card iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.video-card:not(.is-ig) iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
 .video-card.is-ig { aspect-ratio: auto; background: transparent; overflow: visible; min-height: 420px; }
 .video-card.is-ig .instagram-media { margin: 0 !important; min-width: 0 !important; width: 100% !important; max-width: 100% !important; }
-.video-card.is-ig iframe { position: static; }
 .video-card.is-ig blockquote { margin: 0; padding: 20px; border: 1.5px solid var(--line); border-radius: var(--radius); background: var(--white); }
 @media (min-width: 760px) { .social-list { grid-template-columns: repeat(3, 1fr); } }
 
