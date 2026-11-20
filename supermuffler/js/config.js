@@ -3,9 +3,10 @@
 //  Everything the shop may need to change lives here.
 // =====================================================================
 export const CONFIG = {
-  // Google Apps Script web app URL (ends in /exec). Leave empty until the
-  // back office is deployed; the form will ask people to call instead.
-  formEndpoint: '',
+  // Web3Forms access key: every contact form is emailed to the address the key belongs to.
+  // Get one free at https://web3forms.com (type the shop's email, the key arrives by email).
+  // While empty, the form asks people to call instead.
+  web3formsKey: '',
 
   // Shop time zone and hours (24 h clock). 0 = Sunday ... 6 = Saturday.
   timeZone: 'America/Los_Angeles',

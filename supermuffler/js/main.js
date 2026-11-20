@@ -304,7 +304,7 @@ function renderVideos() {
 }
 
 /* =====================================================================
-   Contact form -> Google Apps Script -> Google Sheets
+   Contact form -> Web3Forms -> shop email
    ===================================================================== */
 function captureUtm() {
   const q = new URLSearchParams(location.search);
@@ -357,37 +357,48 @@ function initForm() {
       return;
     }
 
-    if (!CONFIG.formEndpoint) {
+    if (!CONFIG.web3formsKey) {
       setStatus('error', t('offline'));
       return;
     }
 
-    const consentText = $('[data-i18n="form.consent"]').textContent.trim();
-    const payload = new URLSearchParams({
-      name, phone, email,
-      vehicle: f.vehicle.value.trim(),
-      service: f.service.value,
-      message: f.message.value.trim(),
-      contactPref: (form.querySelector('input[name="contactPref"]:checked') || {}).value || '',
-      source: f.source.value,
-      consent: 'yes',
-      consentText,
-      offers: f.offers.checked ? 'yes' : 'no',
-      lang,
-      page: location.origin + location.pathname,
-      referrer: document.referrer || '',
-      utm_source: utm('utm_source'),
-      utm_medium: utm('utm_medium'),
-      utm_campaign: utm('utm_campaign')
-    });
+    const service = f.service.value;
+    // the email the shop receives (labels in English, empty fields left out)
+    const fields = {
+      'Name': name,
+      'Phone': phone,
+      'Email': email,
+      'Vehicle': f.vehicle.value.trim(),
+      'Needs help with': service,
+      'Message': f.message.value.trim(),
+      'Contact by': (form.querySelector('input[name="contactPref"]:checked') || {}).value || '',
+      'Language': lang === 'es' ? 'Spanish' : 'English',
+      'Heard about us': f.source.value,
+      'Wants specials and offers': f.offers.checked ? 'Yes' : 'No',
+      'Agreed to be contacted': 'Yes: ' + $('[data-i18n="form.consent"]').textContent.trim(),
+      'UTM source': utm('utm_source'),
+      'UTM medium': utm('utm_medium'),
+      'UTM campaign': utm('utm_campaign')
+    };
+    const payload = {
+      access_key: CONFIG.web3formsKey,
+      subject: `New website contact: ${name}${service ? ` (${service})` : ''}`,
+      from_name: 'Super Muffler website',
+      botcheck: false
+    };
+    if (email) payload.replyto = email;
+    Object.entries(fields).forEach(([k, v]) => { if (v) payload[k] = v; });
 
     submit.disabled = true;
     setStatus('sending', t('sending'));
     try {
-      const res = await fetch(CONFIG.formEndpoint, { method: 'POST', body: payload });
-      let ok = res.ok;
-      try { const data = await res.json(); ok = ok && data.ok !== false; } catch (err) { /* non-JSON reply */ }
-      if (!ok) throw new Error('Rejected');
+      const res = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || !data.success) throw new Error(data.message || 'Rejected');
       form.reset();
       setStatus('ok', t('ok').replace('{n}', name.split(' ')[0]));
     } catch (err) {
