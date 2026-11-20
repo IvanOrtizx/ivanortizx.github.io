@@ -60,7 +60,7 @@ function applyLang(next) {
   store.set('sm-lang', lang);
 
   updateStatus();
-  renderVideos();
+  updateVideoTitles();
 }
 
 function initialLang() {
@@ -261,45 +261,91 @@ function initGallery() {
 }
 
 /* =====================================================================
-   Videos (optional, from config.js)
+   Videos and posts (from config.js)
+   Instagram uses its official embed, loaded only when the section gets close.
+   TikTok / YouTube show a cover first and load the player on tap.
    ===================================================================== */
 function embedUrl(v) {
   if (v.platform === 'tiktok') return `https://www.tiktok.com/embed/v2/${encodeURIComponent(v.id)}`;
-  if (v.platform === 'instagram') return `https://www.instagram.com/reel/${encodeURIComponent(v.id)}/embed`;
   if (v.platform === 'youtube') return `https://www.youtube-nocookie.com/embed/${encodeURIComponent(v.id)}?autoplay=1&rel=0`;
   return '';
 }
+const videoTitle = v => (v.title && (v.title[lang] || v.title.en)) || '';
+
+function loadInstagram() {
+  const run = () => window.instgrm && window.instgrm.Embeds.process();
+  if (window.instgrm) { run(); return; }
+  const s = document.createElement('script');
+  s.async = true;
+  s.src = 'https://www.instagram.com/embed.js';
+  s.onload = run;
+  document.body.appendChild(s);
+}
+
 function renderVideos() {
   const grid = $('#videoGrid');
-  const list = (CONFIG.videos || []).filter(v => v && v.id && embedUrl(v));
   if (!grid) return;
+  const list = (CONFIG.videos || []).filter(v => v && v.id && (v.platform === 'instagram' || embedUrl(v)));
   grid.hidden = !list.length;
-  grid.innerHTML = '';
+  if (!list.length) return;
+
   list.forEach(v => {
-    const title = (v.title && (v.title[lang] || v.title.en)) || '';
     const card = document.createElement('div');
-    card.className = 'video-card';
-    const btn = document.createElement('button');
-    btn.type = 'button';
-    btn.setAttribute('aria-label', `${t('play')}: ${title}`);
-    if (v.poster) {
-      const im = document.createElement('img');
-      im.src = v.poster; im.alt = ''; im.loading = 'lazy';
-      btn.appendChild(im);
+    if (v.platform === 'instagram') {
+      card.className = 'video-card is-ig';
+      const url = `https://www.instagram.com/p/${encodeURIComponent(v.id)}/`;
+      const q = document.createElement('blockquote');
+      q.className = 'instagram-media';
+      q.setAttribute('data-instgrm-permalink', url);
+      q.setAttribute('data-instgrm-version', '14');
+      const a = document.createElement('a');
+      a.href = url; a.target = '_blank'; a.rel = 'noopener';
+      a.textContent = 'Instagram @supermufflerinc';
+      q.appendChild(a);
+      card.appendChild(q);
+    } else {
+      card.className = 'video-card';
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      if (v.poster) {
+        const im = document.createElement('img');
+        im.src = v.poster; im.alt = ''; im.loading = 'lazy';
+        btn.appendChild(im);
+      }
+      const play = document.createElement('span'); play.className = 'play'; play.setAttribute('aria-hidden', 'true');
+      const tt = document.createElement('span'); tt.className = 'v-title';
+      btn.append(play, tt);
+      btn.addEventListener('click', () => {
+        const f = document.createElement('iframe');
+        f.src = embedUrl(v);
+        f.title = videoTitle(v) || 'Video';
+        f.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
+        f.allowFullscreen = true;
+        card.replaceChildren(f);
+      });
+      card.appendChild(btn);
+      card._video = v;
     }
-    const play = document.createElement('span'); play.className = 'play'; play.setAttribute('aria-hidden', 'true');
-    const tt = document.createElement('span'); tt.className = 'v-title'; tt.textContent = title;
-    btn.append(play, tt);
-    btn.addEventListener('click', () => {
-      const f = document.createElement('iframe');
-      f.src = embedUrl(v);
-      f.title = title || 'Video';
-      f.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
-      f.allowFullscreen = true;
-      card.replaceChildren(f);
-    });
-    card.appendChild(btn);
     grid.appendChild(card);
+  });
+  updateVideoTitles();
+
+  if (list.some(v => v.platform === 'instagram')) {
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver(es => {
+        if (es.some(e => e.isIntersecting)) { io.disconnect(); loadInstagram(); }
+      }, { rootMargin: '800px 0px' });
+      io.observe(grid);
+    } else loadInstagram();
+  }
+}
+
+function updateVideoTitles() {
+  $$('#videoGrid .video-card').forEach(card => {
+    const v = card._video; if (!v) return;
+    const btn = $('button', card), tt = $('.v-title', card);
+    if (tt) tt.textContent = videoTitle(v);
+    if (btn) btn.setAttribute('aria-label', `${t('play')}: ${videoTitle(v)}`);
   });
 }
 
@@ -413,6 +459,7 @@ function initForm() {
    Boot
    ===================================================================== */
 snapshot();
+renderVideos();
 applyLang(initialLang());
 $$('.lang-btn').forEach(b => b.addEventListener('click', () => applyLang(b.dataset.lang)));
 setInterval(updateStatus, 60 * 1000);

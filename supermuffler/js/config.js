@@ -20,12 +20,16 @@ export const CONFIG = {
     6: null
   },
 
-  // TikTok / Instagram / YouTube videos to show in "Watch the work".
-  // Copy the ID from the video link and add a photo to use as cover.
-  //   TikTok:    https://www.tiktok.com/@supermuffler/video/7301234567890123456  ->  id: '7301234567890123456'
-  //   Instagram: https://www.instagram.com/reel/C1a2B3c4D5e/                     ->  id: 'C1a2B3c4D5e'
-  //   YouTube:   https://youtube.com/shorts/AbCdEfGhIjK                          ->  id: 'AbCdEfGhIjK'
+  // Posts and videos to show in "Watch the work".
+  //   Instagram: https://www.instagram.com/p/C8U-BTZyYVz/  ->  { platform: 'instagram', id: 'C8U-BTZyYVz' }
+  //              (works for posts and reels; Instagram shows its own cover and caption)
+  //   TikTok:    https://www.tiktok.com/@supermuffler/video/7301234567890123456
+  //              ->  { platform: 'tiktok', id: '7301234567890123456', poster: 'img/gallery/xpipe-sm.webp', title: { en: '...', es: '...' } }
+  //   YouTube:   https://youtube.com/shorts/AbCdEfGhIjK  ->  { platform: 'youtube', id: 'AbCdEfGhIjK', poster: '...', title: { en: '...', es: '...' } }
   videos: [
-    // { platform: 'tiktok', id: '7301234567890123456', poster: 'img/gallery/xpipe-sm.webp', title: { en: 'Custom X-pipe sound check', es: 'Prueba de sonido del X-pipe' } },
+    { platform: 'instagram', id: 'C8U-BTZyYVz' },
+    { platform: 'instagram', id: 'Dctctudgsfk' },
+    { platform: 'instagram', id: 'DcbrJHZA2ev' },
+    { platform: 'instagram', id: 'DW9J85TgP2S' }
   ]
 };
