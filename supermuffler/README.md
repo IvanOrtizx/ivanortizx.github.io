@@ -10,7 +10,8 @@ El formulario guarda nombre, correo, teléfono y cómo nos conocieron en una hoj
 | `index.html` | La página. Los textos en inglés están aquí. |
 | `js/i18n.js` | Los textos en español (misma clave que en `index.html`). |
 | `js/config.js` | URL del back office, horario para el aviso "Abierto ahora" y videos de Instagram/TikTok. |
-| `apps-script/Code.gs` | Back office: guarda cada contacto en Google Sheets. |
+| `apps-script/Code.gs` | Back office: guarda cada contacto en Google Sheets y atiende el panel. |
+| `panel/` | Panel privado de contactos (`/panel`), con contraseña. |
 | `js/main.js` | Idioma, horario en vivo, galería, formulario y carga del 3D. |
 | `js/exhaust3d.js` | Escena 3D ya compilada (no se edita a mano). |
 | `src/exhaust3d.src.js` | Código fuente del 3D. |
@@ -33,6 +34,17 @@ El formulario guarda nombre, correo, teléfono y cómo nos conocieron en una hoj
 5. Copiar la URL que termina en `/exec` y pegarla en `js/config.js` en `formEndpoint`. Subir el cambio.
 6. Probar con el formulario de la página: la fila aparece arriba en la hoja.
 7. Compartir la hoja con Nuri y con el taller. Para pasar los contactos al CRM: Archivo > Descargar > CSV.
+
+8. En la hoja: menú **Super Muffler > Set panel password** y poner la contraseña del panel (mínimo 8 caracteres).
+
+### Panel de contactos (`/panel`)
+
+- Dirección: `supermufflerinc.com/panel` (no tiene enlace desde la página y Google no lo indexa).
+- Se entra con la contraseña del paso 8. La sesión dura 6 horas. Después de 10 intentos fallidos se bloquea 10 minutos.
+- Muestra fecha, nombre, correo, teléfono, cómo nos conocieron e idioma. Tiene buscador, filtros por estado,
+  cambio de estado (New, Added to CRM, Customer, Unsubscribed, Spam) y botón **Download CSV** para subir los contactos al CRM.
+- Mientras `formEndpoint` esté vacío, el panel funciona en modo demo con datos de ejemplo (contraseña: `demo`).
+- Para cambiar la contraseña: repetir el paso 8.
 
 No envía correos. Si algún día lo quieren, se ponen los correos en `NOTIFY_EMAILS` y se hace Implementar > Administrar implementaciones > editar > Nueva versión (la URL no cambia).
 

@@ -3,6 +3,7 @@
  * -------------------------------------------------
  * Every form sent from the website lands as a new row (newest on top) in the
  * "Contacts" tab of this Google Sheet, ready for CRM follow-up.
+ * The private contacts panel (supermufflerinc.com/panel) reads and updates it.
  * No email notifications (they can be turned on later with NOTIFY_EMAILS).
  *
  * Setup (once):
@@ -11,6 +12,7 @@
  *   3. Deploy > New deployment > type: Web app
  *        Execute as: Me    |    Who has access: Anyone
  *      Copy the Web app URL (ends in /exec) into js/config.js -> formEndpoint.
+ *   4. In the sheet: menu Super Muffler > Set panel password.
  */
 
 const SETTINGS = {
@@ -35,9 +37,13 @@ function doGet() {
 }
 
 function doPost(e) {
+  const p = (e && e.parameter) || {};
+  return p.action ? panel_(p) : saveContact_(p);
+}
+
+function saveContact_(p) {
   const lock = LockService.getScriptLock();
   try {
-    const p = (e && e.parameter) || {};
     if (p.company) return json_({ ok: true });                       // bot trap
 
     const name = clean_(p.name, 80);
@@ -105,6 +111,7 @@ function onOpen() {
     .createMenu('Super Muffler')
     .addItem('Mark selected rows as Added to CRM', 'markAddedToCrm')
     .addItem('Send a test contact', 'sendTestContact')
+    .addItem('Set panel password', 'setPanelPassword')
     .addSeparator()
     .addItem('Set up / repair the sheet', 'setup')
     .addToUi();
@@ -167,6 +174,82 @@ function sendTestContact() {
     consent: 'yes', consentText: 'Test from the Apps Script menu', lang: 'en', page: 'apps-script-test'
   } });
   SpreadsheetApp.getActive().toast(res.getContent(), 'Test contact');
+}
+
+/* ------------------------------------------------------------------ */
+/*  Contacts panel (supermufflerinc.com/panel)                         */
+/* ------------------------------------------------------------------ */
+function panel_(p) {
+  try {
+    if (p.action === 'login') return json_(login_(p.password));
+    if (!p.token || !CacheService.getScriptCache().get('t' + p.token)) return json_({ ok: false, error: 'auth' });
+    if (p.action === 'list') return json_({ ok: true, rows: listRows_() });
+    if (p.action === 'status') return json_(setStatus_(p.id, p.status));
+    return json_({ ok: false, error: 'action' });
+  } catch (err) {
+    console.error(err);
+    return json_({ ok: false, error: 'server' });
+  }
+}
+
+function login_(pw) {
+  const cache = CacheService.getScriptCache();
+  const fails = Number(cache.get('loginFails') || 0);
+  if (fails >= 10) return { ok: false, error: 'locked' };            // 10 wrong tries -> wait 10 minutes
+  const real = PropertiesService.getScriptProperties().getProperty('PANEL_PASSWORD') || '';
+  if (!real) return { ok: false, error: 'nopassword' };
+  if (String(pw || '') !== real) {
+    cache.put('loginFails', String(fails + 1), 600);
+    Utilities.sleep(700);
+    return { ok: false, error: 'password' };
+  }
+  const token = Utilities.getUuid().replace(/-/g, '') + Utilities.getUuid().replace(/-/g, '');
+  cache.put('t' + token, '1', 21600);                                 // session lasts 6 hours
+  return { ok: true, token: token };
+}
+
+function listRows_() {
+  const sheet = getSheet_();
+  const last = sheet.getLastRow();
+  if (last < 2) return [];
+  const vals = sheet.getRange(2, 1, Math.min(last - 1, 5000), HEADERS.length).getValues();
+  const c = name => COL(name) - 1;
+  return vals.filter(r => r[c('ID')]).map(r => ({
+    id: String(r[c('ID')]),
+    received: r[c('Received')] instanceof Date ? r[c('Received')].toISOString() : String(r[c('Received')]),
+    status: String(r[c('Status')] || 'New'),
+    name: String(r[c('Name')]),
+    email: String(r[c('Email')]),
+    phone: String(r[c('Phone')]),
+    source: String(r[c('Heard about us')]),
+    lang: String(r[c('Language')]),
+    notes: String(r[c('Notes')])
+  }));
+}
+
+function setStatus_(id, status) {
+  if (STATUSES.indexOf(status) < 0) return { ok: false, error: 'status' };
+  const sheet = getSheet_();
+  const last = sheet.getLastRow();
+  if (last < 2) return { ok: false, error: 'notfound' };
+  const ids = sheet.getRange(2, COL('ID'), last - 1, 1).getValues();
+  for (let i = 0; i < ids.length; i++) {
+    if (String(ids[i][0]) === String(id)) {
+      sheet.getRange(i + 2, COL('Status')).setValue(status);
+      return { ok: true };
+    }
+  }
+  return { ok: false, error: 'notfound' };
+}
+
+function setPanelPassword() {
+  const ui = SpreadsheetApp.getUi();
+  const r = ui.prompt('Panel password', 'Password for the contacts panel (at least 8 characters):', ui.ButtonSet.OK_CANCEL);
+  if (r.getSelectedButton() !== ui.Button.OK) return;
+  const pw = r.getResponseText().trim();
+  if (pw.length < 8) { ui.alert('Use at least 8 characters.'); return; }
+  PropertiesService.getScriptProperties().setProperty('PANEL_PASSWORD', pw);
+  ui.alert('Saved. Use this password to open the contacts panel.');
 }
 
 /* ------------------------------------------------------------------ */
