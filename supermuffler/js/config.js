@@ -5,7 +5,7 @@
 export const CONFIG = {
   // Back office: Google Apps Script web app URL (ends in /exec). Every form is saved as a row
   // in the shop's Google Sheet. While empty, the form asks people to call instead.
-  formEndpoint: '',
+  formEndpoint: 'https://script.google.com/macros/s/AKfycbyaiB2ESRSePfRL_y8HwbhX3XHc142ER800FxH-oWG28HABCFr5FP5owOLKAjXLXQciTg/exec',
 
   // Shop time zone and hours (24 h clock). 0 = Sunday ... 6 = Saturday.
   timeZone: 'America/Los_Angeles',
