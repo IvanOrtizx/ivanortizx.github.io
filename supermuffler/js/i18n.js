@@ -4,7 +4,7 @@
 // =====================================================================
 export const ES = {
   'meta.title': 'Taller de escapes y mofles en Santa Maria, CA | Super Muffler Inc.',
-  'meta.desc': 'Reparación de mofles, escapes de alto rendimiento, convertidores catalíticos, headers y doblado de tubo a la medida en Santa Maria, CA desde los años 80. Sin cita, inspección gratis, instalación desde 35 minutos. Llama al (805) 922-9684.',
+  'meta.desc': 'Reparación de mofles, escapes de alto rendimiento, convertidores catalíticos, headers y doblado de tubo a la medida en Santa Maria, CA desde los años 80. Sin cita e inspección gratis. Llama al (805) 922-9684.',
 
   'skip': 'Saltar al contenido',
   'brand.aria': 'Super Muffler Inc., volver al inicio',
@@ -17,9 +17,10 @@ export const ES = {
   'nav.menu': 'Menú',
 
   'hero.title': 'El taller de escapes y mofles de Santa Maria desde los años 80',
-  'hero.lede': 'Reparaciones que silencian, mejoras que se escuchan, convertidores catalíticos y doblado de tubo a la medida. Ven sin cita para una inspección gratis. Muchas instalaciones toman solo 35 minutos.',
+  'hero.lede': 'Tus especialistas de confianza en escapes en Santa Maria desde los años 80. Trabajo honesto, precios justos y mano de obra de calidad. Desde reparaciones de escape hasta mejoras a la medida, hacemos el trabajo bien.',
   'cta.call': 'Llamar al (805) 922-9684',
   'cta.directions': 'Cómo llegar',
+  'hero.estimate': 'Los presupuestos se dan solo por teléfono o en persona. ¡Llámanos hoy!',
   'hero.rating': 'en Google, de 133 reseñas',
 
   'part.headers.short': 'Headers',
@@ -33,7 +34,7 @@ export const ES = {
   'part.cat.title': 'Convertidor catalítico',
   'part.cat.text': 'Limpia los gases para que tu carro pase el smog. ¿Falla, suena, te lo robaron o marca un código? Instalamos reemplazos de calidad, bien hechos desde la primera vez.',
   'part.muffler.title': 'Mofle',
-  'part.muffler.text': 'El mofle decide cómo suena tu carro. Arreglamos los ruidosos e instalamos mofles de alto rendimiento para un tono más grueso, muchas veces en unos 35 minutos.',
+  'part.muffler.text': 'El mofle decide cómo suena tu carro. Arreglamos los ruidosos e instalamos mofles de alto rendimiento para un tono más grueso.',
   'part.tips.title': 'Tubo de cola y puntas',
   'part.tips.text': 'El toque final. Tubo de cola bien instalado y puntas pulidas, sencillas o dobles, dobladas a la medida de tu carro o camioneta.',
   'part.call': 'Llamar para preguntar',
@@ -46,13 +47,15 @@ export const ES = {
   'facts.walkin.d': 'No necesitas cita previa.',
   'facts.inspect.t': 'Inspección gratis',
   'facts.inspect.d': 'Primero revisamos y te decimos qué necesita.',
-  'facts.fast.t': 'Instalación desde 35 minutos',
-  'facts.fast.d': 'Casi todas las piezas ya están en el estante.',
+  'facts.exp.t': 'Respaldados por la experiencia',
+  'facts.exp.d': 'Al servicio de Santa Maria desde los años 80.',
   'facts.vet.t': 'Descuento para militares y veteranos',
-  'facts.vet.d': 'Muestra tu identificación o DD-214.',
+  'facts.vet.d': 'Muestra tu identificación o DD\u2011214.',
+  'facts.cutoff.t': 'Hora límite para dejar el vehículo',
+  'facts.cutoff.d': 'Lunes a jueves: 4:00 PM<br>Viernes: 2:00 PM',
 
   'services.title': 'Reparaciones, mejoras y trabajos a la medida',
-  'services.lede': 'Desde un protector de calor que vibra hasta un sistema completo a la medida, todo se hace en nuestro taller de Main Street.',
+  'services.lede': 'Con orgullo al servicio de Santa Maria con reparaciones de escape confiables, mejoras a la medida y un servicio honesto desde los años 80.',
   'svc.muffler.t': 'Reparación de mofles y escapes',
   'svc.muffler.d': 'Ruidos, golpeteos, fugas, vibración o la luz de check engine. Encontramos el problema y lo arreglamos a buen precio, sin venderte lo que no necesitas.',
   'svc.perf.t': 'Escapes de alto rendimiento',
@@ -94,8 +97,8 @@ export const ES = {
   'rev.3': '“[…] trabajos de fabricación a la medida bastante complicados para mi Mustang, y estos tipos me cumplieron las dos veces. Creo firmemente que son los mejores de la ciudad […] 10/10”',
   'rev.src': 'Reseña de Google, traducida del inglés',
 
-  'social.title': 'Mira el trabajo',
-  'social.lede': 'Construcciones, sonidos y la vida del taller en TikTok e Instagram.',
+  'social.title': 'Mira nuestros trabajos más recientes',
+  'social.lede': 'Descubre vehículos de clientes, transformaciones de escape y proyectos a la medida en nuestro TikTok e Instagram.',
 
   'visit.title': 'Visítanos en el taller',
   'visit.caption': 'Busca el letrero amarillo de MUFFLER en 926 W Main St.',
