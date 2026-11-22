@@ -42,6 +42,24 @@
       </form>
     </section>
 
+    <!-- first login: choose a new password -->
+    <section class="login" id="changePw" hidden>
+      <form class="login-card" id="changeForm" novalidate>
+        <h1 data-t="changeTitle">Choose your password</h1>
+        <p data-t="changeText">You logged in with the temporary password. Choose a new one to open the panel.</p>
+        <div class="field">
+          <label for="pw1" data-t="newPw">New password (at least 8 characters)</label>
+          <input id="pw1" type="password" autocomplete="new-password" minlength="8" required>
+        </div>
+        <div class="field">
+          <label for="pw2" data-t="newPw2">Type it again</label>
+          <input id="pw2" type="password" autocomplete="new-password" minlength="8" required>
+        </div>
+        <button class="btn btn-red btn-lg" type="submit" id="changeBtn" data-t="saveOpen">Save and open panel</button>
+        <p class="form-status" id="changeStatus" role="status" aria-live="polite"></p>
+      </form>
+    </section>
+
     <!-- contacts -->
     <section class="wrap app" id="app" hidden>
       <p class="demo-banner" id="demoBanner" hidden data-t="demoBanner">Demo with sample data. Real contacts from the website form will show here once the form is connected.</p>

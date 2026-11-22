@@ -4,22 +4,27 @@
  * Every form sent from the website lands as a new row (newest on top) in the
  * "Contacts" tab of this Google Sheet, ready for CRM follow-up.
  * The private contacts panel (supermufflerinc.com/panel) reads and updates it.
- * No email notifications (they can be turned on later with NOTIFY_EMAILS).
+ * No email notifications.
  *
  * Setup (once):
  *   1. Open the Google Sheet > Extensions > Apps Script, paste this file, save.
+ *      (Or create a standalone Apps Script project and put the sheet ID in SHEET_ID.)
  *   2. Choose the function  setup  and press Run (authorize when asked).
  *   3. Deploy > New deployment > type: Web app
  *        Execute as: Me    |    Who has access: Anyone
  *      Copy the Web app URL (ends in /exec) into js/config.js -> formEndpoint.
- *   4. In the sheet: menu Super Muffler > Set panel password.
+ *   4. The panel starts with the temporary password 12345678 and asks for a new one
+ *      the first time someone logs in. If it is lost, run resetPanelPassword from the editor.
  */
 
 const SETTINGS = {
+  // Leave empty when the script is opened from the sheet (Extensions > Apps Script).
+  // For a standalone Apps Script project, paste the sheet ID (the long code in the sheet's URL).
+  SHEET_ID: '',
   SHEET_NAME: 'Contacts',
-  NOTIFY_EMAILS: '',            // off for now. Comma-separated emails to get a message per contact.
   TIMEZONE: 'America/Los_Angeles',
-  SHOP_NAME: 'Super Muffler Inc.'
+  SHOP_NAME: 'Super Muffler Inc.',
+  TEMP_PANEL_PASSWORD: '12345678'   // first login only: the panel forces a change
 };
 
 const HEADERS = [
@@ -92,8 +97,6 @@ function saveContact_(p) {
     sheet.getRange(2, COL('Status')).setDataValidation(statusRule_());
     SpreadsheetApp.flush();
     lock.releaseLock();
-
-    notify_(lead, sheet);
     return json_({ ok: true, id: lead.id });
   } catch (err) {
     console.error(err);
@@ -117,10 +120,21 @@ function onOpen() {
     .addToUi();
 }
 
+function ss_() {
+  if (SETTINGS.SHEET_ID) return SpreadsheetApp.openById(SETTINGS.SHEET_ID);
+  const id = PropertiesService.getScriptProperties().getProperty('SHEET_ID');
+  return id ? SpreadsheetApp.openById(id) : SpreadsheetApp.getActiveSpreadsheet();
+}
+
 function setup() {
-  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const ss = SETTINGS.SHEET_ID ? SpreadsheetApp.openById(SETTINGS.SHEET_ID) : SpreadsheetApp.getActiveSpreadsheet();
   ss.setSpreadsheetTimeZone(SETTINGS.TIMEZONE);
-  PropertiesService.getScriptProperties().setProperty('SHEET_ID', ss.getId());
+  const props = PropertiesService.getScriptProperties();
+  props.setProperty('SHEET_ID', ss.getId());
+  if (!props.getProperty('PANEL_PASSWORD')) {
+    props.setProperty('PANEL_PASSWORD', SETTINGS.TEMP_PANEL_PASSWORD);
+    props.setProperty('PANEL_MUST_CHANGE', 'yes');
+  }
 
   let sheet = ss.getSheetByName(SETTINGS.SHEET_NAME);
   if (!sheet) sheet = ss.insertSheet(SETTINGS.SHEET_NAME, 0);
@@ -173,7 +187,17 @@ function sendTestContact() {
     name: 'Test Contact', email: 'test@example.com', phone: '(805) 555-0123', source: 'Other',
     consent: 'yes', consentText: 'Test from the Apps Script menu', lang: 'en', page: 'apps-script-test'
   } });
-  SpreadsheetApp.getActive().toast(res.getContent(), 'Test contact');
+  console.log(res.getContent());
+  try { SpreadsheetApp.getActive().toast(res.getContent(), 'Test contact'); } catch (e) { /* standalone project */ }
+}
+
+// Run from the Apps Script editor if the panel password is lost:
+// sets it back to the temporary 12345678 and asks for a new one at the next login.
+function resetPanelPassword() {
+  const props = PropertiesService.getScriptProperties();
+  props.setProperty('PANEL_PASSWORD', SETTINGS.TEMP_PANEL_PASSWORD);
+  props.setProperty('PANEL_MUST_CHANGE', 'yes');
+  console.log('Panel password reset to the temporary one.');
 }
 
 /* ------------------------------------------------------------------ */
@@ -183,6 +207,8 @@ function panel_(p) {
   try {
     if (p.action === 'login') return json_(login_(p.password));
     if (!p.token || !CacheService.getScriptCache().get('t' + p.token)) return json_({ ok: false, error: 'auth' });
+    if (p.action === 'changePassword') return json_(changePassword_(p.newPassword));
+    if (mustChange_()) return json_({ ok: false, error: 'mustchange' });
     if (p.action === 'list') return json_({ ok: true, rows: listRows_() });
     if (p.action === 'status') return json_(setStatus_(p.id, p.status));
     return json_({ ok: false, error: 'action' });
@@ -205,7 +231,21 @@ function login_(pw) {
   }
   const token = Utilities.getUuid().replace(/-/g, '') + Utilities.getUuid().replace(/-/g, '');
   cache.put('t' + token, '1', 21600);                                 // session lasts 6 hours
-  return { ok: true, token: token };
+  return { ok: true, token: token, mustChange: mustChange_() };
+}
+
+function mustChange_() {
+  return PropertiesService.getScriptProperties().getProperty('PANEL_MUST_CHANGE') === 'yes';
+}
+
+function changePassword_(pw) {
+  pw = String(pw || '');
+  if (pw.length < 8) return { ok: false, error: 'short' };
+  if (pw === SETTINGS.TEMP_PANEL_PASSWORD) return { ok: false, error: 'same' };
+  const props = PropertiesService.getScriptProperties();
+  props.setProperty('PANEL_PASSWORD', pw);
+  props.deleteProperty('PANEL_MUST_CHANGE');
+  return { ok: true };
 }
 
 function listRows_() {
@@ -248,7 +288,9 @@ function setPanelPassword() {
   if (r.getSelectedButton() !== ui.Button.OK) return;
   const pw = r.getResponseText().trim();
   if (pw.length < 8) { ui.alert('Use at least 8 characters.'); return; }
-  PropertiesService.getScriptProperties().setProperty('PANEL_PASSWORD', pw);
+  const props = PropertiesService.getScriptProperties();
+  props.setProperty('PANEL_PASSWORD', pw);
+  props.deleteProperty('PANEL_MUST_CHANGE');
   ui.alert('Saved. Use this password to open the contacts panel.');
 }
 
@@ -256,8 +298,7 @@ function setPanelPassword() {
 /*  Helpers                                                            */
 /* ------------------------------------------------------------------ */
 function getSheet_() {
-  const id = PropertiesService.getScriptProperties().getProperty('SHEET_ID');
-  const ss = id ? SpreadsheetApp.openById(id) : SpreadsheetApp.getActiveSpreadsheet();
+  const ss = ss_();
   let sheet = ss.getSheetByName(SETTINGS.SHEET_NAME);
   if (!sheet) { setup(); sheet = ss.getSheetByName(SETTINGS.SHEET_NAME); }
   return sheet;
@@ -281,28 +322,4 @@ function formatPhone_(d) {
 
 function json_(obj) {
   return ContentService.createTextOutput(JSON.stringify(obj)).setMimeType(ContentService.MimeType.JSON);
-}
-
-function esc_(s) {
-  return String(s || '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-}
-
-// Off while NOTIFY_EMAILS is empty
-function notify_(lead, sheet) {
-  const to = (SETTINGS.NOTIFY_EMAILS || '').trim();
-  if (!to) return;
-  try {
-    const rows = [['Name', lead.name], ['Email', lead.email], ['Phone', lead.phone], ['Heard about us', lead.source], ['Language', lead.lang]].filter(r => r[1]);
-    MailApp.sendEmail({
-      to: to,
-      subject: 'New website contact: ' + lead.name,
-      htmlBody: '<div style="font-family:Arial,sans-serif;font-size:15px">' +
-        rows.map(r => '<p style="margin:4px 0"><b>' + esc_(r[0]) + ':</b> ' + esc_(r[1]) + '</p>').join('') +
-        '<p style="margin-top:14px"><a href="' + sheet.getParent().getUrl() + '">Open the contacts sheet</a></p></div>',
-      name: SETTINGS.SHOP_NAME + ' website',
-      replyTo: lead.email
-    });
-  } catch (err) {
-    console.error('Email failed: ' + err);
-  }
 }

@@ -26,6 +26,9 @@ El formulario guarda nombre, correo, teléfono y cómo nos conocieron en una hoj
 
 ## 2. Back office del formulario (Google Sheets)
 
+Instalado en la cuenta `nurisolutions.web@gmail.com`: hoja **Super Muffler - Website contacts** y proyecto de Apps Script
+**Super Muffler - Website backend** (proyecto independiente con el ID de la hoja en `SHEET_ID`). Pasos para reinstalarlo:
+
 1. En la cuenta de Google que va a manejar los contactos, crear una hoja de cálculo: `Super Muffler - Contactos web`.
 2. Extensiones > Apps Script. Borrar lo que haya, pegar `apps-script/Code.gs` y guardar.
 3. Elegir la función `setup` y darle Ejecutar. Autorizar los permisos (si sale "Google no verificó esta app": Configuración avanzada > Ir a… > Permitir).
@@ -35,18 +38,19 @@ El formulario guarda nombre, correo, teléfono y cómo nos conocieron en una hoj
 6. Probar con el formulario de la página: la fila aparece arriba en la hoja.
 7. Compartir la hoja con Nuri y con el taller. Para pasar los contactos al CRM: Archivo > Descargar > CSV.
 
-8. En la hoja: menú **Super Muffler > Set panel password** y poner la contraseña del panel (mínimo 8 caracteres).
+8. El panel arranca con la contraseña temporal `12345678` y la primera vez que alguien entra obliga a cambiarla.
+   Si se pierde: en el editor de Apps Script, ejecutar `resetPanelPassword` (vuelve a la temporal).
 
 ### Panel de contactos (`/panel`)
 
 - Dirección: `supermufflerinc.com/panel` (no tiene enlace desde la página y Google no lo indexa).
-- Se entra con la contraseña del paso 8. La sesión dura 6 horas. Después de 10 intentos fallidos se bloquea 10 minutos.
+- Se entra con la contraseña del paso 8 (la primera vez pide cambiarla). La sesión dura 6 horas. Después de 10 intentos fallidos se bloquea 10 minutos.
 - Muestra fecha, nombre, correo, teléfono, cómo nos conocieron e idioma. Tiene buscador, filtros por estado,
   cambio de estado (New, Added to CRM, Customer, Unsubscribed, Spam) y botón **Download CSV** para subir los contactos al CRM.
 - Mientras `formEndpoint` esté vacío, el panel funciona en modo demo con datos de ejemplo (contraseña: `demo`).
-- Para cambiar la contraseña: repetir el paso 8.
+- Si se olvida la contraseña: ejecutar `resetPanelPassword` en el editor de Apps Script.
 
-No envía correos. Si algún día lo quieren, se ponen los correos en `NOTIFY_EMAILS` y se hace Implementar > Administrar implementaciones > editar > Nueva versión (la URL no cambia).
+No envía correos.
 
 ## 3. Conectar el dominio (solo cuando la página esté aprobada)
 

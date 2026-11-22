@@ -31,6 +31,10 @@ const T = {
     errNet: 'Could not reach the contacts. Check the internet connection and press Refresh.',
     errSave: 'The status did not save. Try again.',
     saved: 'Saved.',
+    changeTitle: 'Choose your password', changeText: 'You logged in with the temporary password. Choose a new one to open the panel.',
+    newPw: 'New password (at least 8 characters)', newPw2: 'Type it again', saveOpen: 'Save and open panel',
+    errShort: 'Use at least 8 characters.', errMatch: 'The two passwords are different.', errSame: 'Choose a password different from the temporary one.',
+    pwSaved: 'Password saved. Use it from now on.',
     updated: t => `Updated ${t}`,
     via: 'via'
   },
@@ -55,6 +59,10 @@ const T = {
     errNet: 'No se pudieron cargar los contactos. Revisa la conexión a internet y presiona Actualizar.',
     errSave: 'El estado no se guardó. Intenta de nuevo.',
     saved: 'Guardado.',
+    changeTitle: 'Elige tu contraseña', changeText: 'Entraste con la contraseña temporal. Elige una nueva para abrir el panel.',
+    newPw: 'Contraseña nueva (mínimo 8 caracteres)', newPw2: 'Escríbela otra vez', saveOpen: 'Guardar y abrir el panel',
+    errShort: 'Usa mínimo 8 caracteres.', errMatch: 'Las dos contraseñas no son iguales.', errSame: 'Elige una contraseña diferente a la temporal.',
+    pwSaved: 'Contraseña guardada. Úsala de ahora en adelante.',
     updated: t => `Actualizado ${t}`,
     via: 'por'
   }
@@ -112,6 +120,7 @@ async function loadRows() {
   try {
     const data = await api('list', { token });
     if (data.error === 'auth') { logout(); return; }
+    if (data.error === 'mustchange') { showChange(); return; }
     if (!data.ok) throw new Error(data.error);
     rows = data.rows || [];
     render();
@@ -232,8 +241,16 @@ function exportCsv() {
 }
 
 /* ---------- session ---------- */
+function showChange() {
+  $('#login').hidden = true;
+  $('#app').hidden = true;
+  $('#changePw').hidden = false;
+  $('#logout').hidden = false;
+  $('#pw1').focus();
+}
 function showApp() {
   $('#login').hidden = true;
+  $('#changePw').hidden = true;
   $('#app').hidden = false;
   $('#logout').hidden = false;
   $('#demoBanner').hidden = !DEMO;
@@ -243,6 +260,7 @@ function logout() {
   token = null; rows = [];
   store.del('sm-panel-token');
   $('#app').hidden = true;
+  $('#changePw').hidden = true;
   $('#logout').hidden = true;
   $('#login').hidden = false;
   $('#pw').value = '';
@@ -272,9 +290,35 @@ $('#loginForm').addEventListener('submit', async e => {
     store.set('sm-panel-token', token);
     status.textContent = ''; status.dataset.state = '';
     $('#pw').removeAttribute('aria-invalid');
-    showApp();
+    if (data.mustChange) showChange(); else showApp();
   } catch (err) {
     fail(tt('errNet'));
+  } finally {
+    btn.disabled = false;
+  }
+});
+
+$('#changeForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  const a = $('#pw1').value, b = $('#pw2').value;
+  const st = $('#changeStatus');
+  const fail = (msg, el) => { st.dataset.state = 'error'; st.textContent = msg; el.setAttribute('aria-invalid', 'true'); el.focus(); };
+  ['#pw1', '#pw2'].forEach(s => $(s).removeAttribute('aria-invalid'));
+  if (a.length < 8) return fail(tt('errShort'), $('#pw1'));
+  if (a === '12345678') return fail(tt('errSame'), $('#pw1'));
+  if (a !== b) return fail(tt('errMatch'), $('#pw2'));
+  const btn = $('#changeBtn');
+  btn.disabled = true; st.dataset.state = 'sending'; st.textContent = tt('checking');
+  try {
+    const data = await api('changePassword', { token, newPassword: a });
+    if (data.error === 'auth') { logout(); return; }
+    if (!data.ok) return fail(data.error === 'same' ? tt('errSame') : tt('errShort'), $('#pw1'));
+    st.textContent = ''; st.dataset.state = '';
+    $('#pw1').value = ''; $('#pw2').value = '';
+    showApp();
+    setStatusMsg('', tt('pwSaved'));
+  } catch (err) {
+    fail(tt('errNet'), $('#pw1'));
   } finally {
     btn.disabled = false;
   }
