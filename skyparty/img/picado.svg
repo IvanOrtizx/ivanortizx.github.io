@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 64" width="300" height="64">
+  <defs>
+    <g id="cut" fill="#fff9f0">
+      <circle cx="0" cy="-6" r="5"/>
+      <path d="M0 6 l6 6 -6 6 -6 -6Z"/>
+      <circle cx="-11" cy="12" r="2.6"/><circle cx="11" cy="12" r="2.6"/>
+      <circle cx="-11" cy="-6" r="2.2"/><circle cx="11" cy="-6" r="2.2"/>
+    </g>
+    <g id="flag">
+      <path d="M-25 0h50v42l-6.25 6-6.25-6-6.25 6-6.25-6-6.25 6-6.25-6-6.25 6L-25 42Z"/>
+    </g>
+  </defs>
+  <path d="M0 5 Q150 15 300 5" fill="none" stroke="#1e1b3a" stroke-width="2"/>
+  <g transform="translate(30 8)"><use href="#flag" fill="#ec2b83"/><g transform="translate(0 20)"><use href="#cut"/></g></g>
+  <g transform="translate(90 11)"><use href="#flag" fill="#2e9bf0"/><g transform="translate(0 20)"><use href="#cut"/></g></g>
+  <g transform="translate(150 12)"><use href="#flag" fill="#ffc233"/><g transform="translate(0 20)"><use href="#cut"/></g></g>
+  <g transform="translate(210 11)"><use href="#flag" fill="#2dbe6c"/><g transform="translate(0 20)"><use href="#cut"/></g></g>
+  <g transform="translate(270 8)"><use href="#flag" fill="#ff7a2f"/><g transform="translate(0 20)"><use href="#cut"/></g></g>
+</svg>
